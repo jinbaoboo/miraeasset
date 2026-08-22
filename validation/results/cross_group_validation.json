@@ -1,0 +1,1869 @@
+{
+  "sample_count": 20,
+  "check_count": 173,
+  "summary": {
+    "pass": 173
+  },
+  "documents": [
+    {
+      "doc_id": "periodic_20230515002335",
+      "corp_name": "삼성전자",
+      "doc_group": "periodic",
+      "report_nm": "분기보고서 (2023.03)",
+      "tags": [
+        "quarter",
+        "strict_recovery",
+        "rowspan_colspan"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 137,
+        "text_chunks": 106,
+        "logical_tables": 356,
+        "table_cells": 20312,
+        "corrections": 0,
+        "images": 2,
+        "events": 0
+      },
+      "warnings": [
+        "20230515002335.xml:bare_ampersands:245",
+        "20230515002335.xml:angle_text:10",
+        "20230515002335.xml:missing_image_assets:2"
+      ]
+    },
+    {
+      "doc_id": "periodic_20230814002534",
+      "corp_name": "삼성전자",
+      "doc_group": "periodic",
+      "report_nm": "반기보고서 (2023.06)",
+      "tags": [
+        "half",
+        "multilevel_header"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 212,
+        "text_chunks": 148,
+        "logical_tables": 537,
+        "table_cells": 30924,
+        "corrections": 0,
+        "images": 2,
+        "events": 0
+      },
+      "warnings": [
+        "20230814002534.xml:bare_ampersands:437",
+        "20230814002534.xml:angle_text:16",
+        "20230814002534.xml:missing_image_assets:2"
+      ]
+    },
+    {
+      "doc_id": "periodic_20240312000736",
+      "corp_name": "삼성전자",
+      "doc_group": "periodic",
+      "report_nm": "사업보고서 (2023.12)",
+      "tags": [
+        "annual",
+        "audit_attachment",
+        "complex_table_group"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 252,
+        "text_chunks": 194,
+        "logical_tables": 805,
+        "table_cells": 51212,
+        "corrections": 0,
+        "images": 4,
+        "events": 0
+      },
+      "warnings": [
+        "20240312000736.xml:bare_ampersands:529",
+        "20240312000736.xml:angle_text:16",
+        "20240312000736.xml:malformed_attribute_quotes:6",
+        "20240312000736.xml:missing_image_assets:2",
+        "20240312000736_00760.xml:bare_ampersands:51"
+      ]
+    },
+    {
+      "doc_id": "periodic_20240329002895",
+      "corp_name": "삼성전기",
+      "doc_group": "periodic",
+      "report_nm": "[기재정정]사업보고서 (2023.12)",
+      "tags": [
+        "correction_annual",
+        "before_after"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 134,
+        "text_chunks": 106,
+        "logical_tables": 304,
+        "table_cells": 24390,
+        "corrections": 1,
+        "images": 3,
+        "events": 0
+      },
+      "warnings": [
+        "20240329002895.xml:bare_ampersands:138",
+        "20240329002895.xml:angle_text:16",
+        "20240329002895.xml:missing_image_assets:3"
+      ]
+    },
+    {
+      "doc_id": "periodic_20240913000803",
+      "corp_name": "LG이노텍",
+      "doc_group": "periodic",
+      "report_nm": "[기재정정]반기보고서 (2024.06)",
+      "tags": [
+        "correction_half",
+        "different_company"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 144,
+        "text_chunks": 103,
+        "logical_tables": 275,
+        "table_cells": 14177,
+        "corrections": 1,
+        "images": 4,
+        "events": 0
+      },
+      "warnings": [
+        "20240913000803.xml:bare_ampersands:29",
+        "20240913000803.xml:angle_text:20",
+        "20240913000803.xml:missing_image_assets:4"
+      ]
+    },
+    {
+      "doc_id": "periodic_20250320001103",
+      "corp_name": "두산에너빌리티",
+      "doc_group": "periodic",
+      "report_nm": "사업보고서 (2024.12)",
+      "tags": [
+        "mismatched_attribute_quote",
+        "industrial",
+        "audit_attachment"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 164,
+        "text_chunks": 189,
+        "logical_tables": 886,
+        "table_cells": 49940,
+        "corrections": 0,
+        "images": 4,
+        "events": 0
+      },
+      "warnings": [
+        "20250320001103.xml:bare_ampersands:154",
+        "20250320001103.xml:angle_text:11",
+        "20250320001103.xml:malformed_attribute_quotes:8",
+        "20250320001103.xml:missing_image_assets:2",
+        "20250320001103_00760.xml:bare_ampersands:10"
+      ]
+    },
+    {
+      "doc_id": "periodic_20260313001191",
+      "corp_name": "KB금융",
+      "doc_group": "periodic",
+      "report_nm": "사업보고서 (2025.12)",
+      "tags": [
+        "spaced_attribute_quote",
+        "finance",
+        "strict_recovery"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 234,
+        "text_chunks": 333,
+        "logical_tables": 2017,
+        "table_cells": 130580,
+        "corrections": 0,
+        "images": 13,
+        "events": 0
+      },
+      "warnings": [
+        "20260313001191.xml:bare_ampersands:224",
+        "20260313001191.xml:angle_text:52",
+        "20260313001191.xml:malformed_attribute_quotes:24",
+        "20260313001191.xml:missing_image_assets:2",
+        "20260313001191_00760.xml:bare_ampersands:2"
+      ]
+    },
+    {
+      "doc_id": "periodic_20250318001196",
+      "corp_name": "우리금융지주",
+      "doc_group": "periodic",
+      "report_nm": "사업보고서 (2024.12)",
+      "tags": [
+        "quoted_acronym_attribute",
+        "strict_recovery"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 230,
+        "text_chunks": 365,
+        "logical_tables": 1851,
+        "table_cells": 68835,
+        "corrections": 0,
+        "images": 4,
+        "events": 0
+      },
+      "warnings": [
+        "20250318001196.xml:bare_ampersands:51",
+        "20250318001196.xml:angle_text:99",
+        "20250318001196.xml:malformed_attribute_quotes:10",
+        "20250318001196.xml:missing_image_assets:2",
+        "20250318001196_00760.xml:angle_text:4"
+      ]
+    },
+    {
+      "doc_id": "periodic_20240514001522",
+      "corp_name": "한화오션",
+      "doc_group": "periodic",
+      "report_nm": "[기재정정]분기보고서 (2024.03)",
+      "tags": [
+        "pdf_fallback",
+        "correction_quarter"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 1,
+        "text_chunks": 277,
+        "logical_tables": 0,
+        "table_cells": 0,
+        "corrections": 0,
+        "images": 0,
+        "events": 0
+      },
+      "warnings": [
+        "pdf_fallback_text_only:tables_and_images_not_structured",
+        "pdf_correction_before_after_not_structured"
+      ]
+    },
+    {
+      "doc_id": "major_20230103000001",
+      "corp_name": "레인보우로보틱스",
+      "doc_group": "major",
+      "report_nm": "주요사항보고서(유상증자결정)",
+      "tags": [
+        "capital_increase",
+        "robotics"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 3,
+        "text_chunks": 3,
+        "logical_tables": 15,
+        "table_cells": 140,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "major_20240326000614",
+      "corp_name": "에코프로비엠",
+      "doc_group": "major",
+      "report_nm": "주요사항보고서(회사합병결정)",
+      "tags": [
+        "merger",
+        "battery"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 8,
+        "text_chunks": 8,
+        "logical_tables": 35,
+        "table_cells": 801,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "major_20241118000171",
+      "corp_name": "삼성전자",
+      "doc_group": "major",
+      "report_nm": "[기재정정]주요사항보고서(자기주식취득결정)",
+      "tags": [
+        "correction_major",
+        "treasury_stock"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 2,
+        "text_chunks": 1,
+        "logical_tables": 4,
+        "table_cells": 229,
+        "corrections": 1,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": [
+        "20241118000171.xml:bare_ampersands:2"
+      ]
+    },
+    {
+      "doc_id": "exchange_20250731800028",
+      "corp_name": "삼성전자",
+      "doc_group": "exchange",
+      "report_nm": "[기재정정]단일판매ㆍ공급계약체결",
+      "tags": [
+        "correction_exchange",
+        "supply_contract"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 0,
+        "text_chunks": 1,
+        "logical_tables": 4,
+        "table_cells": 65,
+        "corrections": 1,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "exchange_20251217800800",
+      "corp_name": "LG에너지솔루션",
+      "doc_group": "exchange",
+      "report_nm": "단일판매ㆍ공급계약해지",
+      "tags": [
+        "contract_termination",
+        "battery"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 0,
+        "text_chunks": 1,
+        "logical_tables": 1,
+        "table_cells": 41,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "exchange_20240424800596",
+      "corp_name": "SK하이닉스",
+      "doc_group": "exchange",
+      "report_nm": "신규시설투자등",
+      "tags": [
+        "facility_investment",
+        "semiconductor"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 0,
+        "text_chunks": 1,
+        "logical_tables": 1,
+        "table_cells": 45,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "exchange_20241220800005",
+      "corp_name": "SK하이닉스",
+      "doc_group": "exchange",
+      "report_nm": "투자판단관련주요경영사항",
+      "tags": [
+        "free_form_management_event"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 0,
+        "text_chunks": 1,
+        "logical_tables": 1,
+        "table_cells": 18,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "exchange_20230315902426",
+      "corp_name": "레인보우로보틱스",
+      "doc_group": "exchange",
+      "report_nm": "투자판단관련주요경영사항(최대주주 변경을 수반하는 콜옵션 조건이 포함된 주주간계약의 체결)",
+      "tags": [
+        "shareholder_agreement",
+        "robotics"
+      ],
+      "status": "success",
+      "counts": {
+        "sections": 0,
+        "text_chunks": 1,
+        "logical_tables": 1,
+        "table_cells": 20,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": []
+    },
+    {
+      "doc_id": "holding_20230120000563",
+      "corp_name": "삼성전자",
+      "doc_group": "holding",
+      "report_nm": "주식등의대량보유상황보고서(일반)",
+      "tags": [
+        "holding_general"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 25,
+        "text_chunks": 7,
+        "logical_tables": 27,
+        "table_cells": 2063,
+        "corrections": 0,
+        "images": 0,
+        "events": 1
+      },
+      "warnings": [
+        "20230120000563.xml:bare_ampersands:1"
+      ]
+    },
+    {
+      "doc_id": "holding_20230307000265",
+      "corp_name": "SK하이닉스",
+      "doc_group": "holding",
+      "report_nm": "주식등의대량보유상황보고서(약식)",
+      "tags": [
+        "holding_short",
+        "foreign_reporter"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 15,
+        "text_chunks": 6,
+        "logical_tables": 16,
+        "table_cells": 2754,
+        "corrections": 0,
+        "images": 1,
+        "events": 1
+      },
+      "warnings": [
+        "20230307000265.xml:bare_ampersands:8",
+        "20230307000265.xml:missing_image_assets:1"
+      ]
+    },
+    {
+      "doc_id": "holding_20250107000540",
+      "corp_name": "고려아연",
+      "doc_group": "holding",
+      "report_nm": "[기재정정]주식등의대량보유상황보고서(약식)",
+      "tags": [
+        "correction_holding",
+        "materials"
+      ],
+      "status": "warning",
+      "counts": {
+        "sections": 17,
+        "text_chunks": 6,
+        "logical_tables": 15,
+        "table_cells": 243,
+        "corrections": 1,
+        "images": 1,
+        "events": 1
+      },
+      "warnings": [
+        "20250107000540.xml:missing_image_assets:1"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230515002335",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20230814002534",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Audit attachment",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240312000736",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Correction before/after",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240329002895",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Correction before/after",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240913000803",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Audit attachment",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250320001103",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20260313001191",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20250318001196",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "PDF page locator",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "PDF limitation warning",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "periodic_20240514001522",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20230103000001",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20240326000614",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Correction before/after",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "major_20241118000171",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Correction before/after",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20250731800028",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20251217800800",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20240424800596",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20241220800005",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "exchange_20230315902426",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230120000563",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20230307000265",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Document metadata",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Parse status",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Body chunks",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Section hierarchy",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Logical tables",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Normalized cells",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Scope enum",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Correction before/after",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Event record",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    },
+    {
+      "document": "holding_20250107000540",
+      "test_item": "Numeric relation or narrative preservation",
+      "ok": true,
+      "problem": "",
+      "cause": "",
+      "needs_fix": false
+    }
+  ]
+}

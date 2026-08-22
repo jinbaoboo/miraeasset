@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "periodic_records.schema.json",
+  "title": "Periodic filing structured records",
+  "type": "object",
+  "required": ["schema_version", "document", "sections", "text_chunks", "logical_tables", "table_cells", "corrections", "images", "parse_log"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "document": {"$ref": "#/$defs/document"},
+    "sections": {"type": "array", "items": {"$ref": "#/$defs/section"}},
+    "text_chunks": {"type": "array", "items": {"$ref": "#/$defs/textChunk"}},
+    "logical_tables": {"type": "array", "items": {"$ref": "#/$defs/table"}},
+    "table_cells": {"type": "array", "items": {"$ref": "#/$defs/cell"}},
+    "corrections": {"type": "array", "items": {"$ref": "#/$defs/correction"}},
+    "images": {"type": "array", "items": {"$ref": "#/$defs/image"}},
+    "parse_log": {"$ref": "#/$defs/parseLog"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["doc_id", "corp_code", "corp_name", "listed_name", "report_nm", "rcept_no", "rcept_dt", "doc_group", "doc_subtype", "base_year", "base_month", "is_correction", "file_path"],
+      "properties": {
+        "doc_id": {"type": "string"}, "corp_code": {"type": "string"}, "corp_name": {"type": "string"},
+        "listed_name": {"type": "string"}, "report_nm": {"type": "string"}, "rcept_no": {"type": "string"},
+        "rcept_dt": {"type": "string"}, "doc_group": {"const": "periodic"},
+        "doc_subtype": {"enum": ["annual", "half", "quarter"]}, "base_year": {"type": "integer"},
+        "base_month": {"type": "integer"}, "is_correction": {"type": "boolean"}, "file_path": {"type": "string"}
+      }, "additionalProperties": true
+    },
+    "document": {"type": "object", "required": ["source", "source_files", "version", "parse_summary", "record_counts"], "properties": {"source": {"$ref": "#/$defs/source"}, "source_files": {"type": "array"}, "version": {"type": "object"}, "parse_summary": {"type": "object"}, "record_counts": {"type": "object"}}, "additionalProperties": true},
+    "section": {"type": "object", "required": ["section_id", "source", "level", "title", "title_source", "section_path", "order"], "properties": {"section_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "level": {"type": "integer"}, "title": {"type": "string"}, "title_source": {"enum": ["TITLE", "bold_span", "synthetic"]}, "section_path": {"type": "array", "items": {"type": "string"}}, "order": {"type": "integer"}}, "additionalProperties": true},
+    "textChunk": {"type": "object", "required": ["chunk_id", "source", "section_path", "content_type", "text"], "properties": {"chunk_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "section_path": {"type": "array", "items": {"type": "string"}}, "content_type": {"const": "text"}, "text": {"type": "string"}}, "additionalProperties": true},
+    "unit": {"type": "object", "required": ["raw", "quantity"], "properties": {"raw": {"type": ["string", "null"]}, "currency": {"type": ["string", "null"]}, "scale": {"type": ["integer", "null"]}, "quantity": {"enum": ["money", "shares", "percent", "count", "mixed", "unknown"]}}, "additionalProperties": true},
+    "table": {"type": "object", "required": ["table_id", "source", "table_title", "unit", "scope", "periods", "columns", "rows", "normalized_cell_ids", "footnotes", "search_text"], "properties": {"table_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "table_title": {"type": ["string", "null"]}, "unit": {"$ref": "#/$defs/unit"}, "scope": {"enum": ["consolidated", "separate", "unknown"]}, "periods": {"type": "array"}, "columns": {"type": "array"}, "rows": {"type": "array"}, "normalized_cell_ids": {"type": "array", "items": {"type": "string"}}, "footnotes": {"type": "array", "items": {"type": "string"}}, "search_text": {"type": "string"}}, "additionalProperties": true},
+    "cell": {"type": "object", "required": ["cell_id", "table_id", "source", "row_label", "column_label", "original_text", "value_type", "unit", "scope", "is_missing"], "properties": {"cell_id": {"type": "string"}, "table_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "row_label": {"type": ["string", "null"]}, "column_label": {"type": ["string", "null"]}, "original_text": {"type": "string"}, "numeric_value": {"type": ["number", "null"]}, "value_type": {"enum": ["number", "percent", "text", "dash", "empty"]}, "unit": {"$ref": "#/$defs/unit"}, "period": {"type": ["object", "null"]}, "scope": {"enum": ["consolidated", "separate", "unknown"]}, "is_missing": {"type": "boolean"}}, "additionalProperties": true},
+    "correction": {"type": "object", "required": ["correction_id", "source", "version_role", "correction_doc_id", "is_latest_version", "correction_items"], "properties": {"correction_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "version_role": {"enum": ["original", "correction"]}, "correction_doc_id": {"type": "string"}, "is_latest_version": {"type": "boolean"}, "correction_items": {"type": "array"}}, "additionalProperties": true},
+    "image": {"type": "object", "required": ["image_id", "source", "filename", "asset_exists"], "properties": {"image_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "filename": {"type": "string"}, "caption": {"type": ["string", "null"]}, "asset_exists": {"type": "boolean"}}, "additionalProperties": true},
+    "parseLog": {"type": "object", "required": ["status", "files", "warnings", "errors"], "properties": {"status": {"enum": ["success", "warning", "failed"]}, "files": {"type": "array"}, "warnings": {"type": "array"}, "errors": {"type": "array"}}, "additionalProperties": true}
+  }
+}

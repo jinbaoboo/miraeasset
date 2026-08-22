@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.mirae/answer-response.schema.json",
+  "title": "DisclosureAgentAnswer",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question_id", "question", "retrieved_context", "think_trace", "answer"],
+  "properties": {
+    "question_id": {"type": "string"},
+    "question": {"type": "string"},
+    "retrieved_context": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "record_id", "content", "citation"],
+        "properties": {
+          "kind": {"enum": ["cell", "text", "table", "event", "event_field", "correction"]},
+          "record_id": {"type": ["string", "null"]},
+          "content": {"type": "string"},
+          "citation": {
+            "type": "object",
+            "properties": {
+              "doc_id": {"type": ["string", "null"]},
+              "corp_name": {"type": ["string", "null"]},
+              "report_nm": {"type": ["string", "null"]},
+              "rcept_no": {"type": ["string", "null"]},
+              "rcept_dt": {"type": ["string", "null"]},
+              "section_path": {"type": ["string", "null"]},
+              "table_title": {"type": ["string", "null"]},
+              "row_label": {"type": ["string", "null"]},
+              "column_path": {"type": ["string", "null"]},
+              "original_text": {"type": ["string", "null"]},
+              "unit_raw": {"type": ["string", "null"]}
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "think_trace": {
+      "type": "object",
+      "required": ["steps", "query_plan", "note"],
+      "properties": {
+        "steps": {"type": "array", "items": {"type": "string"}},
+        "query_plan": {"type": "object"},
+        "note": {"type": "string"}
+      }
+    },
+    "answer": {"type": "string"}
+  }
+}

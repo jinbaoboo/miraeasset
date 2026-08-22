@@ -1,0 +1,120 @@
+{
+  "database": "outputs/disclosures.db",
+  "counts": {
+    "documents": 4204,
+    "sections": 163152,
+    "chunks": 144829,
+    "logical_tables": 553774,
+    "cells": 30140784,
+    "corrections": 1002,
+    "correction_items": 4948,
+    "events": 3150,
+    "event_fields": 1300351,
+    "chunks_fts": 144829,
+    "tables_fts": 553774,
+    "events_fts": 3150
+  },
+  "checks": [
+    {
+      "name": "sqlite_integrity",
+      "ok": true,
+      "critical": true,
+      "detail": "ok"
+    },
+    {
+      "name": "chunk_fts_count",
+      "ok": true,
+      "critical": true,
+      "detail": {
+        "records": 144829,
+        "fts": 144829
+      }
+    },
+    {
+      "name": "table_fts_count",
+      "ok": true,
+      "critical": true,
+      "detail": {
+        "records": 553774,
+        "fts": 553774
+      }
+    },
+    {
+      "name": "event_fts_count",
+      "ok": true,
+      "critical": true,
+      "detail": {
+        "records": 3150,
+        "fts": 3150
+      }
+    },
+    {
+      "name": "orphan_sections",
+      "ok": true,
+      "critical": true,
+      "detail": 0
+    },
+    {
+      "name": "orphan_chunks",
+      "ok": true,
+      "critical": true,
+      "detail": 0
+    },
+    {
+      "name": "orphan_tables",
+      "ok": true,
+      "critical": true,
+      "detail": 0
+    },
+    {
+      "name": "orphan_cells",
+      "ok": true,
+      "critical": true,
+      "detail": 0
+    },
+    {
+      "name": "orphan_events",
+      "ok": true,
+      "critical": true,
+      "detail": 0
+    },
+    {
+      "name": "failed_documents",
+      "ok": true,
+      "critical": true,
+      "detail": []
+    },
+    {
+      "name": "periodic_latest_version_uniqueness",
+      "ok": true,
+      "critical": true,
+      "detail": []
+    },
+    {
+      "name": "holding_search_text_sensitive_patterns",
+      "ok": true,
+      "critical": true,
+      "detail": []
+    },
+    {
+      "name": "manifest_document_count",
+      "ok": true,
+      "critical": true,
+      "detail": {
+        "manifest": 4204,
+        "database": 4204
+      }
+    },
+    {
+      "name": "source_paths_exist",
+      "ok": true,
+      "critical": true,
+      "detail": []
+    }
+  ],
+  "summary": {
+    "pass": 14,
+    "fail": 0
+  },
+  "ok": true
+}

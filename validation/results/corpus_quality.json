@@ -1,0 +1,57 @@
+{
+  "database": "outputs/disclosures.db",
+  "status": {
+    "success": 2433,
+    "warning": 1771
+  },
+  "groups": {
+    "exchange": {
+      "total": 1469,
+      "success": 1469,
+      "warning": 0,
+      "failed": 0
+    },
+    "holding": {
+      "total": 1083,
+      "success": 555,
+      "warning": 528,
+      "failed": 0
+    },
+    "major": {
+      "total": 598,
+      "success": 409,
+      "warning": 189,
+      "failed": 0
+    },
+    "periodic": {
+      "total": 1054,
+      "success": 0,
+      "warning": 1054,
+      "failed": 0
+    }
+  },
+  "records": {
+    "companies": 70,
+    "documents": 4204,
+    "sections": 163152,
+    "chunks": 144829,
+    "logical_tables": 553774,
+    "cells": 30140784,
+    "corrections": 1002,
+    "correction_items": 4948,
+    "events": 3150,
+    "event_fields": 1300351
+  },
+  "latest_documents": 3826,
+  "version_linked_documents": 1440,
+  "warning_reason_counts": {
+    "missing_image_assets": 1789,
+    "bare_ampersands": 1620,
+    "angle_text": 1358,
+    "malformed_attribute_quotes": 288,
+    "tables_and_images_not_structured": 3,
+    "pdf_correction_before_after_not_structured": 2
+  },
+  "failed_documents": [],
+  "warning_error_documents": []
+}

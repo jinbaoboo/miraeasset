@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mirae-disclosure-agent"
+version = "0.1.0"
+description = "Grounded Korean disclosure retrieval, calculation, and QA agent"
+requires-python = ">=3.9"
+dependencies = ["fastapi>=0.110,<1", "uvicorn[standard]>=0.27,<1", "pypdf>=5,<7"]
+
+[tool.setuptools.packages.find]
+include = ["src*"]

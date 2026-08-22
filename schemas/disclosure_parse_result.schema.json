@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.mirae/disclosure-parse-result.schema.json",
+  "title": "DisclosureParseResult",
+  "type": "object",
+  "required": ["document", "sections", "text_chunks", "logical_tables", "table_cells", "corrections", "events", "parse_log"],
+  "properties": {
+    "document": {"$ref": "#/$defs/document"},
+    "sections": {"type": "array", "items": {"$ref": "#/$defs/section"}},
+    "text_chunks": {"type": "array", "items": {"$ref": "#/$defs/chunk"}},
+    "logical_tables": {"type": "array", "items": {"$ref": "#/$defs/table"}},
+    "table_cells": {"type": "array", "items": {"$ref": "#/$defs/cell"}},
+    "corrections": {"type": "array", "items": {"$ref": "#/$defs/correction"}},
+    "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+    "images": {"type": "array", "items": {"type": "object"}},
+    "parse_log": {"$ref": "#/$defs/parseLog"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["doc_id", "corp_code", "corp_name", "report_nm", "rcept_no", "rcept_dt", "doc_group", "is_correction", "file_path"],
+      "properties": {
+        "doc_id": {"type": "string"}, "corp_code": {"type": "string"}, "corp_name": {"type": "string"},
+        "listed_name": {"type": ["string", "null"]}, "stock_code": {"type": ["string", "null"]},
+        "industry": {"type": ["string", "null"]}, "sector": {"type": ["string", "null"]}, "flr_nm": {"type": ["string", "null"]},
+        "report_nm": {"type": "string"}, "rcept_no": {"type": "string"},
+        "rcept_dt": {"type": "string"}, "doc_group": {"enum": ["periodic", "major", "exchange", "holding"]},
+        "doc_subtype": {"type": ["string", "null"]}, "base_year": {"type": ["integer", "null"]},
+        "base_month": {"type": ["integer", "null"]}, "is_correction": {"type": "boolean"}, "file_path": {"type": "string"}
+      }
+    },
+    "document": {"type": "object", "required": ["source", "parse_summary", "record_counts"], "properties": {"source": {"$ref": "#/$defs/source"}, "version": {"type": "object"}, "parse_summary": {"type": "object"}, "record_counts": {"type": "object"}}},
+    "section": {"type": "object", "required": ["section_id", "source", "level", "title", "section_path"], "properties": {"section_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "parent_section_id": {"type": ["string", "null"]}, "level": {"type": "integer"}, "title": {"type": "string"}, "section_path": {"type": "array", "items": {"type": "string"}}}},
+    "chunk": {"type": "object", "required": ["chunk_id", "source", "content_type", "text", "section_path"], "properties": {"chunk_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "content_type": {"type": "string"}, "text": {"type": "string"}, "section_path": {"type": "array", "items": {"type": "string"}}, "source_locator": {"type": "object"}}},
+    "unit": {"type": "object", "properties": {"raw": {"type": ["string", "null"]}, "currency": {"type": ["string", "null"]}, "scale": {"type": ["number", "null"]}, "quantity": {"type": ["string", "null"]}}},
+    "table": {"type": "object", "required": ["table_id", "source", "section_path", "scope", "columns", "rows", "footnotes", "search_text"], "properties": {"table_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "table_title": {"type": ["string", "null"]}, "section_path": {"type": "array", "items": {"type": "string"}}, "unit": {"$ref": "#/$defs/unit"}, "scope": {"enum": ["consolidated", "separate", "unknown"]}, "periods": {"type": "array"}, "columns": {"type": "array"}, "rows": {"type": "array"}, "footnotes": {"type": "array"}, "search_text": {"type": "string"}}},
+    "cell": {"type": "object", "required": ["cell_id", "table_id", "source", "row_label", "column_path", "original_text", "value_type", "scope"], "properties": {"cell_id": {"type": "string"}, "table_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "row_label": {"type": ["string", "null"]}, "column_path": {"type": "array", "items": {"type": "string"}}, "original_text": {"type": "string"}, "numeric_value": {"type": ["number", "null"]}, "value_type": {"enum": ["number", "percent", "text", "dash", "empty"]}, "unit": {"$ref": "#/$defs/unit"}, "period": {"type": ["object", "null"]}, "scope": {"enum": ["consolidated", "separate", "unknown"]}}},
+    "correction": {"type": "object", "required": ["correction_id", "source", "correction_items"], "properties": {"correction_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "original_doc_id": {"type": ["string", "null"]}, "supersedes_doc_id": {"type": ["string", "null"]}, "is_latest_version": {"type": "boolean"}, "correction_items": {"type": "array", "items": {"type": "object", "required": ["before", "after", "current_effective_value"]}}}},
+    "event": {"type": "object", "required": ["event_id", "source", "event_type", "fields", "search_text"], "properties": {"event_id": {"type": "string"}, "source": {"$ref": "#/$defs/source"}, "event_type": {"type": "string"}, "event_title": {"type": ["string", "null"]}, "scope": {"enum": ["consolidated", "separate", "unknown"]}, "fields": {"type": "array", "items": {"type": "object"}}, "search_text": {"type": "string"}}},
+    "parseLog": {"type": "object", "required": ["status", "warnings", "errors"], "properties": {"status": {"enum": ["success", "warning", "failed"]}, "warnings": {"type": "array"}, "errors": {"type": "array"}}}
+  }
+}

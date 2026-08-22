@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from .table_parser import parse_numeric
 from .text_cleaner import normalize_text
+from .path_utils import resolve_manifest_path
 
 
 SOURCE_FIELDS = [
@@ -224,7 +225,7 @@ class ExchangeParser:
 
     def parse_document(self, record: Dict[str, Any]) -> Dict[str, Any]:
         source = {field: record.get(field) for field in SOURCE_FIELDS}
-        folder = self.data_root / str(record["file_path"])
+        folder = resolve_manifest_path(self.data_root, str(record["file_path"]))
         files = sorted(folder.glob("*.xml")) if folder.is_dir() else []
         result: Dict[str, Any] = {
             "document": {}, "sections": [], "text_chunks": [], "logical_tables": [],

@@ -49,16 +49,35 @@ class DisclosureAgent:
                 question_id, question, [], trace,
                 "제공 코퍼스의 기업을 식별할 수 없습니다. 회사명 또는 종목코드를 정확히 입력해 주세요.", plan,
             )
+        candidate_docs = self.retriever.candidate_documents(plan)
+        search_plan = dict(plan)
+        if candidate_docs:
+            candidate_doc_ids = [doc["doc_id"] for doc in candidate_docs]
+            search_plan["_candidate_doc_ids"] = candidate_doc_ids
+            plan["candidate_filter"] = {
+                "count": len(candidate_docs),
+                "sample_doc_ids": candidate_doc_ids[:10],
+            }
+            trace.append("candidate_documents_filtered")
+        elif self._requires_candidate_documents(plan):
+            trace.append("candidate_documents_not_found")
+            answer = "질문 조건에 맞는 후보 공시 문서를 찾지 못했습니다. 회사명·기간·공시 유형을 확인해 주세요."
+            return self._response(question_id, question, [], trace, answer, plan)
         contexts: List[Dict[str, Any]] = []
         financial_metrics = {"revenue", "operating_profit", "net_income", "assets", "liabilities", "equity", "rnd", "capex"}
         cell_limit = 200 if plan.get("cross_corpus") else 60 if len(plan.get("companies") or []) > 1 else 12
-        cells = self.retriever.find_metric_cells(plan, limit=cell_limit) if plan.get("metric") in financial_metrics else []
-        cells = self._prioritize_cells(cells, plan)
+        structured_values = self.retriever.extract_structured_values(search_plan, limit_per_metric=cell_limit)
+        if structured_values.get("missing_metrics"):
+            plan["missing_structured_metrics"] = structured_values["missing_metrics"]
+        cells = structured_values["cells"]
+        cells = self._prioritize_cells(cells, search_plan)
         if cells:
             trace.append("structured_cells_retrieved")
             contexts.extend(self._cell_context(cell) for cell in cells[:6])
         event_limit = 1000 if plan.get("intent") == "calculation" else 8
-        event_fields = self.retriever.find_event_fields(plan, limit=event_limit) if plan.get("metric") else []
+        event_fields = structured_values["event_fields"]
+        if event_fields and event_limit < len(event_fields):
+            event_fields = event_fields[:event_limit]
         if event_fields:
             trace.append("structured_event_fields_retrieved")
             context_fields = event_fields if plan.get("intent") == "calculation" else event_fields[:8]
@@ -69,7 +88,7 @@ class DisclosureAgent:
             if history:
                 trace.append("correction_history_retrieved")
                 contexts.extend(self._correction_context(item) for item in history)
-        retrieved = self.retriever.search(question, plan, limit=max(4, 8-len(contexts)))
+        retrieved = self.retriever.search(question, search_plan, limit=max(4, 8-len(contexts)))
         contexts.extend({"kind": item["kind"], "record_id": item["record_id"],
                          "content": item.get("content", "")[:6000], "citation": item.get("citation", {})} for item in retrieved)
         if retrieved: trace.append("fts_evidence_retrieved")
@@ -80,10 +99,15 @@ class DisclosureAgent:
             answer = "제공된 공시 코퍼스에서 질문을 뒷받침할 근거를 찾지 못했습니다. 회사명·기간·공시 유형을 더 구체적으로 입력해 주세요."
             return self._response(question_id, question, contexts, trace, answer, plan)
         answer = None
-        deterministic_numeric = plan.get("intent") in {"comparison", "calculation"} and bool(cells or event_fields)
+        calculation_answer = self._calculation_answer(plan, cells, event_fields)
+        if calculation_answer:
+            answer = calculation_answer
+            trace.append("deterministic_calculation_executed")
+        can_template_cells = self._can_template_with_cells(plan, financial_metrics)
+        deterministic_numeric = plan.get("intent") in {"comparison", "calculation"} and bool((can_template_cells and cells) or event_fields)
         if deterministic_numeric:
             trace.append("deterministic_numeric_tool_preferred")
-        if use_llm and self.hcx.configured and not deterministic_numeric:
+        if not answer and use_llm and self.hcx.configured and not deterministic_numeric:
             try:
                 generation_contexts = contexts[:20]
                 generated = self.hcx.generate(question, generation_contexts)
@@ -95,7 +119,7 @@ class DisclosureAgent:
             except RuntimeError:
                 trace.append("hyperclova_x_request_failed_fallback")
         if not answer:
-            answer = self._template_answer(question, plan, cells, event_fields, contexts)
+            answer = self._template_answer(question, plan, cells if can_template_cells else [], event_fields, contexts)
             trace.append("deterministic_grounded_template")
         trace.append("citations_attached")
         return self._response(question_id, question, contexts, trace, answer, plan)
@@ -266,6 +290,141 @@ class DisclosureAgent:
                 f"접수번호 {citation.get('rcept_no','')}). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.")
 
     @staticmethod
+    def _calculation_answer(plan: Dict[str, Any], cells: List[Dict[str, Any]], event_fields: List[Dict[str, Any]]) -> Optional[str]:
+        calculation = plan.get("calculation") or {}
+        operation = calculation.get("operation")
+        if not operation:
+            return None
+        if operation in {"growth_rate", "difference"}:
+            return DisclosureAgent._year_pair_calculation_answer(plan, cells, operation)
+        if operation == "ratio":
+            return DisclosureAgent._ratio_calculation_answer(plan, cells)
+        if operation == "sum" and cells:
+            selected = DisclosureAgent._best_cells_by_metric_year(cells)
+            if not selected:
+                return None
+            compatible, reason = DisclosureAgent._compatible_numeric_cells(selected, require_scope=False)
+            if not compatible:
+                return f"검색된 값들의 {reason}이 일치하지 않아 합계를 안전하게 계산할 수 없습니다."
+            total = calculate("sum", [DisclosureAgent._normalized_numeric(cell) for cell in selected])
+            unit = DisclosureAgent._normalized_unit_label(selected[0])
+            receipts = ", ".join(cell.get("rcept_no") or "" for cell in selected)
+            return f"조건에 맞는 값 {len(selected)}개의 합계는 {DecimalFormatter.comma(total['result'])}{unit}입니다. 계산식: {total['formula']}. 근거 접수번호: {receipts}."
+        return None
+
+    @staticmethod
+    def _year_pair_calculation_answer(plan: Dict[str, Any], cells: List[Dict[str, Any]], operation: str) -> Optional[str]:
+        calculation = plan.get("calculation") or {}
+        target_year = calculation.get("target_year")
+        baseline_year = calculation.get("baseline_year")
+        metric = (plan.get("required_metrics") or [plan.get("metric")])[0]
+        if not target_year or not baseline_year or not metric:
+            return None
+        current = DisclosureAgent._best_cell(cells, metric=metric, year=target_year)
+        baseline = DisclosureAgent._best_cell(cells, metric=metric, year=baseline_year)
+        if not current or not baseline:
+            return None
+        compatible, reason = DisclosureAgent._compatible_numeric_cells([current, baseline], require_scope=True)
+        if not compatible:
+            return f"{target_year}년과 {baseline_year}년 값의 {reason}이 일치하지 않아 계산할 수 없습니다."
+        current_value = DisclosureAgent._normalized_numeric(current)
+        baseline_value = DisclosureAgent._normalized_numeric(baseline)
+        result = calculate(operation, [current_value, baseline_value])
+        unit = "%" if operation == "growth_rate" else DisclosureAgent._normalized_unit_label(current)
+        verb = "증감률" if operation == "growth_rate" else "차이"
+        rendered = f"{result['result_float']:.2f}%" if operation == "growth_rate" else f"{DecimalFormatter.comma(result['result'])}{unit}"
+        direction = ""
+        if operation == "growth_rate":
+            direction = " 증가" if Decimal(result["result"]) > 0 else " 감소" if Decimal(result["result"]) < 0 else " 변동 없음"
+        inputs = (
+            f"{target_year}년 {current.get('original_text')} ({current.get('unit_raw') or '단위 미상'}), "
+            f"{baseline_year}년 {baseline.get('original_text')} ({baseline.get('unit_raw') or '단위 미상'})"
+        )
+        return (
+            f"{current['corp_name']}의 {target_year}년 {current.get('row_label')} {verb}은(는) {rendered}{direction}입니다. "
+            f"입력값은 {inputs}입니다. 계산식: {result['formula']}. "
+            f"근거 접수번호: {current.get('rcept_no')}, {baseline.get('rcept_no')}."
+        )
+
+    @staticmethod
+    def _ratio_calculation_answer(plan: Dict[str, Any], cells: List[Dict[str, Any]]) -> Optional[str]:
+        required_metrics = plan.get("required_metrics") or []
+        if len(required_metrics) != 2:
+            return None
+        year = max(plan.get("years") or []) if plan.get("years") else None
+        numerator = DisclosureAgent._best_cell(cells, metric=required_metrics[0], year=year)
+        denominator = DisclosureAgent._best_cell(cells, metric=required_metrics[1], year=year)
+        if not numerator or not denominator:
+            return None
+        compatible, reason = DisclosureAgent._compatible_numeric_cells([numerator, denominator], require_scope=True)
+        if not compatible:
+            return f"{numerator.get('row_label')}과 {denominator.get('row_label')}의 {reason}이 일치하지 않아 비율을 계산할 수 없습니다."
+        result = calculate("ratio", [DisclosureAgent._normalized_numeric(numerator), DisclosureAgent._normalized_numeric(denominator)])
+        label = {
+            "operating_margin": "영업이익률",
+            "net_margin": "순이익률",
+            "debt_ratio": "부채비율",
+            "roe": "ROE",
+        }.get(plan.get("metric"), "비율")
+        period = f"{year}년 " if year else ""
+        return (
+            f"{numerator['corp_name']}의 {period}{label}은(는) {result['result_float']:.2f}%입니다. "
+            f"입력값은 {numerator.get('row_label')} {numerator.get('original_text')} ({numerator.get('unit_raw') or '단위 미상'}), "
+            f"{denominator.get('row_label')} {denominator.get('original_text')} ({denominator.get('unit_raw') or '단위 미상'})입니다. "
+            f"계산식: {result['formula']}. 근거 접수번호: {numerator.get('rcept_no')}, {denominator.get('rcept_no')}."
+        )
+
+    @staticmethod
+    def _best_cell(cells: List[Dict[str, Any]], metric: Optional[str], year: Optional[int] = None) -> Optional[Dict[str, Any]]:
+        candidates = [cell for cell in cells if (not metric or cell.get("metric") == metric)]
+        if year is not None:
+            candidates = [cell for cell in candidates if cell.get("base_year") == year]
+        if not candidates:
+            return None
+        return sorted(
+            candidates,
+            key=lambda cell: (
+                cell.get("selection_score", 0),
+                1 if cell.get("period_role") == "current" else 0,
+                cell.get("base_year") or 0,
+                cell.get("base_month") or 0,
+                cell.get("rcept_dt") or "",
+            ),
+            reverse=True,
+        )[0]
+
+    @staticmethod
+    def _best_cells_by_metric_year(cells: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        best: Dict[tuple, Dict[str, Any]] = {}
+        for cell in cells:
+            key = (cell.get("corp_code"), cell.get("metric"), cell.get("base_year"), cell.get("base_month"))
+            if key not in best or cell.get("selection_score", 0) > best[key].get("selection_score", 0):
+                best[key] = cell
+        return list(best.values())
+
+    @staticmethod
+    def _compatible_numeric_cells(cells: List[Dict[str, Any]], require_scope: bool) -> tuple[bool, str]:
+        if any(cell.get("unit_currency") is None or cell.get("unit_scale") is None for cell in cells):
+            return False, "통화 또는 단위"
+        currencies = {cell.get("unit_currency") for cell in cells}
+        if len(currencies) != 1:
+            return False, "통화"
+        if require_scope:
+            scopes = {cell.get("scope") for cell in cells}
+            if len(scopes) != 1:
+                return False, "연결/별도 기준"
+        return True, ""
+
+    @staticmethod
+    def _normalized_numeric(cell: Dict[str, Any]) -> str:
+        return str(Decimal(DisclosureAgent._exact_numeric(cell)) * Decimal(str(cell.get("unit_scale") or 1)))
+
+    @staticmethod
+    def _normalized_unit_label(cell: Dict[str, Any]) -> str:
+        currency = cell.get("unit_currency")
+        return "원" if currency == "KRW" else f" {currency}" if currency else ""
+
+    @staticmethod
     def _distinct_cells(cells: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         best: Dict[tuple, Dict[str, Any]] = {}
         for cell in cells:
@@ -308,6 +467,17 @@ class DisclosureAgent:
 
     def close(self) -> None:
         self.retriever.close(); self._analyzer_conn.close()
+
+    @staticmethod
+    def _requires_candidate_documents(plan: Dict[str, Any]) -> bool:
+        return bool(plan.get("companies") or plan.get("years") or plan.get("doc_groups") or plan.get("doc_subtypes"))
+
+    @staticmethod
+    def _can_template_with_cells(plan: Dict[str, Any], financial_metrics: set[str]) -> bool:
+        if plan.get("metric") in financial_metrics:
+            return True
+        calculation = plan.get("calculation") or {}
+        return calculation.get("operation") in {"growth_rate", "difference"} and len(plan.get("required_metrics") or []) == 1
 
 
 class DecimalFormatter:

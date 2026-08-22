@@ -49,6 +49,7 @@ class StoreAgentTests(unittest.TestCase):
         agent.close()
         self.assertIn("1,000", result["answer"])
         self.assertTrue(result["retrieved_context"])
+        self.assertIn("candidate_documents_filtered", result["think_trace"]["steps"])
         self.assertIn("citations_attached", result["think_trace"]["steps"])
 
     def test_database_integrity_validator_accepts_small_valid_store(self):
@@ -84,11 +85,148 @@ class StoreAgentTests(unittest.TestCase):
         self.assertEqual(plan["doc_subtypes"], ["quarter"])
         self.assertEqual(plan["quarter"], 1)
 
+    def test_candidate_documents_use_metadata_filters(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2023년 1분기 연결 영업이익은?")
+        docs = agent.retriever.candidate_documents(plan)
+        agent.close()
+        self.assertEqual([doc["doc_id"] for doc in docs], ["periodic_1"])
+
+    def test_candidate_documents_expand_growth_baseline_year(self):
+        store = DisclosureStore(self.db); store.initialize()
+        for year in (2024, 2025):
+            record = dict(self.record, doc_id=f"periodic_{year}", rcept_no=f"{year}0501000001",
+                          rcept_dt=f"{year + 1}0301", report_nm=f"사업보고서 ({year}.12)",
+                          doc_subtype="annual", base_year=year, base_month=12)
+            store.upsert_result(record, sample_result(record))
+        store.close()
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 전년대비 매출액 증가율은?")
+        docs = agent.retriever.candidate_documents(plan)
+        agent.close()
+        self.assertEqual({doc["base_year"] for doc in docs}, {2024, 2025})
+
+    def test_structured_value_extraction_uses_candidate_documents(self):
+        store = DisclosureStore(self.db); store.initialize()
+        for year, value in ((2024, 800), (2025, 1000)):
+            record = dict(self.record, doc_id=f"periodic_op_{year}", rcept_no=f"{year}0601000001",
+                          rcept_dt=f"{year + 1}0301", report_nm=f"사업보고서 ({year}.12)",
+                          doc_subtype="annual", base_year=year, base_month=12)
+            result = sample_result(record)
+            result["table_cells"][0]["original_text"] = str(value)
+            result["table_cells"][0]["numeric_value"] = value
+            store.upsert_result(record, result)
+        store.close()
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 전년대비 영업이익 증가율은?")
+        docs = agent.retriever.candidate_documents(plan)
+        plan["_candidate_doc_ids"] = [doc["doc_id"] for doc in docs]
+        extracted = agent.retriever.extract_structured_values(plan)
+        agent.close()
+        self.assertEqual({cell["base_year"] for cell in extracted["cells"]}, {2024, 2025})
+        self.assertEqual({cell["metric"] for cell in extracted["cells"]}, {"operating_profit"})
+        self.assertFalse(extracted["missing_metrics"])
+
+    def test_growth_rate_answer_is_calculated_from_structured_values(self):
+        store = DisclosureStore(self.db); store.initialize()
+        for year, value in ((2024, 800), (2025, 1000)):
+            record = dict(self.record, doc_id=f"periodic_growth_{year}", rcept_no=f"{year}0701000001",
+                          rcept_dt=f"{year + 1}0301", report_nm=f"사업보고서 ({year}.12)",
+                          doc_subtype="annual", base_year=year, base_month=12)
+            result = sample_result(record)
+            result["table_cells"][0]["original_text"] = str(value)
+            result["table_cells"][0]["numeric_value"] = value
+            store.upsert_result(record, result)
+        store.close()
+        agent = DisclosureAgent(self.db)
+        result = agent.answer("q-growth", "테스트 2025년 전년대비 영업이익 증가율은?", use_llm=False)
+        agent.close()
+        self.assertIn("25.00%", result["answer"])
+        self.assertIn("deterministic_calculation_executed", result["think_trace"]["steps"])
+
+    def test_structured_value_extraction_handles_derived_metric_inputs(self):
+        store = DisclosureStore(self.db); store.initialize()
+        record = dict(self.record, doc_id="periodic_margin", rcept_no="20260301000001",
+                      rcept_dt="20260301", report_nm="사업보고서 (2025.12)",
+                      doc_subtype="annual", base_year=2025, base_month=12)
+        result = sample_result(record)
+        revenue_cell = dict(result["table_cells"][0])
+        revenue_cell.update({
+            "cell_id": result["table_cells"][0]["table_id"] + ":cell:revenue",
+            "row_label": "매출액",
+            "row_path": ["매출액"],
+            "original_text": "10,000",
+            "numeric_value": 10000,
+        })
+        result["table_cells"].append(revenue_cell)
+        store.upsert_result(record, result)
+        store.close()
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 영업이익률은?")
+        docs = agent.retriever.candidate_documents(plan)
+        plan["_candidate_doc_ids"] = [doc["doc_id"] for doc in docs]
+        extracted = agent.retriever.extract_structured_values(plan)
+        agent.close()
+        self.assertEqual({cell["metric"] for cell in extracted["cells"]}, {"operating_profit", "revenue"})
+        self.assertFalse(extracted["missing_metrics"])
+
+    def test_margin_answer_is_calculated_from_required_metrics(self):
+        store = DisclosureStore(self.db); store.initialize()
+        record = dict(self.record, doc_id="periodic_margin_answer", rcept_no="20260302000001",
+                      rcept_dt="20260302", report_nm="사업보고서 (2025.12)",
+                      doc_subtype="annual", base_year=2025, base_month=12)
+        result = sample_result(record)
+        revenue_cell = dict(result["table_cells"][0])
+        revenue_cell.update({
+            "cell_id": result["table_cells"][0]["table_id"] + ":cell:revenue",
+            "row_label": "매출액",
+            "row_path": ["매출액"],
+            "original_text": "10,000",
+            "numeric_value": 10000,
+        })
+        result["table_cells"].append(revenue_cell)
+        store.upsert_result(record, result)
+        store.close()
+        agent = DisclosureAgent(self.db)
+        result = agent.answer("q-margin", "테스트 2025년 영업이익률은?", use_llm=False)
+        agent.close()
+        self.assertIn("10.00%", result["answer"])
+        self.assertIn("deterministic_calculation_executed", result["think_trace"]["steps"])
+
     def test_funding_instrument_question_routes_to_major_filings(self):
         agent = DisclosureAgent(self.db)
         plan = agent.analyzer.analyze("테스트 2025년 자금조달 CB, BW, EB 내역")
         agent.close()
         self.assertIn("major", plan["doc_groups"])
+
+    def test_year_over_year_growth_question_selects_formula(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 전년대비 매출액 증가율은?")
+        agent.close()
+        self.assertEqual(plan["intent"], "calculation")
+        self.assertEqual(plan["metric"], "revenue")
+        self.assertEqual(plan["required_metrics"], ["revenue"])
+        self.assertEqual(plan["calculation"]["operation"], "growth_rate")
+        self.assertEqual(plan["calculation"]["target_year"], 2025)
+        self.assertEqual(plan["calculation"]["baseline_year"], 2024)
+        self.assertEqual(plan["period_basis"], "base_period")
+
+    def test_derived_margin_question_lists_required_metrics(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 영업이익률은?")
+        agent.close()
+        self.assertEqual(plan["intent"], "calculation")
+        self.assertEqual(plan["metric"], "operating_margin")
+        self.assertEqual(plan["calculation"]["operation"], "ratio")
+        self.assertEqual(plan["required_metrics"], ["operating_profit", "revenue"])
+        self.assertIn("영업이익 / 매출액", plan["calculation"]["formula"])
+
+    def test_ambiguous_return_metric_is_flagged(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 수익률은?")
+        agent.close()
+        self.assertIn("metric", plan["missing_slots"])
+        self.assertIn("ambiguous_return_metric", plan["warnings"])
 
     def test_unknown_company_metric_does_not_return_another_company(self):
         agent = DisclosureAgent(self.db)

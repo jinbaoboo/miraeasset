@@ -8,8 +8,8 @@ Examples:
 from __future__ import annotations
 
 import argparse
-import fcntl
 import json
+import os
 import time
 import uuid
 from collections import Counter
@@ -21,6 +21,12 @@ from typing import Any, Dict, Iterable, List, Optional
 from src.parser.disclosure_parser import DisclosureParser
 from src.parser.periodic_parser import load_manifest
 from src.storage.sqlite_store import DisclosureStore
+
+
+if os.name == "nt":
+    import msvcrt
+else:
+    import fcntl
 
 
 def _now() -> str:
@@ -41,14 +47,22 @@ def _exclusive_build_lock(db_path: Path):
     db_path.parent.mkdir(parents=True, exist_ok=True)
     lock_handle = db_path.with_suffix(db_path.suffix + ".build.lock").open("a+", encoding="utf-8")
     try:
-        fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError as error:
+        if os.name == "nt":
+            lock_handle.seek(0)
+            msvcrt.locking(lock_handle.fileno(), msvcrt.LK_NBLCK, 1)
+        else:
+            fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except (BlockingIOError, OSError) as error:
         lock_handle.close()
         raise RuntimeError(f"Another corpus build is already writing {db_path}") from error
     try:
         yield
     finally:
-        fcntl.flock(lock_handle.fileno(), fcntl.LOCK_UN)
+        if os.name == "nt":
+            lock_handle.seek(0)
+            msvcrt.locking(lock_handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            fcntl.flock(lock_handle.fileno(), fcntl.LOCK_UN)
         lock_handle.close()
 
 

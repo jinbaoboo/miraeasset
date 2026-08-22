@@ -34,6 +34,7 @@ from .text_cleaner import (
     normalize_text,
     split_leading_bold_heading,
 )
+from .path_utils import resolve_manifest_path
 from .xml_recovery import RecoveryResult, parse_xml_file
 
 
@@ -150,7 +151,7 @@ class PeriodicParser:
             "version_index": 1,
             "version_count": 1,
         })
-        folder = self.data_root / str(record["file_path"])
+        folder = resolve_manifest_path(self.data_root, str(record["file_path"]))
         result: Dict[str, Any] = {
             "schema_version": SCHEMA_VERSION,
             "document": {}, "sections": [], "text_chunks": [], "logical_tables": [],

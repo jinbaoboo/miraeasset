@@ -4,7 +4,7 @@
   "title": "DisclosureAgentAnswer",
   "type": "object",
   "additionalProperties": false,
-  "required": ["question_id", "question", "retrieved_context", "think_trace", "answer"],
+  "required": ["question_id", "question", "answer", "claims", "calculations", "citations", "limitations", "confidence", "validation"],
   "properties": {
     "question_id": {"type": "string"},
     "question": {"type": "string"},
@@ -14,7 +14,7 @@
         "type": "object",
         "required": ["kind", "record_id", "content", "citation"],
         "properties": {
-          "kind": {"enum": ["cell", "text", "table", "event", "event_field", "correction"]},
+          "kind": {"enum": ["cell", "text", "table", "event", "event_field", "correction", "investment_plan", "financing", "contract", "contract_termination", "contract_lifecycle", "business_evidence", "business_profile"]},
           "record_id": {"type": ["string", "null"]},
           "content": {"type": "string"},
           "citation": {
@@ -47,6 +47,37 @@
         "note": {"type": "string"}
       }
     },
-    "answer": {"type": "string"}
+    "answer": {"type": "string"},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "text", "claim_type", "evidence_ids", "verified"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "text": {"type": "string"},
+          "claim_type": {"enum": ["extracted_fact", "calculated_fact"]},
+          "evidence_ids": {"type": "array", "items": {"type": "string"}},
+          "verified": {"type": "boolean"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "calculations": {"type": "array", "items": {"type": "object"}},
+    "citations": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "validation": {
+      "type": "object",
+      "required": ["passed", "checks", "requirements", "grounding", "action"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "checks": {"type": "array", "items": {"type": "object"}},
+        "requirements": {"type": "object"},
+        "grounding": {"type": "object"},
+        "action": {"enum": ["allow", "review", "blocked", "clarify", "limit"]}
+      },
+      "additionalProperties": true
+    }
   }
 }

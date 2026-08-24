@@ -9,9 +9,12 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from src.domain.metric_ontology import FINANCIAL_CELL_METRICS
 from src.retrieval.hybrid_search import HybridRetriever
 from src.retrieval.query_analyzer import QueryAnalyzer
+from src.retrieval.query_planner import QueryPlanner
 from src.tools.calculator import calculate
+from src.validation import AnswerGuardrail
 
 from .hyperclova_client import HyperClovaClient
 
@@ -30,9 +33,18 @@ class DisclosureAgent:
         analyzer_conn.row_factory = sqlite3.Row
         self._analyzer_conn = analyzer_conn
         self.analyzer = QueryAnalyzer(analyzer_conn)
+        self.planner = QueryPlanner(self.analyzer)
         self.hcx = hcx_client or HyperClovaClient()
+        self.guardrail = AnswerGuardrail()
 
     def answer(self, question_id: str, question: str, use_llm: bool = True) -> Dict[str, Any]:
+        if question.strip() and not any(term.lower() in question.lower() for term in SECURITY_TERMS):
+            composite = self.planner.plan(question)
+            if composite["is_composite"]:
+                return self._answer_composite(question_id, question, composite, use_llm)
+        return self._answer_single(question_id, question, use_llm)
+
+    def _answer_single(self, question_id: str, question: str, use_llm: bool = True) -> Dict[str, Any]:
         if not question.strip():
             return self._response(question_id, question, [], ["empty_question"], "질문이 비어 있어 답변할 수 없습니다.")
         if any(term.lower() in question.lower() for term in SECURITY_TERMS):
@@ -43,6 +55,12 @@ class DisclosureAgent:
                                   "제공된 공시 코퍼스만으로는 주가·뉴스·투자 추천을 확인할 수 없습니다.")
         plan = self.analyzer.analyze(question)
         trace: List[str] = ["query_analyzed", "metadata_filters_applied"]
+        clarification = self._clarification_answer(plan)
+        if clarification:
+            reason_code, answer = clarification
+            plan["resolution"] = {"action": "clarify", "reason_code": reason_code}
+            trace.append(f"clarification_required:{reason_code}")
+            return self._response(question_id, question, [], trace, answer, plan)
         if plan.get("metric") and not plan.get("companies") and not plan.get("cross_corpus"):
             trace.append("company_not_identified")
             return self._response(
@@ -64,7 +82,46 @@ class DisclosureAgent:
             answer = "질문 조건에 맞는 후보 공시 문서를 찾지 못했습니다. 회사명·기간·공시 유형을 확인해 주세요."
             return self._response(question_id, question, [], trace, answer, plan)
         contexts: List[Dict[str, Any]] = []
-        financial_metrics = {"revenue", "operating_profit", "net_income", "assets", "liabilities", "equity", "rnd", "capex"}
+        specialized_data: Any = None
+        query_type = plan.get("query_type")
+        if query_type == "investment_plan":
+            specialized_data = self.retriever.find_investment_plan(search_plan)
+            if specialized_data:
+                trace.append("investment_plan_table_reconstructed")
+                contexts.extend(self._investment_context(item) for item in specialized_data)
+        elif query_type == "financing_history":
+            specialized_data = self.retriever.find_financing_lifecycle(search_plan)
+            trace.append("financing_lifecycle_linked")
+            for chain in specialized_data.get("chains", []):
+                contexts.extend(self._financing_context(item) for item in chain.get("history", []))
+        elif query_type == "contract_termination":
+            specialized_data = self.retriever.find_contract_lifecycle(search_plan)
+            trace.append("contract_lifecycle_linked")
+            contexts.append(self._contract_summary_context(specialized_data))
+            contract_items = [item for chain in specialized_data.get("chains", [])
+                              for item in chain.get("history", []) + chain.get("terminations", [])]
+            matched_ids = {item.get("event_id") for item in contract_items}
+            contract_items += [item for item in specialized_data.get("terminations", [])
+                               if item.get("event_id") not in matched_ids]
+            contexts.extend(self._contract_context(item) for item in contract_items[:20])
+        elif query_type == "business_change":
+            specialized_data = self.retriever.find_business_change_evidence(search_plan)
+            if specialized_data.get("evidence"):
+                trace.append("business_sections_compared_by_year")
+                for year, profile in sorted(specialized_data.get("profiles", {}).items()):
+                    contexts.append(self._business_profile_context(int(year), profile, specialized_data["evidence"]))
+                contexts.extend(self._business_context(item) for item in specialized_data["evidence"])
+        elif query_type == "correction_history":
+            specialized_data = self.retriever.find_correction_chains(search_plan)
+            trace.append("correction_chains_reconstructed")
+            for chain in specialized_data.get("chains", []):
+                effective = {self._normalized_item(item.get("item")): item.get("current")
+                             for item in chain.get("effective_items", [])}
+                for version in chain.get("versions", []):
+                    for item in version.get("items", []):
+                        contexts.append(self._correction_item_context(chain, version, item,
+                            effective.get(self._normalized_item(item.get("item")))))
+        financial_metrics = FINANCIAL_CELL_METRICS
         cell_limit = 200 if plan.get("cross_corpus") else 60 if len(plan.get("companies") or []) > 1 else 12
         structured_values = self.retriever.extract_structured_values(search_plan, limit_per_metric=cell_limit)
         if structured_values.get("missing_metrics"):
@@ -82,31 +139,42 @@ class DisclosureAgent:
             trace.append("structured_event_fields_retrieved")
             context_fields = event_fields if plan.get("intent") == "calculation" else event_fields[:8]
             contexts.extend(self._event_field_context(field) for field in context_fields)
-        if "정정" in question and plan.get("companies"):
+        if query_type != "correction_history" and "정정" in question and plan.get("companies"):
             history = self.retriever.correction_history(plan["companies"][0]["corp_code"], limit=50,
                                                         doc_groups=plan.get("doc_groups"))
             if history:
                 trace.append("correction_history_retrieved")
                 contexts.extend(self._correction_context(item) for item in history)
-        retrieved = self.retriever.search(question, search_plan, limit=max(4, 8-len(contexts)))
+        specialized_answer = self._specialized_answer(plan, specialized_data)
+        retrieved = ([] if specialized_answer else
+                     self.retriever.search(question, search_plan, limit=max(4, 8-len(contexts))))
         contexts.extend({"kind": item["kind"], "record_id": item["record_id"],
-                         "content": item.get("content", "")[:6000], "citation": item.get("citation", {})} for item in retrieved)
+                         "content": item.get("content", "")[:6000], "citation": item.get("citation", {}),
+                         "retrieval_score": item.get("score"), "score_breakdown": item.get("score_breakdown", {})}
+                        for item in retrieved)
         if retrieved: trace.append("fts_evidence_retrieved")
-        context_limit = 1000 if plan.get("intent") == "calculation" and event_fields else 50 if "정정" in question else 10
+        context_limit = (1000 if plan.get("intent") == "calculation" and event_fields else 50 if "정정" in question
+                         else 20 if query_type == "business_change" else 10)
         contexts = self._deduplicate(contexts)[:context_limit]
-        if not contexts:
+        if not contexts and not specialized_answer:
             trace.append("insufficient_evidence")
             answer = "제공된 공시 코퍼스에서 질문을 뒷받침할 근거를 찾지 못했습니다. 회사명·기간·공시 유형을 더 구체적으로 입력해 주세요."
             return self._response(question_id, question, contexts, trace, answer, plan)
-        answer = None
+        answer = specialized_answer
+        if answer:
+            trace.append("deterministic_specialized_answer")
         calculation_answer = self._calculation_answer(plan, cells, event_fields)
-        if calculation_answer:
+        if not answer and calculation_answer:
             answer = calculation_answer
             trace.append("deterministic_calculation_executed")
         can_template_cells = self._can_template_with_cells(plan, financial_metrics)
         deterministic_numeric = plan.get("intent") in {"comparison", "calculation"} and bool((can_template_cells and cells) or event_fields)
         if deterministic_numeric:
             trace.append("deterministic_numeric_tool_preferred")
+        # Qualitative multi-year business comparison benefits from grounded
+        # generation; all numeric/sum/lifecycle routes remain deterministic.
+        if query_type == "business_change" and use_llm and self.hcx.configured:
+            answer = None
         if not answer and use_llm and self.hcx.configured and not deterministic_numeric:
             try:
                 generation_contexts = contexts[:20]
@@ -123,6 +191,124 @@ class DisclosureAgent:
             trace.append("deterministic_grounded_template")
         trace.append("citations_attached")
         return self._response(question_id, question, contexts, trace, answer, plan)
+
+    def _answer_composite(self, question_id: str, question: str, composite: Dict[str, Any],
+                          use_llm: bool) -> Dict[str, Any]:
+        subresults = [self._answer_single(f"{question_id}:{task['task_id']}", task["question"], use_llm)
+                      for task in composite["subtasks"]]
+        contexts = self._deduplicate([context for result in subresults for context in result.get("retrieved_context", [])])
+        answer_parts = []
+        claims = []
+        calculations = []
+        citations = []
+        limitations = []
+        seen_citations = set()
+        confidence_rank = {"low": 0, "medium": 1, "high": 2}
+        confidence = "high"
+        for task, result in zip(composite["subtasks"], subresults):
+            answer_parts.append(f"[{task['task_id']}] {task['question']}\n{result['answer']}")
+            for claim in result.get("claims", []):
+                claims.append(dict(claim, claim_id=f"{task['task_id']}:{claim['claim_id']}", task_id=task["task_id"]))
+            for calculation in result.get("calculations", []):
+                calculations.append(dict(calculation,
+                                         calculation_id=f"{task['task_id']}:{calculation['calculation_id']}",
+                                         task_id=task["task_id"]))
+            for citation in result.get("citations", []):
+                key = (citation.get("doc_id"), citation.get("record_id"))
+                if key not in seen_citations:
+                    seen_citations.add(key)
+                    citations.append(dict(citation, citation_id=f"citation_{len(citations)+1:03d}"))
+            limitations.extend(dict(item, task_id=task["task_id"]) for item in result.get("limitations", []))
+            if confidence_rank.get(result.get("confidence"), 0) < confidence_rank[confidence]:
+                confidence = result.get("confidence", "low")
+        actions = [result.get("validation", {}).get("action") for result in subresults]
+        passed = all(result.get("validation", {}).get("passed") for result in subresults)
+        action = "blocked" if "blocked" in actions else "clarify" if "clarify" in actions else "limit" if all(
+            value == "limit" for value in actions) else "allow" if passed else "review"
+        checks = [{"name": "subtask_coverage", "passed": len(subresults) == len(composite["subtasks"]),
+                   "details": [task["task_id"] for task in composite["subtasks"]]},
+                  {"name": "all_subtasks_validated", "passed": passed,
+                   "details": [{"task_id": task["task_id"], "action": result["validation"]["action"]}
+                               for task, result in zip(composite["subtasks"], subresults)]}]
+        return {
+            "question_id": question_id, "question": question, "retrieved_context": contexts,
+            "think_trace": {"steps": ["multi_intent_query_planned", "subtasks_executed", "subtask_answers_merged"],
+                            "query_plan": composite, "note": "내부 추론 원문이 아닌 실행 단계 요약입니다."},
+            "answer": "\n\n".join(answer_parts), "claims": claims, "calculations": calculations,
+            "citations": citations, "limitations": limitations, "confidence": confidence,
+            "validation": {"passed": passed, "checks": checks,
+                           "requirements": {"query_type": "multi_intent", "passed": passed,
+                                            "subtask_count": len(subresults)},
+                           "grounding": {"passed": all(result["validation"]["grounding"]["passed"]
+                                                       for result in subresults)},
+                           "action": action},
+        }
+
+    @staticmethod
+    def _investment_context(item: Dict[str, Any]) -> Dict[str, Any]:
+        rendered_rows = []
+        for row in item.get("rows", []):
+            values = ", ".join(f"{value.get('column_label')}: {value.get('original_text')}"
+                               for value in row.get("values", []))
+            rendered_rows.append(f"{row.get('row_label')}: {values}")
+        unit = (item.get("unit") or {}).get("raw") or "단위 미상"
+        content = (f"{item.get('corp_name')} | {item.get('report_nm')} | {item.get('section_path')} | "
+                   f"{item.get('table_title')} | {unit}\n" + "\n".join(rendered_rows))
+        return {"kind": "investment_plan", "record_id": item["table_id"], "content": content,
+                "citation": item["citation"]}
+
+    @staticmethod
+    def _financing_context(item: Dict[str, Any]) -> Dict[str, Any]:
+        purposes = ", ".join(f"{purpose['purpose']} {purpose['amount_krw']}원" for purpose in item.get("purposes", []))
+        content = (f"{item.get('corp_name')} | {item.get('instrument')} | {item.get('report_nm')} | "
+                   f"단계 {item.get('stage') or 'decision'} | 조달 결정금액 {item.get('amount_krw') or '확인 불가'}원 | "
+                   f"납입 예정일 {item.get('scheduled_payment_date') or '미상'} | 목적 {purposes or '미상'} | "
+                   "실제 납입·발행 완료 금액은 이 공시만으로 확인 불가")
+        return {"kind": "financing", "record_id": item["event_id"], "content": content,
+                "citation": item["citation"]}
+
+    @staticmethod
+    def _contract_context(item: Dict[str, Any]) -> Dict[str, Any]:
+        content = (f"{item.get('corp_name')} | {item.get('report_nm')} | {item.get('contract_name') or '계약명 미상'} | "
+                   f"금액 {item.get('amount_krw') or '미상'} | 계약일 {item.get('contract_date') or '미상'} | "
+                   f"해지일 {item.get('termination_date') or '해당 없음'} | 해지사유 {item.get('termination_reason') or '해당 없음'} | "
+                   f"단계 {item.get('stage') or item.get('kind')} | 관련공시 {item.get('related_disclosure') or '미상'}")
+        return {"kind": item.get("kind"), "record_id": item["event_id"], "content": content,
+                "citation": item["citation"]}
+
+    @staticmethod
+    def _contract_summary_context(lifecycle: Dict[str, Any]) -> Dict[str, Any]:
+        contracts = lifecycle.get("contracts", [])
+        matches = lifecycle.get("matches", [])
+        terminations = lifecycle.get("terminations", [])
+        first = (contracts or terminations or [{}])[0]
+        content = (f"계약 lifecycle 집계 | 원계약 체인 {len(contracts)}건 | 연결된 해지 {len(matches)}건 | "
+                   f"검색된 후속 해지 공시 {len(terminations)}건 | "
+                   "체인은 정정본을 중복 제거하고 관련공시일·계약명·상대방·계약기간으로 연결")
+        return {"kind": "contract_lifecycle", "record_id": "contract_lifecycle:summary", "content": content,
+                "citation": first.get("citation") or {},
+                "contract_chain_ids": [item.get("contract_chain_id") for item in contracts],
+                "matched_chain_ids": [item.get("contract_chain_id") for item in matches],
+                "termination_event_ids": [item.get("event_id") for item in terminations]}
+
+    @staticmethod
+    def _business_context(item: Dict[str, Any]) -> Dict[str, Any]:
+        content = (f"{item.get('corp_name')} | {item.get('base_year')}년 | {item.get('report_nm')} | "
+                   f"{item.get('section_path')} | 근거분류 {', '.join(item.get('evidence_categories') or [])} | "
+                   f"사업신호 {', '.join(item.get('signals') or [])}\n{item.get('text', '')[:5000]}")
+        return {"kind": "business_evidence", "record_id": item["chunk_id"], "content": content,
+                "citation": item["citation"]}
+
+    @staticmethod
+    def _business_profile_context(year: int, profile: Dict[str, Any], evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
+        representative = next((item for item in evidence if item.get("base_year") == year), {})
+        content = (f"{representative.get('corp_name')} | {year}년 사업 변화 분류 프로필 | "
+                   f"근거분류 {', '.join(profile.get('categories') or [])} | "
+                   f"사업신호 {', '.join(profile.get('signals') or [])} | "
+                   f"분석한 사업 섹션 청크 {profile.get('section_count') or 0}개")
+        return {"kind": "business_profile", "record_id": f"business_profile:{representative.get('doc_id')}:{year}",
+                "content": content, "citation": representative.get("citation") or {},
+                "signal_sources": profile.get("signal_sources") or {}}
 
     @staticmethod
     def _cell_context(cell: Dict[str, Any]) -> Dict[str, Any]:
@@ -173,7 +359,7 @@ class DisclosureAgent:
                 if corp_code not in seen_companies:
                     seen_companies.add(corp_code); first.append(cell)
             first.sort(
-                key=lambda item: Decimal(DisclosureAgent._exact_numeric(item)) * Decimal(str(item.get("unit_scale") or 0)),
+                key=lambda item: DisclosureAgent._comparison_numeric(item, plan),
                 reverse=True,
             )
             chosen_ids = {cell.get("cell_id") for cell in first}
@@ -189,6 +375,259 @@ class DisclosureAgent:
         return first + [cell for cell in cells if cell.get("cell_id") not in chosen_ids]
 
     @staticmethod
+    def _specialized_answer(plan: Dict[str, Any], data: Any) -> Optional[str]:
+        query_type = plan.get("query_type")
+        if query_type == "investment_plan":
+            return DisclosureAgent._investment_plan_answer(data or [])
+        if query_type == "financing_history":
+            return DisclosureAgent._financing_answer(plan, data or {"chains": [], "coverage": {}})
+        if query_type == "contract_termination":
+            return DisclosureAgent._contract_termination_answer(plan, data or {})
+        if query_type == "business_change":
+            return DisclosureAgent._business_change_answer(plan, data or {"evidence": [], "profiles": {}})
+        if query_type == "correction_history":
+            return DisclosureAgent._correction_history_answer(plan, data or {"chains": [], "unlinked_count": 0})
+        return None
+
+    @staticmethod
+    def _correction_item_context(chain: Dict[str, Any], version: Dict[str, Any], item: Dict[str, Any],
+                                 current: Optional[str]) -> Dict[str, Any]:
+        content = (f"{version.get('corp_name')} | {version.get('report_nm')} | 정정 항목 {item.get('item') or '미상'} | "
+                   f"정정 전 {item.get('before_text') or '미상'} | 정정 후 {item.get('after_text') or '미상'} | "
+                   f"현재 유효 값 {current or item.get('after_text') or '미상'} | 사유 {item.get('reason') or '미상'}")
+        return {"kind": "correction", "record_id": item.get("item_id") or version.get("correction_id"),
+                "content": content, "citation": item.get("citation") or {}, "correction_chain_id": chain.get("chain_id")}
+
+    @staticmethod
+    def _correction_history_answer(plan: Dict[str, Any], data: Dict[str, Any]) -> str:
+        chains = data.get("chains", [])
+        company = (plan.get("companies") or [{}])[0].get("corp_name", "해당 기업")
+        if not chains:
+            return f"{company}의 질문 조건에 해당하는 정정공시를 제공 코퍼스에서 찾지 못했습니다."
+        view = plan.get("correction_view") or "history"
+        lines = [f"{company}의 정정공시를 원본·정정본 체인 기준으로 확인했습니다."]
+        receipts: List[str] = []
+        for chain in chains[:5]:
+            current = chain.get("current_version") or {}
+            original = chain.get("original") or {}
+            label = current.get("report_nm") or original.get("report_nm") or "정정공시"
+            lines.append(f"- {label} (연결 신뢰도 {chain.get('link_confidence') or 'unknown'})")
+            if original:
+                lines.append(f"  원 공시: {original.get('report_nm')}, 접수번호 {original.get('rcept_no')}")
+                receipts.append(original.get("rcept_no") or "")
+            meaningful_items = [item for item in chain.get("effective_items", [])
+                                if DisclosureAgent._meaningful_correction_item(item)]
+            unique_items = []
+            seen_items = set()
+            for item in meaningful_items:
+                item_name = item.get("item") or "정정 항목 미상"
+                display_name = "정정 사항" if not DisclosureAgent._normalized_item(item_name) else item_name
+                key = (DisclosureAgent._normalized_item(display_name), item.get("original"), item.get("current"))
+                if key in seen_items:
+                    continue
+                seen_items.add(key)
+                unique_items.append((display_name, item))
+            for item_name, item in unique_items[:10]:
+                if view == "original":
+                    lines.append(f"  · {item_name}: 최초/정정 전 {item.get('original') or '확인 불가'}")
+                elif view == "current":
+                    lines.append(f"  · {item_name}: 현재 유효 값 {item.get('current') or '확인 불가'}")
+                else:
+                    lines.append(f"  · {item_name}: 정정 전 {item.get('original') or '확인 불가'} → "
+                                 f"정정 후·현재 유효 {item.get('current') or '확인 불가'}")
+            receipts.extend(version.get("rcept_no") or "" for version in chain.get("versions", []))
+        if data.get("unlinked_count"):
+            lines.append("일부 정정본은 원 공시 식별자가 없어 독립 체인으로 보존했으며, 임의로 원본과 연결하지 않았습니다.")
+        if receipts:
+            lines.append(f"근거 접수번호: {', '.join(dict.fromkeys(filter(None, receipts)))}.")
+        return "\n".join(lines)
+
+    @staticmethod
+    def _meaningful_correction_item(item: Dict[str, Any]) -> bool:
+        generic_names = {"시작일", "종료일", "해당여부", "우리사주조합", "구주주"}
+        name = (item.get("item") or "").strip()
+        original = (item.get("original") or "").strip()
+        current = (item.get("current") or "").strip()
+        if name in generic_names:
+            return False
+        return bool(name and name not in {"-", "--"} and (len(original) > 2 or len(current) > 2)) or bool(
+            name in {"-", "--"} and len(current) > 2)
+
+    @staticmethod
+    def _normalized_item(value: Optional[str]) -> str:
+        return re.sub(r"[^0-9A-Za-z가-힣]", "", value or "").lower()
+
+    @staticmethod
+    def _investment_plan_answer(tables: List[Dict[str, Any]]) -> Optional[str]:
+        if not tables:
+            return None
+        table = tables[0]
+        unit = (table.get("unit") or {}).get("raw") or "단위 미상"
+
+        def value_for(row: Dict[str, Any], token: str) -> Optional[Dict[str, Any]]:
+            return next((value for value in row.get("values", []) if token.replace(" ", "") in
+                         (value.get("column_label") or "").replace(" ", "")), None)
+
+        lines: List[str] = []
+        total_line: Optional[str] = None
+        for row in table.get("rows", []):
+            planned = value_for(row, "투자계획")
+            actual = value_for(row, "1분기실적")
+            previous = value_for(row, "2025년실적")
+            if not planned:
+                continue
+            detail = f"{row.get('row_label')}: 연간 계획 {planned.get('original_text')}"
+            if actual:
+                detail += f", 1분기 실적 {actual.get('original_text')}"
+                planned_number = DisclosureAgent._decimal_from_item(planned)
+                actual_number = DisclosureAgent._decimal_from_item(actual)
+                if planned_number:
+                    detail += f"(집행률 {(actual_number / planned_number * 100):.1f}%)"
+            if previous:
+                detail += f", 2025년 실적 {previous.get('original_text')}"
+            if "합" in (row.get("row_label") or ""):
+                total_line = detail
+            else:
+                lines.append(detail)
+        if not lines and not total_line:
+            return None
+        summary = f"{table.get('corp_name')}의 {table.get('report_nm')} 기준 주요 투자 계획은 다음과 같습니다. {unit}"
+        if total_line:
+            summary += f"\n\n- 전체: {total_line.split(': ', 1)[-1]}"
+        summary += "".join(f"\n- {line}" for line in lines)
+        summary += (f"\n\n이 숫자는 투자 '계획'과 분기 '실적'이며, 집행 완료 금액으로 해석하지 않았습니다. "
+                    f"근거: {table.get('report_nm')}, 접수번호 {table.get('rcept_no')}, {table.get('section_path')}.")
+        return summary
+
+    @staticmethod
+    def _financing_answer(plan: Dict[str, Any], lifecycle: Any) -> str:
+        if isinstance(lifecycle, list):
+            events = lifecycle
+            coverage = {"payment_completion": False, "issuance_result": False,
+                        "reason_code": "financing_followup_filings_not_in_corpus"}
+        else:
+            events = [chain.get("current", {}) for chain in lifecycle.get("chains", [])]
+            coverage = lifecycle.get("coverage", {})
+        instruments = plan.get("funding_instruments") or ["equity", "CB", "BW", "EB"]
+        labels = {"equity": "유상증자", "CB": "CB(전환사채)", "BW": "BW(신주인수권부사채)", "EB": "EB(교환사채)"}
+        company = (plan.get("companies") or [{}])[0].get("corp_name", "해당 기업")
+        year = (plan.get("years") or [None])[0]
+        lines = []
+        receipts: List[str] = []
+        for instrument in instruments:
+            selected = [event for event in events if event.get("instrument") == instrument]
+            amounts = [DisclosureAgent._decimal_text(event.get("amount_krw")) for event in selected if event.get("amount_krw")]
+            total = sum(amounts) if amounts else None
+            if not selected:
+                lines.append(f"- {labels[instrument]}: 해당 기간 결정 공시 없음")
+                continue
+            amount_text = f", 결정금액 합계 {DecimalFormatter.comma(format(total, 'f'))}원" if total is not None else ", 금액 확인 불가"
+            purpose_names = sorted({purpose["purpose"] for event in selected for purpose in event.get("purposes", [])})
+            purpose_text = f", 용도 {', '.join(purpose_names)}" if purpose_names else ""
+            lines.append(f"- {labels[instrument]}: {len(selected)}건{amount_text}{purpose_text}")
+            receipts.extend(event.get("rcept_no") or "" for event in selected)
+        qualifier = "접수일 기준" if year else "제공 코퍼스 기준"
+        answer = f"{company}의 {year or ''}년 자금조달 결정 공시를 {qualifier}으로 집계했습니다.\n" + "\n".join(lines)
+        answer += "\n\n주의: 위 금액은 실제 납입·발행 완료액이 아니라 유상증자/사채 발행 '결정 공시'의 계획 금액입니다."
+        if not coverage.get("payment_completion") or not coverage.get("issuance_result"):
+            answer += " 제공 코퍼스에 납입 완료·발행 결과 공시 유형이 없어 실제 조달 완료 여부와 완료 금액은 확인할 수 없습니다."
+        if any(event.get("stage") == "correction" for event in events):
+            answer += " 정정 이력이 있는 건은 가장 최근 정정본의 결정 금액을 사용했습니다."
+        if plan.get("funding_status_requested") == "completed":
+            answer += " 따라서 질문의 '실시한'을 실제 조달 완료로 단정하지 않고, 확인 가능한 결정 내역만 제시합니다."
+        if receipts:
+            answer += f" 근거 접수번호: {', '.join(dict.fromkeys(receipts))}."
+        return answer
+
+    @staticmethod
+    def _contract_termination_answer(plan: Dict[str, Any], lifecycle: Dict[str, Any]) -> str:
+        company = (plan.get("companies") or [{}])[0].get("corp_name", "해당 기업")
+        year = (plan.get("years") or [None])[0]
+        contracts = lifecycle.get("contracts", [])
+        matches = lifecycle.get("matches", [])
+        if matches:
+            lines = []
+            receipts = []
+            for match in matches:
+                contract, termination = match["contract"], match["termination"]
+                kind = {"partial": "일부 해지", "total": "전체 해지", "unknown": "해지 범위 판단 불가"}.get(
+                    match.get("termination_kind"), "해지 범위 판단 불가")
+                basis = ", ".join(match.get("match_reasons") or []) or "복합 식별자"
+                lines.append(f"- {termination.get('contract_name') or contract.get('contract_name') or '계약명 미상'}: "
+                             f"{termination.get('termination_date') or termination.get('rcept_dt')}에 해지 공시 "
+                             f"({kind}, 연결 신뢰도 {match.get('match_confidence') or 'unknown'}, 근거 {basis})")
+                receipts.extend([contract.get("rcept_no") or "", termination.get("rcept_no") or ""])
+            return (f"예. {company}이 {year}년에 공시한 주요 계약 중 이후 해지 공시와 연결된 계약이 "
+                    f"{len(matches)}건 있습니다.\n" + "\n".join(lines) +
+                    f"\n근거 접수번호: {', '.join(dict.fromkeys(receipts))}.")
+        if not contracts:
+            return f"{company}의 {year}년 단일판매·공급계약 체결 공시를 제공 코퍼스에서 찾지 못했습니다."
+        receipts = ", ".join(contract.get("rcept_no") or "" for contract in contracts)
+        return (f"{company}이 {year}년에 공시한 단일판매·공급계약 {len(contracts)}건을 후속 해지 공시와 대조했으나, "
+                f"관련공시일·계약명·상대방·계약기간을 기준으로 명확히 연결되는 해지 건은 확인되지 않았습니다. "
+                f"이는 해지가 없다는 법적 단정이 아니라 제공 코퍼스 내 검색 결과입니다. 계약 근거 접수번호: {receipts}.")
+
+    @staticmethod
+    def _business_change_answer(plan: Dict[str, Any], analysis: Any) -> Optional[str]:
+        years = sorted(plan.get("years") or [])
+        if isinstance(analysis, list):
+            evidence = analysis
+            profiles = {}
+        else:
+            evidence = analysis.get("evidence", [])
+            profiles = {int(year): value for year, value in (analysis.get("profiles") or {}).items()}
+        if len(years) < 2 or not evidence:
+            return None
+        by_year = {year: [item for item in evidence if item.get("base_year") == year] for year in years}
+        if any(not by_year[year] for year in years):
+            return f"{years[0]}년과 {years[-1]}년 모두의 사업보고서 '사업의 내용' 근거가 갖춰지지 않아 변화를 판단할 수 없습니다."
+        old, new = years[0], years[-1]
+        if not profiles:
+            profiles = {year: {"signals": sorted({signal for item in by_year[year] for signal in item.get("signals", [])}),
+                               "categories": sorted({category for item in by_year[year]
+                                                     for category in item.get("evidence_categories", [])})}
+                        for year in years}
+        old_signals = set(profiles.get(old, {}).get("signals", []))
+        new_signals = set(profiles.get(new, {}).get("signals", []))
+        added = sorted(new_signals - old_signals)
+        retained = sorted(new_signals & old_signals)
+        reduced = sorted(old_signals - new_signals)
+        category_labels = {"overview": "사업 개요", "products": "제품·서비스", "segments_revenue": "사업부문·매출구성",
+                           "new_business": "신규사업", "strategy_technology": "전략·기술", "rnd": "R&D",
+                           "investment": "투자", "market_change": "시장 변화"}
+        company = (plan.get("companies") or [{}])[0].get("corp_name", "해당 기업")
+        parts = [f"{company}의 {old}년과 {new}년 사업보고서 'II. 사업의 내용'을 같은 근거 분류로 비교한 결과입니다."]
+        if retained: parts.append(f"- 유지된 핵심 사업·전략 축: {', '.join(retained)}")
+        if added: parts.append(f"- {new}년에 추가로 강조된 변화: {', '.join(added)}")
+        if reduced: parts.append(f"- {new}년 근거에서 강조가 줄어든 표현: {', '.join(reduced)}")
+        if len(parts) == 1: parts.append("- 사전 정의된 사업 테마 기준으로는 명확한 추가·제거 신호가 적었습니다.")
+        for year in (old, new):
+            categories = [category_labels.get(value, value) for value in profiles.get(year, {}).get("categories", [])]
+            parts.append(f"- {year}년 비교 근거 범위: {', '.join(categories) if categories else '사업의 내용 본문'}")
+        receipts = [item.get("rcept_no") for item in evidence if item.get("rcept_no")]
+        parts.append("'강조가 줄었다'는 표현 빈도 변화이며 사업 중단을 뜻하지 않습니다. 매출 비중 같은 수치 변화는 "
+                     "동일 단위의 구조화 표가 별도로 확인될 때만 단정할 수 있습니다. "
+                     f"근거 접수번호: {', '.join(dict.fromkeys(receipts))}.")
+        return "\n".join(parts)
+
+    @staticmethod
+    def _comparison_numeric(item: Dict[str, Any], plan: Dict[str, Any]) -> Decimal:
+        value = Decimal(DisclosureAgent._exact_numeric(item)) * Decimal(str(item.get("unit_scale") or 0))
+        return abs(value) if plan.get("metric") == "capex" else value
+
+    @staticmethod
+    def _decimal_from_item(item: Dict[str, Any]) -> Decimal:
+        return DisclosureAgent._decimal_text(item.get("original_text") or item.get("numeric_value") or "0")
+
+    @staticmethod
+    def _decimal_text(value: Any) -> Decimal:
+        text = str(value).strip().replace(",", "")
+        negative = text.startswith(("△", "▲")) or (text.startswith("(") and text.endswith(")"))
+        text = text.lstrip("△▲").strip().strip("()").rstrip("%").strip()
+        number = Decimal(text)
+        return -number if negative and number > 0 else number
+
+    @staticmethod
     def _template_answer(question: str, plan: Dict[str, Any], cells: List[Dict[str, Any]],
                          event_fields: List[Dict[str, Any]], contexts: List[Dict[str, Any]]) -> str:
         if plan.get("cross_corpus") and cells:
@@ -201,12 +640,12 @@ class DisclosureAgent:
             if comparable and len(currencies) == 1:
                 ranked = sorted(
                     comparable,
-                    key=lambda item: Decimal(DisclosureAgent._exact_numeric(item)) * Decimal(str(item["unit_scale"])),
+                    key=lambda item: DisclosureAgent._comparison_numeric(item, plan),
                     reverse=True,
                 )
                 top = ranked[:min(3, len(ranked))]
                 details = ", ".join(
-                    f"{item['corp_name']} {item.get('original_text')} ({item.get('unit_raw') or '단위 미상'})" for item in top
+                    f"{item['corp_name']} {item.get('original_text')} {item.get('unit_raw') or '(단위 미상)'}" for item in top
                 )
                 receipts = ", ".join(item.get("rcept_no") or "" for item in top)
                 return f"검색 조건에서 규모 상위는 {details} 순입니다. 근거 접수번호: {receipts}."
@@ -221,19 +660,23 @@ class DisclosureAgent:
                 currencies = {item.get("unit_currency") for item in selected}
                 scales_known = all(item.get("unit_scale") is not None for item in selected)
                 if len(currencies) == 1 and None not in currencies and scales_known:
-                    normalized = [Decimal(DisclosureAgent._exact_numeric(item)) * Decimal(str(item.get("unit_scale") or 1))
-                                  for item in selected]
+                    normalized = [DisclosureAgent._comparison_numeric(item, plan) for item in selected]
                     winner_index = max(range(len(selected)), key=lambda index: normalized[index])
                     details = ", ".join(
-                        f"{item['corp_name']} {item.get('original_text')} ({item.get('unit_raw') or '단위 미상'})"
+                        f"{item['corp_name']} "
+                        f"{DisclosureAgent._absolute_original(item) if plan.get('metric') == 'capex' else item.get('original_text')} "
+                        f"{item.get('unit_raw') or '(단위 미상)'}"
                         for item in selected
                     )
                     receipts = ", ".join(item.get("rcept_no") or "" for item in selected)
-                    return (f"{details}이며, 동일 통화·scale로 환산하면 "
+                    basis = ("연결 현금흐름표의 '유형자산의 취득' 현금유출액(절대값) 기준으로 "
+                             if plan.get("metric") == "capex" else "")
+                    period = f"{max(plan.get('years') or [])}년 " if plan.get("years") else ""
+                    return (f"{period}{basis}{details}이며, 동일 통화·단위로 환산하면 "
                             f"{selected[winner_index]['corp_name']}의 규모가 더 큽니다. "
                             f"근거 접수번호: {receipts}.")
                 details = ", ".join(
-                    f"{item['corp_name']} {item.get('original_text')} ({item.get('unit_raw') or '단위 미상'})"
+                    f"{item['corp_name']} {item.get('original_text')} {item.get('unit_raw') or '(단위 미상)'}"
                     for item in selected
                 )
                 return (f"검색된 값은 {details}입니다. 통화 또는 단위 scale을 일치시키 거나 확인할 수 없어 "
@@ -273,8 +716,8 @@ class DisclosureAgent:
             cell = cells[0]
             scope = {"consolidated": "연결", "separate": "별도", "unknown": "기준 미상"}.get(cell.get("scope"), cell.get("scope"))
             unit = cell.get("unit_raw") or "단위가 명시되지 않음"
-            return (f"{cell['corp_name']}의 {cell.get('base_year')}년 {cell.get('base_month')}월 기준 "
-                    f"{scope} {cell.get('row_label')}은(는) {cell.get('original_text')} ({unit})입니다. "
+            return (f"{cell['corp_name']}의 {cell.get('base_year')}년 {cell.get('base_month')}월 {scope} 기준 "
+                    f"{DisclosureAgent._topic(cell.get('row_label') or '해당 값')} {cell.get('original_text')} {unit}입니다. "
                     f"근거: {cell.get('report_nm')}, 접수번호 {cell.get('rcept_no')}, "
                     f"{cell.get('table_title') or '표 제목 미상'}의 해당 행·열.")
         if event_fields:
@@ -329,6 +772,15 @@ class DisclosureAgent:
             return f"{target_year}년과 {baseline_year}년 값의 {reason}이 일치하지 않아 계산할 수 없습니다."
         current_value = DisclosureAgent._normalized_numeric(current)
         baseline_value = DisclosureAgent._normalized_numeric(baseline)
+        calculation_basis = ""
+        if metric == "capex":
+            # Cash-flow statements express acquisitions as cash outflows.  For
+            # an investment-size comparison the economically meaningful value
+            # is the magnitude, while the original signed text remains in the
+            # evidence and formula inputs for auditability.
+            current_value = format(abs(Decimal(str(current_value))), "f")
+            baseline_value = format(abs(Decimal(str(baseline_value))), "f")
+            calculation_basis = " 연결 현금흐름표의 현금유출 절대값 기준입니다."
         result = calculate(operation, [current_value, baseline_value])
         unit = "%" if operation == "growth_rate" else DisclosureAgent._normalized_unit_label(current)
         verb = "증감률" if operation == "growth_rate" else "차이"
@@ -342,7 +794,7 @@ class DisclosureAgent:
         )
         return (
             f"{current['corp_name']}의 {target_year}년 {current.get('row_label')} {verb}은(는) {rendered}{direction}입니다. "
-            f"입력값은 {inputs}입니다. 계산식: {result['formula']}. "
+            f"입력값은 {inputs}입니다.{calculation_basis} 계산식: {result['formula']}. "
             f"근거 접수번호: {current.get('rcept_no')}, {baseline.get('rcept_no')}."
         )
 
@@ -454,23 +906,80 @@ class DisclosureAgent:
         return "-" + value.lstrip("+") if negative and not value.startswith("-") else value
 
     @staticmethod
+    def _absolute_original(item: Dict[str, Any]) -> str:
+        value = abs(Decimal(DisclosureAgent._exact_numeric(item)))
+        return DecimalFormatter.comma(format(value, "f"))
+
+    @staticmethod
+    def _topic(label: str) -> str:
+        last = label.rstrip()[-1]
+        code = ord(last)
+        has_final_consonant = 0xAC00 <= code <= 0xD7A3 and (code - 0xAC00) % 28 != 0
+        return label + ("은" if has_final_consonant else "는")
+
+    @staticmethod
     def _valid_generated_citations(answer: str, context_count: int) -> bool:
         cited = [int(value) for value in re.findall(r"\[근거\s*(\d+)\]", answer)]
         return bool(cited) and all(1 <= index <= context_count for index in cited)
 
-    @staticmethod
-    def _response(question_id: str, question: str, contexts: List[Dict[str, Any]], trace: List[str],
+    def _response(self, question_id: str, question: str, contexts: List[Dict[str, Any]], trace: List[str],
                   answer: str, plan: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        plan = plan or {}
+        artifacts = self.guardrail.evaluate(answer, contexts, plan)
+        if not artifacts["validation"]["passed"] and not self.guardrail.is_limit_answer(answer):
+            answer = self.guardrail.safe_failure_answer(artifacts["validation"])
+            artifacts["validation"]["action"] = "blocked"
+            trace = trace + ["answer_guardrail_blocked"]
+            artifacts["limitations"].append({
+                "code": "answer_blocked_by_guardrail",
+                "message": "근거·수치·필수 요구사항 검증을 통과하지 못한 초안을 차단했습니다.",
+            })
+        else:
+            trace = trace + ["answer_guardrail_passed"]
+            resolution_action = (plan.get("resolution") or {}).get("action")
+            if resolution_action == "clarify":
+                artifacts["validation"]["action"] = "clarify"
+            elif self.guardrail.is_limit_answer(answer):
+                artifacts["validation"]["action"] = "limit"
         return {"question_id": question_id, "question": question, "retrieved_context": contexts,
-                "think_trace": {"steps": trace, "query_plan": plan or {},
-                                "note": "내부 추론 원문이 아닌 실행 단계 요약입니다."}, "answer": answer}
+                "think_trace": {"steps": trace, "query_plan": plan,
+                                "note": "내부 추론 원문이 아닌 실행 단계 요약입니다."}, "answer": answer,
+                **artifacts}
 
     def close(self) -> None:
         self.retriever.close(); self._analyzer_conn.close()
 
     @staticmethod
     def _requires_candidate_documents(plan: Dict[str, Any]) -> bool:
+        if plan.get("query_type") == "correction_history":
+            return False
         return bool(plan.get("companies") or plan.get("years") or plan.get("doc_groups") or plan.get("doc_subtypes"))
+
+    @staticmethod
+    def _clarification_answer(plan: Dict[str, Any]) -> Optional[tuple[str, str]]:
+        """Return a concrete reverse question only when a core route cannot be executed safely."""
+        query_type = plan.get("query_type")
+        core_types = {
+            "financial_metric", "investment_plan", "capex_comparison", "financing_history",
+            "contract_termination", "business_change", "correction_history",
+        }
+        missing = set(plan.get("missing_slots") or [])
+        warnings = set(plan.get("warnings") or [])
+        if "ambiguous_return_metric" in warnings:
+            return "ambiguous_metric", "어떤 수익률을 뜻하는지 확인이 필요합니다. 영업이익률, 순이익률, ROE 중 하나를 지정해 주세요."
+        if query_type not in core_types:
+            return None
+        if "company" in missing:
+            return "missing_company", "대상 기업을 식별할 수 없습니다. 정확한 회사명 또는 종목코드를 입력해 주세요."
+        if "comparison_target" in missing:
+            return "missing_comparison_target", "비교할 기업이 부족합니다. 두 기업의 회사명 또는 종목코드를 모두 입력해 주세요."
+        if "comparison_periods" in missing:
+            return "missing_comparison_periods", "사업 변화를 비교할 두 기준연도를 입력해 주세요. 예: 2023년과 2025년."
+        if "period" in missing:
+            return "missing_period", "조회 기준연도를 입력해 주세요. 분기·반기 질의라면 분기 또는 기준월도 함께 지정해 주세요."
+        if "metric" in missing:
+            return "missing_metric", "조회할 재무 지표를 지정해 주세요. 예: 연결 매출액, 영업이익, 당기순이익."
+        return None
 
     @staticmethod
     def _can_template_with_cells(plan: Dict[str, Any], financial_metrics: set[str]) -> bool:

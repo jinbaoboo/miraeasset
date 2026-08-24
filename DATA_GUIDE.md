@@ -11,7 +11,7 @@
 - 주요사항보고서 원문: `raw/major`
 - 거래소공시 원문: `raw/exchange`
 - 지분공시 원문: `raw/holding`
-- 이 작업공간에 별도로 생성된 정기공시 구조화 샘플: `outputs/`
+- 이 작업공간에 생성된 전체 구조화 DB와 파생 산출물: `outputs/`
 
 > 핵심: `manifest.jsonl`은 실제로 내려받아 코퍼스에 포함한 4,204개 문서의 기준 인덱스다. `list_*.json`은 DART 목록 조회 원본이므로 수집 대상 밖의 공시도 포함한다. 실제 원문을 찾을 때는 항상 manifest의 `file_path`를 사용한다.
 

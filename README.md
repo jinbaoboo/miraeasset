@@ -2,6 +2,9 @@
 
 주최 측이 제공한 4,204건의 공시 코퍼스만 사용해 정기·주요사항·거래소·지분공시를 구조화하고, 검색·수치 조회·계산·정정 이력·근거 기반 답변을 제공하는 프로젝트다. 원본 `raw` 파일은 읽기 전용이며 외부 뉴스나 웹 데이터는 답변 근거로 사용하지 않는다.
 
+현재는 샘플 분석 단계가 아니라 전체 공시 4,204건을 구조화한 메인 프로젝트 단계다.
+현재 개발 순서는 [메인 프로젝트 로드맵](docs/main_project_roadmap.md)을 기준으로 한다.
+
 ## 현재 구현 범위
 
 - DART XML 메모리 복구: bare `&`, 비태그 `<...>`, 잘못된 제어문자
@@ -13,7 +16,15 @@
 - 지분공시 검색 인덱스의 주민번호·사업자번호·전화·이메일 최소 마스킹
 - SQLite 정규화 저장, FTS5 본문·표·이벤트 검색, 정형 숫자 조회
 - 누락값을 0으로 만들지 않는 `Decimal` 계산 도구
+- 6대 핵심 질의 전용 경로: 연결 재무지표, 주요 투자계획, 기업 간 설비투자 비교,
+  유상증자·CB·BW·EB 자금조달, 계약 체결–해지 연결, 연도별 핵심 사업 비교
+- 주석 중간합계보다 주재무제표를 우선하고, 표가 나뉘어 저장된 경우 인접 단위를 복원
 - 근거가 없거나 공시 범위 밖인 질문의 명시적 거절
+- `claims`, `calculations`, `citations`, `limitations`, `confidence`, `validation` 기반 Evaluation Guardrail
+- 필수 회사·기간·비교 대상·지표가 없을 때 reason code가 있는 구체적 역질문
+- 자금조달 결정–정정과 계약 체결–정정–해지 lifecycle, 공시군 공통 정정 전후/current effective 조회
+- 복수 재무지표와 설비투자 증감률+투자방향을 subtask로 나누는 복합 질의 planner
+- 검색 점수 breakdown과 문서·섹션 중복을 줄이는 근거 재정렬, 재무지표 ontology
 - 선택적 HyperCLOVA X 생성 어댑터와 `GET /answer` API
 
 다른 LLM 공급자 연동은 코드에 포함하지 않았다. `HCX_*` 환경변수가 없으면 근거 기반 결정론 템플릿으로 동작한다.
@@ -68,7 +79,9 @@ Docker API 실행(구조화 DB는 read-only mount):
 
 ## API 출력 계약
 
-`GET /answer`는 `question_id`, `question`, `retrieved_context`, `think_trace`, `answer`를 반환한다. `retrieved_context`에는 레코드 종류·검색 내용·원문 위치를 가리키는 citation이 들어간다. `think_trace`는 비공개 내부 사고과정이 아니라 재현 가능한 실행 단계, 필터 및 도구 사용 요약이다.
+`GET /answer`는 답변과 함께 `claims`, `calculations`, `citations`, `limitations`, `confidence`, `validation`을 반환한다.
+`retrieved_context`에는 레코드 종류·검색 내용·원문 위치를 가리키는 citation이 들어간다. `think_trace`는 비공개 내부 사고과정이 아니라 재현 가능한 실행 단계, 필터 및 도구 사용 요약이다. `debug=false`이면 원문 context와 trace만 숨길 수 있다.
+`GET /metrics`에서는 지원 지표의 표준명·alias·선호 재무제표·부호 해석 정책을 확인할 수 있다.
 
 ## 품질 확인
 
@@ -78,7 +91,7 @@ Docker API 실행(구조화 DB는 read-only mount):
 
 20개 교차 샘플은 annual/half/quarter, 각 정정 유형, PDF fallback, 복잡 표, strict XML 실패, 세 종류의 malformed 속성, 감사보고서 첨부, 여러 산업, 거래소 HTML, 일반·약식 지분공시를 포함한다.
 
-전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위 테스트 36/36, 교차 샘플 검사 173/173, DB 무결성 검사 14/14, golden 질문 평가 31/31을 통과했다. 전체 레코드 수와 경고 해석, 재현 절차는 [implementation_report.md](docs/implementation_report.md)에 정리했다.
+전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위 테스트 74/74, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가도 150/150 통과했으며 `eval/golden_questions.jsonl`과 `eval/evaluate_agent.py`로 재현할 수 있다. 전체 레코드 수와 경고 해석, 재현 절차는 [implementation_report.md](docs/implementation_report.md)에 정리했다.
 
 ## 중요한 한계
 

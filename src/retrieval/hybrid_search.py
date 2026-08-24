@@ -5,13 +5,42 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+from collections import defaultdict
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
-from .query_analyzer import METRICS
+from src.domain.metric_ontology import FINANCIAL_CELL_METRICS, METRICS, metric_definition
+from .reranker import EvidenceReranker
 
+BUSINESS_EVIDENCE_CATEGORIES = {
+    "overview": ("사업의 개요", "사업 개요", "영업의 개황"),
+    "products": ("주요 제품", "제품 및 서비스", "상품 및 서비스"),
+    "segments_revenue": ("사업부문", "부문별 매출", "매출 및 수주", "매출실적", "매출 비중"),
+    "new_business": ("신규사업", "신사업", "사업목적 추가", "신규 사업"),
+    "strategy_technology": ("중장기 전략", "성장 전략", "전략", "기술", "소프트웨어", "SDV"),
+    "rnd": ("연구개발", "R&D", "연구 개발"),
+    "investment": ("투자 계획", "투자 현황", "설비의 신설", "CAPEX"),
+    "market_change": ("시장 여건", "시장 변화", "산업의 특성", "영업의 개황"),
+}
 
-FINANCIAL_CELL_METRICS = {"revenue", "operating_profit", "net_income", "assets", "liabilities", "equity", "rnd", "capex"}
+BUSINESS_SIGNALS = {
+    "전동화·전기차": ("전동차", "전기차", "EV ", "EV라인업", "IONIQ", "아이오닉"),
+    "하이브리드": ("하이브리드", "HEV"),
+    "수소": ("수소", "넥쏘"),
+    "SDV": ("SDV", "Software Defined Vehicle", "소프트웨어 정의 차량"),
+    "자율주행": ("자율주행", "Motional", "Waymo"),
+    "PBV": ("PBV",),
+    "AAM": ("AAM", "도심항공"),
+    "로보틱스": ("로보틱스", "로봇"),
+    "AI": ("AI ", "인공지능"),
+    "배터리": ("배터리",),
+    "현지생산·현지화": ("현지생산", "현지 생산", "현지화", "HMGMA"),
+    "전략적 파트너십": ("전략적 협업", "협업", "파트너십", "공동 개발", "협력"),
+    "제조혁신": ("Manufacturing Excellence", "제조 혁신", "스마트 팩토리"),
+    "제네시스": ("제네시스", "Genesis"),
+    "자동차 금융": ("현대캐피탈", "자동차 금융", "금융부문"),
+}
 
 
 def _fts_query(text: str) -> str:
@@ -33,6 +62,7 @@ class HybridRetriever:
         self.db_path = Path(db_path)
         self.conn = sqlite3.connect(f"file:{self.db_path}?mode=ro", uri=True)
         self.conn.row_factory = sqlite3.Row
+        self.reranker = EvidenceReranker()
 
     def candidate_documents(self, plan: Dict[str, Any], limit: int = 2000) -> List[Dict[str, Any]]:
         where: List[str] = []
@@ -136,14 +166,12 @@ class HybridRetriever:
                 item["citation"] = self.citation_for(kind, item["record_id"])
                 candidates.append(item)
         candidates.sort(key=lambda item: (-item["score"], item.get("rank", 0)))
-        seen = set(); result = []
+        seen = set(); unique = []
         for item in candidates:
             key = (item["kind"], item["record_id"])
             if key not in seen:
-                seen.add(key); result.append(item)
-            if len(result) >= limit:
-                break
-        return result
+                seen.add(key); unique.append(item)
+        return self.reranker.rerank(question, unique, plan, limit)
 
     def find_metric_cells(self, plan: Dict[str, Any], limit: int = 30) -> List[Dict[str, Any]]:
         return self.find_metric_cells_for_metric(plan, plan.get("metric"), limit=limit)
@@ -177,12 +205,15 @@ class HybridRetriever:
             where.append("c.scope=?"); args.append(plan["scope"])
         if plan.get("requires_current_effective", True):
             where.append("d.is_latest_version=1")
-        sql = f"""SELECT c.*,t.table_title,t.section_path,d.corp_code,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,
+        sql = f"""SELECT c.*,t.table_title,t.section_path,t.statement_type,t.unit_json,d.corp_code,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,
                           d.base_year,d.base_month,d.doc_id,d.doc_subtype,d.is_latest_version
                    FROM cells c JOIN logical_tables t ON t.table_id=c.table_id
                    JOIN documents d ON d.doc_id=c.doc_id WHERE {' AND '.join(where)}
                    ORDER BY d.base_year DESC,d.base_month DESC,d.rcept_dt DESC LIMIT ?"""
-        args.append(limit * 5)
+        # Ranking happens after row retrieval because it depends on normalized
+        # labels, statement type and period role.  A small LIMIT here can cut
+        # off the primary statement before scoring (notes often appear first).
+        args.append(max(500, limit * 10))
         rows = [dict(row) for row in self.conn.execute(sql, args).fetchall()]
         for row in rows:
             row["metric"] = metric
@@ -190,6 +221,332 @@ class HybridRetriever:
             row["citation"] = self.citation_for("cell", row["cell_id"])
         rows.sort(key=lambda row: -row["selection_score"])
         return rows[:limit]
+
+    def find_investment_plan(self, plan: Dict[str, Any], limit: int = 5) -> List[Dict[str, Any]]:
+        """Return complete investment-plan rows instead of an FTS table excerpt."""
+        candidate_doc_ids = plan.get("_candidate_doc_ids") or []
+        if not candidate_doc_ids:
+            return []
+        placeholders = ",".join("?" for _ in candidate_doc_ids)
+        tables = self.conn.execute(
+            f"""SELECT t.*,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,d.base_year,d.base_month
+                  FROM logical_tables t JOIN documents d ON d.doc_id=t.doc_id
+                 WHERE t.doc_id IN ({placeholders})
+                   AND (t.section_path LIKE '%사업의 내용%')
+                   AND (t.search_text LIKE '%투자계획%' OR t.search_text LIKE '%투자 계획%'
+                        OR t.search_text LIKE '%주요 투자 현황%' OR t.table_title LIKE '%주요 투자%')""",
+            candidate_doc_ids,
+        ).fetchall()
+        ranked: List[tuple[int, Dict[str, Any]]] = []
+        for raw_table in tables:
+            table = dict(raw_table)
+            cell_rows = self.conn.execute(
+                "SELECT * FROM cells WHERE table_id=? ORDER BY row_index,column_index", (table["table_id"],)
+            ).fetchall()
+            cells = [dict(row) for row in cell_rows]
+            numeric = [cell for cell in cells if cell.get("numeric_value") is not None]
+            text = (table.get("table_title") or "") + " " + (table.get("search_text") or "")
+            score = len(numeric) + (30 if "투자계획" in text.replace(" ", "") else 0)
+            score += 20 if any("R&D" in (cell.get("row_label") or "") or "CAPEX" in (cell.get("row_label") or "") for cell in cells) else 0
+            if not numeric:
+                continue
+            unit = self._effective_table_unit(table)
+            for cell in cells:
+                if not cell.get("unit_raw") and unit.get("raw"):
+                    cell.update({"unit_raw": unit.get("raw"), "unit_currency": unit.get("currency"),
+                                 "unit_scale": unit.get("scale")})
+            headers = {int(cell.get("column_index") or 0): cell.get("original_text") or ""
+                       for cell in cells if int(cell.get("row_index") or 0) == 0}
+            row_items = {int(cell.get("row_index") or 0): cell.get("original_text") or ""
+                         for cell in cells if int(cell.get("row_index") or 0) > 0
+                         and int(cell.get("column_index") or 0) == 1 and cell.get("numeric_value") is None}
+            grouped: Dict[int, Dict[str, Any]] = {}
+            for cell in cells:
+                if cell.get("numeric_value") is None:
+                    continue
+                row_index = int(cell.get("row_index") or 0)
+                segment = cell.get("row_label") or ""
+                item_label = row_items.get(row_index) or segment
+                full_label = " > ".join(dict.fromkeys(part for part in (segment, item_label) if part))
+                row = grouped.setdefault(row_index, {"row_index": row_index,
+                    "row_label": full_label, "segment": segment, "item": item_label, "values": []})
+                row["values"].append({
+                    "column_index": cell.get("column_index"),
+                    "column_label": headers.get(int(cell.get("column_index") or 0)) or cell.get("column_label") or self._last_json_value(cell.get("column_path")),
+                    "column_path": self._json_list(cell.get("column_path")),
+                    "original_text": cell.get("original_text"), "numeric_value": cell.get("numeric_value"),
+                    "period_label": cell.get("period_label"), "period_role": cell.get("period_role"),
+                    "cell_id": cell.get("cell_id"),
+                })
+            citation = self.citation_for("table", table["table_id"])
+            ranked.append((score, {
+                "kind": "investment_plan", "record_id": table["table_id"], "table_id": table["table_id"],
+                "doc_id": table["doc_id"], "corp_name": table["corp_name"], "report_nm": table["report_nm"],
+                "rcept_no": table["rcept_no"], "rcept_dt": table["rcept_dt"], "base_year": table["base_year"],
+                "base_month": table["base_month"], "table_title": table.get("table_title"),
+                "section_path": table.get("section_path"), "scope": table.get("scope") or "unknown",
+                "unit": unit, "rows": list(grouped.values()), "citation": citation,
+            }))
+        ranked.sort(key=lambda item: item[0], reverse=True)
+        return [item for _, item in ranked[:limit]]
+
+    def find_financing_events(self, plan: Dict[str, Any], limit: int = 100) -> List[Dict[str, Any]]:
+        """Compatibility view containing the current decision in each lifecycle."""
+        lifecycle = self.find_financing_lifecycle(plan, limit=limit)
+        return [chain["current"] for chain in lifecycle["chains"]]
+
+    def find_financing_lifecycle(self, plan: Dict[str, Any], limit: int = 100) -> Dict[str, Any]:
+        """Link financing decision versions without treating a scheduled payment as completion.
+
+        The distributed corpus contains decision filings and their corrections, but
+        does not contain issuance-result/payment-completion filing types.  The
+        returned coverage metadata makes that boundary machine readable.
+        """
+        instrument_types = {
+            "equity": ["주요사항보고서(유상증자결정)", "유상증자결정"],
+            "CB": ["주요사항보고서(전환사채권발행결정)"],
+            "BW": ["주요사항보고서(신주인수권부사채권발행결정)"],
+            "EB": ["주요사항보고서(교환사채권발행결정)"],
+        }
+        selected = plan.get("funding_instruments") or list(instrument_types)
+        type_to_instrument = {event_type: instrument for instrument in selected for event_type in instrument_types.get(instrument, [])}
+        if not type_to_instrument:
+            return {"chains": [], "coverage": self._financing_coverage(False)}
+        where = ["e.event_type IN (" + ",".join("?" for _ in type_to_instrument) + ")"]
+        args: List[Any] = list(type_to_instrument)
+        companies = plan.get("companies") or []
+        if companies:
+            where.append("d.corp_code IN (" + ",".join("?" for _ in companies) + ")")
+            args.extend(company["corp_code"] for company in companies)
+        rows = self.conn.execute(
+            f"""SELECT e.event_id,e.event_type,e.event_title,e.effective_status,d.doc_id,d.corp_code,d.corp_name,
+                       d.report_nm,d.rcept_no,d.rcept_dt,d.is_correction,d.original_doc_id,d.supersedes_doc_id,
+                       d.superseded_by_doc_id,d.is_latest_version
+                  FROM events e JOIN documents d ON d.doc_id=e.doc_id
+                 WHERE {' AND '.join(where)} ORDER BY d.rcept_dt DESC LIMIT ?""", args + [limit * 4]
+        ).fetchall()
+        result: List[Dict[str, Any]] = []
+        for raw in rows:
+            event = dict(raw)
+            fields = self._event_fields(event["event_id"])
+            instrument = type_to_instrument[event["event_type"]]
+            amount = self._funding_amount(instrument, fields)
+            purposes = self._funding_purposes(fields)
+            decision_date = self._field_value(fields, ("이사회결의일", "결정일"))
+            payment_date = self._field_value(fields, ("납입일", "납입기일"))
+            event.update({"kind": "financing", "record_id": event["event_id"], "instrument": instrument,
+                          "amount_krw": amount, "purposes": purposes, "decision_date": decision_date,
+                          "scheduled_payment_date": payment_date,
+                          "stage": "correction" if event.get("is_correction") else "decision",
+                          "fields": fields, "citation": self.citation_for("event", event["event_id"])})
+            result.append(event)
+
+        grouped: Dict[tuple, List[Dict[str, Any]]] = defaultdict(list)
+        for event in result:
+            root = event.get("original_doc_id") or self._date_key(event.get("decision_date")) or event.get("doc_id")
+            grouped[(event.get("corp_code"), event["instrument"], root)].append(event)
+
+        years = {str(year) for year in plan.get("years") or []}
+        chains: List[Dict[str, Any]] = []
+        for (corp_code, instrument, root), versions in grouped.items():
+            versions.sort(key=lambda item: (item.get("rcept_dt") or "", item.get("rcept_no") or ""))
+            current = versions[-1]
+            decision_year = self._date_key(current.get("decision_date"))[:4] or (versions[0].get("rcept_dt") or "")[:4]
+            if years and decision_year not in years:
+                continue
+            lifecycle_id = f"funding:{corp_code}:{instrument}:{root}"
+            for version in versions:
+                version["lifecycle_id"] = lifecycle_id
+                version["lifecycle_status"] = "decision_only"
+                version["completed_amount_krw"] = None
+            chains.append({
+                "lifecycle_id": lifecycle_id,
+                "corp_code": corp_code,
+                "corp_name": current.get("corp_name"),
+                "instrument": instrument,
+                "decision_date": current.get("decision_date"),
+                "scheduled_payment_date": current.get("scheduled_payment_date"),
+                "planned_amount_krw": current.get("amount_krw"),
+                "completed_amount_krw": None,
+                "status": "decision_only",
+                "current": current,
+                "history": versions,
+                "limitations": ["completion_evidence_not_in_corpus"],
+            })
+        chains.sort(key=lambda chain: (chain["current"].get("rcept_dt") or "", chain["lifecycle_id"]), reverse=True)
+        return {"chains": chains[:limit], "coverage": self._financing_coverage(any(len(chain["history"]) > 1 for chain in chains))}
+
+    @staticmethod
+    def _financing_coverage(has_corrections: bool) -> Dict[str, Any]:
+        return {
+            "decision": True,
+            "correction": has_corrections,
+            "price_confirmation": False,
+            "payment_completion": False,
+            "issuance_result": False,
+            "withdrawal": False,
+            "reason_code": "financing_followup_filings_not_in_corpus",
+        }
+
+    @staticmethod
+    def _date_key(value: Optional[str]) -> str:
+        return "".join(re.findall(r"\d", value or ""))[:8]
+
+    def find_contract_lifecycle(self, plan: Dict[str, Any], limit: int = 200) -> Dict[str, Any]:
+        companies = plan.get("companies") or []
+        years = plan.get("years") or []
+        if not companies or not years:
+            return {"contracts": [], "terminations": [], "matches": []}
+        corp_codes = [company["corp_code"] for company in companies]
+        contract_rows = self.conn.execute(
+            f"""SELECT e.event_id,e.event_type,d.doc_id,d.corp_code,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,
+                       d.is_correction,d.original_doc_id,d.supersedes_doc_id,d.superseded_by_doc_id,d.is_latest_version
+                  FROM events e JOIN documents d ON d.doc_id=e.doc_id
+                 WHERE e.event_type='단일판매공급계약체결'
+                   AND d.corp_code IN ({','.join('?' for _ in corp_codes)})
+                 ORDER BY d.rcept_dt,e.event_id LIMIT ?""", corp_codes + [limit * 5]
+        ).fetchall()
+        termination_rows = self.conn.execute(
+            f"""SELECT e.event_id,e.event_type,d.doc_id,d.corp_code,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,
+                       d.is_correction,d.original_doc_id,d.supersedes_doc_id,d.superseded_by_doc_id,d.is_latest_version
+                  FROM events e JOIN documents d ON d.doc_id=e.doc_id
+                 WHERE e.event_type='단일판매공급계약해지'
+                   AND d.corp_code IN ({','.join('?' for _ in corp_codes)})
+                   AND substr(d.rcept_dt,1,4)>=?
+                 ORDER BY d.rcept_dt,e.event_id LIMIT ?""", corp_codes + [str(min(years)), limit]
+        ).fetchall()
+        contract_versions = [self._contract_event(dict(row), termination=False) for row in contract_rows]
+        terminations = [self._contract_event(dict(row), termination=True) for row in termination_rows]
+        grouped: Dict[tuple, List[Dict[str, Any]]] = defaultdict(list)
+        for contract in contract_versions:
+            fallback = (
+                self._date_key(contract.get("contract_date")),
+                self._normalize_match_text(contract.get("contract_name")),
+                self._normalize_match_text(contract.get("counterparty")),
+            )
+            root = contract.get("original_doc_id") or ("|".join(fallback) if any(fallback) else contract.get("doc_id"))
+            grouped[(contract.get("corp_code"), root)].append(contract)
+        chains: List[Dict[str, Any]] = []
+        contracts: List[Dict[str, Any]] = []
+        target_years = {str(year) for year in years}
+        for (corp_code, root), versions in grouped.items():
+            versions.sort(key=lambda item: (item.get("rcept_dt") or "", item.get("rcept_no") or ""))
+            current = versions[-1]
+            initial = versions[0]
+            contract_year = self._date_key(initial.get("contract_date"))[:4] or (initial.get("rcept_dt") or "")[:4]
+            if target_years and contract_year not in target_years:
+                continue
+            chain_id = f"contract:{corp_code}:{root}"
+            for version in versions:
+                version["contract_chain_id"] = chain_id
+                version["stage"] = "correction" if version.get("is_correction") else "contract"
+            current["history"] = versions
+            current["contract_chain_id"] = chain_id
+            contracts.append(current)
+            chains.append({"contract_chain_id": chain_id, "initial": initial, "current": current,
+                           "history": versions, "terminations": [], "status": "active_no_termination_found"})
+
+        matches: List[Dict[str, Any]] = []
+        for termination in terminations:
+            scored = []
+            for chain in chains:
+                if chain["current"].get("corp_code") != termination.get("corp_code"):
+                    continue
+                score, reasons = self._contract_match_score(chain, termination)
+                if score:
+                    scored.append((score, chain["contract_chain_id"], reasons, chain))
+            scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
+            if not scored:
+                continue
+            best_score, _, reasons, chain = scored[0]
+            second_score = scored[1][0] if len(scored) > 1 else 0
+            if best_score < 4 or best_score == second_score:
+                continue
+            contract = chain["current"]
+            termination_kind = self._termination_kind(contract.get("amount_krw"), termination.get("amount_krw"))
+            confidence = "high" if best_score >= 9 else "medium"
+            match = {"contract": contract, "termination": termination, "contract_chain_id": chain["contract_chain_id"],
+                     "match_score": best_score, "match_reasons": reasons, "match_confidence": confidence,
+                     "termination_kind": termination_kind}
+            matches.append(match)
+            chain["terminations"].append(termination)
+            chain["status"] = "partially_terminated" if termination_kind == "partial" else "terminated"
+        return {"contracts": contracts, "terminations": terminations, "matches": matches, "chains": chains,
+                "unmatched_terminations": [item for item in terminations if item.get("event_id") not in
+                                            {match["termination"].get("event_id") for match in matches}]}
+
+    def find_business_change_evidence(self, plan: Dict[str, Any], per_year: int = 8) -> Dict[str, Any]:
+        candidate_doc_ids = plan.get("_candidate_doc_ids") or []
+        if not candidate_doc_ids:
+            return {"evidence": [], "profiles": {}}
+        rows = self.conn.execute(
+            f"""SELECT c.chunk_id,c.doc_id,c.heading,c.section_path,c.text,d.corp_code,d.corp_name,d.report_nm,
+                       d.rcept_no,d.rcept_dt,d.base_year,d.base_month
+                  FROM chunks c JOIN documents d ON d.doc_id=c.doc_id
+                 WHERE c.doc_id IN ({','.join('?' for _ in candidate_doc_ids)})
+                   AND c.section_path LIKE '%II. 사업의 내용%'
+                 ORDER BY d.base_year,c.chunk_id""", candidate_doc_ids
+        ).fetchall()
+        ranked: Dict[int, Dict[str, List[tuple[int, Dict[str, Any]]]]] = defaultdict(lambda: defaultdict(list))
+        profiles: Dict[int, Dict[str, Any]] = defaultdict(
+            lambda: {"categories": set(), "signals": set(), "signal_sources": defaultdict(list), "section_count": 0}
+        )
+        for raw in rows:
+            item = dict(raw)
+            year = int(item.get("base_year") or 0)
+            haystack = (item.get("heading") or "") + " " + (item.get("section_path") or "") + " " + item.get("text", "")
+            categories = self._business_categories(haystack)
+            signals = self._business_signals(haystack)
+            profiles[year]["categories"].update(categories)
+            profiles[year]["signals"].update(signals)
+            for signal in signals:
+                profiles[year]["signal_sources"][signal].append(item["chunk_id"])
+            profiles[year]["section_count"] += 1
+            item.update({"kind": "business_evidence", "record_id": item["chunk_id"],
+                         "citation": self.citation_for("text", item["chunk_id"]),
+                         "evidence_categories": categories, "signals": signals})
+            for category in categories:
+                heading_text = (item.get("heading") or "") + " " + (item.get("section_path") or "")
+                score = 12 * sum(token.lower() in heading_text.lower() for token in BUSINESS_EVIDENCE_CATEGORIES[category])
+                score += 3 * sum(token.lower() in haystack.lower() for token in BUSINESS_EVIDENCE_CATEGORIES[category])
+                score += min(6, len(signals))
+                score += 2 if 150 <= len(item.get("text") or "") <= 5000 else 0
+                ranked[year][category].append((score, item))
+        result: List[Dict[str, Any]] = []
+        for year in sorted(ranked):
+            selected_ids = set()
+            for category in BUSINESS_EVIDENCE_CATEGORIES:
+                candidates = ranked[year].get(category, [])
+                candidates.sort(key=lambda pair: (-pair[0], pair[1]["chunk_id"]))
+                chosen = next((item for _, item in candidates if item["chunk_id"] not in selected_ids), None)
+                if chosen:
+                    selected_ids.add(chosen["chunk_id"])
+                    result.append(chosen)
+                if len(selected_ids) >= per_year:
+                    break
+        normalized_profiles = {
+            year: {
+                "categories": sorted(profile["categories"]),
+                "signals": sorted(profile["signals"]),
+                "signal_sources": {signal: list(dict.fromkeys(ids))[:5]
+                                   for signal, ids in profile["signal_sources"].items()},
+                "section_count": profile["section_count"],
+            }
+            for year, profile in profiles.items()
+        }
+        return {"evidence": result, "profiles": normalized_profiles}
+
+    @staticmethod
+    def _business_categories(text: str) -> List[str]:
+        lowered = text.lower()
+        return [category for category, aliases in BUSINESS_EVIDENCE_CATEGORIES.items()
+                if any(alias.lower() in lowered for alias in aliases)] or ["overview"]
+
+    @staticmethod
+    def _business_signals(text: str) -> List[str]:
+        lowered = text.lower()
+        return [signal for signal, aliases in BUSINESS_SIGNALS.items()
+                if any(alias.lower() in lowered for alias in aliases)]
 
     def find_event_fields(self, plan: Dict[str, Any], limit: int = 20) -> List[Dict[str, Any]]:
         return self.find_event_fields_for_metric(plan, plan.get("metric"), limit=limit)
@@ -275,6 +632,328 @@ class HybridRetriever:
                WHERE {' AND '.join(where)} ORDER BY d.rcept_dt DESC LIMIT ?""", args).fetchall()
         return [dict(row) for row in rows]
 
+    def find_correction_chains(self, plan: Dict[str, Any], limit: int = 50) -> Dict[str, Any]:
+        """Return original/before/after/current views across all disclosure groups."""
+        companies = plan.get("companies") or []
+        if not companies:
+            return {"chains": [], "unlinked_count": 0}
+        where = ["d.corp_code IN (" + ",".join("?" for _ in companies) + ")"]
+        args: List[Any] = [company["corp_code"] for company in companies]
+        if plan.get("doc_groups"):
+            where.append("d.doc_group IN (" + ",".join("?" for _ in plan["doc_groups"]) + ")")
+            args.extend(plan["doc_groups"])
+        if plan.get("years"):
+            where.append("substr(d.rcept_dt,1,4) IN (" + ",".join("?" for _ in plan["years"]) + ")")
+            args.extend(str(year) for year in plan["years"])
+        report_tokens = self._correction_report_tokens(plan.get("question") or "")
+        if report_tokens:
+            where.append("(" + " OR ".join("d.report_nm LIKE ?" for _ in report_tokens) + ")")
+            args.extend(f"%{token}%" for token in report_tokens)
+        rows = self.conn.execute(
+            f"""SELECT d.doc_id,d.corp_code,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,d.doc_group,d.doc_subtype,
+                       d.base_year,d.base_month,d.original_doc_id AS document_original_doc_id,d.supersedes_doc_id,
+                       d.superseded_by_doc_id,d.is_latest_version,c.correction_id,c.original_doc_id,
+                       c.original_filing_date,c.target_document,c.correction_date,ci.item_id,ci.item,ci.reason,
+                       ci.before_text,ci.after_text,ci.effective_text,ci.locator_json
+                  FROM corrections c JOIN documents d ON d.doc_id=c.doc_id
+                  LEFT JOIN correction_items ci ON ci.correction_id=c.correction_id
+                 WHERE {' AND '.join(where)} ORDER BY d.rcept_dt,d.rcept_no,ci.item_id LIMIT ?""",
+            args + [limit * 100],
+        ).fetchall()
+        documents: Dict[str, Dict[str, Any]] = {}
+        for raw in rows:
+            row = dict(raw)
+            document = documents.setdefault(row["doc_id"], {key: row.get(key) for key in (
+                "doc_id", "corp_code", "corp_name", "report_nm", "rcept_no", "rcept_dt", "doc_group", "doc_subtype",
+                "base_year", "base_month", "document_original_doc_id", "supersedes_doc_id", "superseded_by_doc_id",
+                "is_latest_version", "correction_id", "original_doc_id", "original_filing_date", "target_document",
+                "correction_date",
+            )})
+            document.setdefault("items", [])
+            if row.get("item_id"):
+                item = {key: row.get(key) for key in ("item_id", "item", "reason", "before_text", "after_text", "effective_text", "locator_json")}
+                item["citation"] = {"doc_id": row.get("doc_id"), "corp_name": row.get("corp_name"),
+                                    "report_nm": row.get("report_nm"), "rcept_no": row.get("rcept_no"),
+                                    "rcept_dt": row.get("rcept_dt"), "correction_id": row.get("correction_id")}
+                document["items"].append(item)
+
+        grouped: Dict[tuple, Dict[str, Any]] = {}
+        for document in documents.values():
+            root, confidence = self._correction_root(document)
+            key = (document.get("corp_code"), document.get("doc_group"), root)
+            chain = grouped.setdefault(key, {"chain_id": f"correction:{document.get('corp_code')}:{document.get('doc_group')}:{root}",
+                                             "root": root, "corp_code": document.get("corp_code"),
+                                             "doc_group": document.get("doc_group"),
+                                             "link_confidence": confidence, "versions": []})
+            chain["versions"].append(document)
+            if confidence == "low":
+                chain["link_confidence"] = "low"
+        chains: List[Dict[str, Any]] = []
+        for chain in grouped.values():
+            chain["versions"].sort(key=lambda item: (item.get("rcept_dt") or "", item.get("rcept_no") or ""))
+            current = chain["versions"][-1]
+            root_id = current.get("original_doc_id") or current.get("document_original_doc_id")
+            original = self._document_summary(root_id) if root_id else self._find_event_chain_original(chain)
+            effective_by_item: Dict[str, Dict[str, Any]] = {}
+            for version in chain["versions"]:
+                for item in version.get("items", []):
+                    item_key = self._normalize_match_text(item.get("item")) or item.get("item_id")
+                    state = effective_by_item.setdefault(item_key, {
+                        "item": item.get("item"), "original": item.get("before_text"), "current": item.get("after_text"),
+                        "reason": item.get("reason"), "citation": item.get("citation"), "history": [],
+                    })
+                    if state.get("original") is None:
+                        state["original"] = item.get("before_text")
+                    state["item"] = item.get("item") or state.get("item")
+                    if (item.get("after_text") or "").strip():
+                        state.update({"current": item.get("after_text"), "reason": item.get("reason"),
+                                      "citation": item.get("citation")})
+                    state["history"].append({"before": item.get("before_text"), "after": item.get("after_text"),
+                                             "reason": item.get("reason"), "rcept_no": version.get("rcept_no"),
+                                             "rcept_dt": version.get("rcept_dt")})
+            chain.update({"original": original, "current_version": current,
+                          "effective_items": list(effective_by_item.values())})
+            chains.append(chain)
+        chains.sort(key=lambda item: item["current_version"].get("rcept_dt") or "", reverse=True)
+        return {"chains": chains[:limit], "unlinked_count": sum(chain["link_confidence"] == "low" for chain in chains)}
+
+    def _find_event_chain_original(self, chain: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        root = chain.get("root") or ""
+        if not root.startswith("event:"):
+            return None
+        _, event_type, identity_date = root.split(":", 2)
+        rows = self.conn.execute(
+            """SELECT d.doc_id,e.event_id FROM documents d JOIN events e ON e.doc_id=d.doc_id
+                WHERE d.corp_code=? AND d.doc_group=? AND d.is_correction=0 AND e.event_type=? ORDER BY d.rcept_dt""",
+            (chain.get("corp_code"), chain.get("doc_group"), event_type),
+        ).fetchall()
+        for row in rows:
+            fields = self._event_fields(row["event_id"])
+            value = self._field_value(fields, ("이사회결의일", "결정일", "계약(수주)일자", "계약(수주)일"))
+            if self._date_key(value) == identity_date:
+                return self._document_summary(row["doc_id"])
+        return None
+
+    def _correction_root(self, document: Dict[str, Any]) -> tuple[str, str]:
+        explicit = document.get("original_doc_id") or document.get("document_original_doc_id")
+        if explicit:
+            return explicit, "high"
+        event = self.conn.execute("SELECT event_id,event_type FROM events WHERE doc_id=? ORDER BY event_id LIMIT 1",
+                                  (document["doc_id"],)).fetchone()
+        if event:
+            fields = self._event_fields(event["event_id"])
+            identity_date = self._field_value(fields, ("이사회결의일", "결정일", "계약(수주)일자", "계약(수주)일"))
+            if identity_date:
+                return f"event:{event['event_type']}:{self._date_key(identity_date)}", "medium"
+        if document.get("original_filing_date"):
+            report = self._normalize_match_text(document.get("target_document") or document.get("report_nm"))
+            return f"filing:{self._date_key(document['original_filing_date'])}:{report}", "medium"
+        if document.get("doc_group") == "periodic" and document.get("base_year"):
+            return f"periodic:{document.get('doc_subtype')}:{document.get('base_year')}:{document.get('base_month')}", "medium"
+        return document["doc_id"], "low"
+
+    def _document_summary(self, doc_id: Optional[str]) -> Optional[Dict[str, Any]]:
+        if not doc_id:
+            return None
+        row = self.conn.execute(
+            "SELECT doc_id,corp_name,report_nm,rcept_no,rcept_dt,doc_group,doc_subtype,base_year,base_month FROM documents WHERE doc_id=?",
+            (doc_id,),
+        ).fetchone()
+        return dict(row) if row else None
+
+    @staticmethod
+    def _correction_report_tokens(question: str) -> List[str]:
+        groups = {
+            "유상증자": ("유상증자",), "전환사채": ("전환사채", "CB"),
+            "신주인수권부사채": ("신주인수권부사채", "BW"), "교환사채": ("교환사채", "EB"),
+            "단일판매": ("공급계약", "판매계약", "주요 계약"), "사업보고서": ("사업보고서",),
+            "반기보고서": ("반기보고서",), "분기보고서": ("분기보고서",),
+        }
+        compact = question.upper()
+        return [report_token for report_token, aliases in groups.items() if any(alias.upper() in compact for alias in aliases)]
+
+    def _effective_table_unit(self, table: Dict[str, Any]) -> Dict[str, Any]:
+        unit = self._json_dict(table.get("unit_json"))
+        if unit.get("raw") and unit.get("scale") is not None:
+            return unit
+        candidates = self.conn.execute(
+            """SELECT table_id,section_path,table_title,unit_json FROM logical_tables
+                WHERE doc_id=? AND unit_json IS NOT NULL ORDER BY table_id""", (table["doc_id"],)
+        ).fetchall()
+        target_ordinal = self._table_ordinal(table["table_id"])
+        best: Optional[tuple[int, Dict[str, Any]]] = None
+        for row in candidates:
+            candidate = self._json_dict(row["unit_json"])
+            if not candidate.get("raw") or candidate.get("scale") is None:
+                continue
+            distance = target_ordinal - self._table_ordinal(row["table_id"])
+            if not 0 <= distance <= 2:
+                continue
+            if row["section_path"] != table.get("section_path"):
+                continue
+            title_bonus = 1 if row["table_title"] == table.get("table_title") else 0
+            rank = distance * 10 - title_bonus
+            if best is None or rank < best[0]:
+                best = (rank, candidate)
+        return best[1] if best else {"raw": None, "currency": None, "scale": None, "quantity": "unknown"}
+
+    def _event_fields(self, event_id: str) -> List[Dict[str, Any]]:
+        return [dict(row) for row in self.conn.execute(
+            "SELECT * FROM event_fields WHERE event_id=? ORDER BY ordinal", (event_id,)
+        ).fetchall()]
+
+    @staticmethod
+    def _funding_amount(instrument: str, fields: List[Dict[str, Any]]) -> Optional[str]:
+        if instrument in {"CB", "BW", "EB"}:
+            field = next((field for field in fields if field.get("numeric_value") is not None
+                          and "사채의 권면" in (field.get("label") or "")), None)
+            return field.get("original_text") if field else None
+        purpose_fields = [field for field in fields if field.get("label") and "자금조달의 목적" in field["label"]]
+        amounts = []
+        for field in purpose_fields:
+            if field.get("numeric_value") is None:
+                continue
+            try:
+                amounts.append(Decimal(HybridRetriever._plain_number(field.get("original_text"))))
+            except (InvalidOperation, ValueError):
+                continue
+        if not amounts:
+            return None
+        return format(sum(amounts), "f")
+
+    @staticmethod
+    def _funding_purposes(fields: List[Dict[str, Any]]) -> List[Dict[str, str]]:
+        purposes: List[Dict[str, str]] = []
+        pending: Optional[str] = None
+        for field in fields:
+            if "자금조달의 목적" not in (field.get("label") or ""):
+                continue
+            text = (field.get("original_text") or "").strip()
+            if text.endswith("(원)") or text.endswith("자금"):
+                pending = re.sub(r"\s*\(원\)\s*$", "", text)
+            elif pending and text not in {"", "-"} and field.get("numeric_value") is not None:
+                purposes.append({"purpose": pending, "amount_krw": HybridRetriever._plain_number(text)})
+                pending = None
+        return purposes
+
+    @staticmethod
+    def _field_value(fields: List[Dict[str, Any]], label_tokens: Sequence[str]) -> Optional[str]:
+        field = next((field for field in fields if any(token in (field.get("label") or "") for token in label_tokens)), None)
+        return field.get("original_text") if field else None
+
+    def _contract_event(self, event: Dict[str, Any], termination: bool) -> Dict[str, Any]:
+        fields = self._event_fields(event["event_id"])
+        name_tokens = ("해지계약명", "계약명") if termination else ("계약내용", "계약명")
+        amount_tokens = ("해지금액",) if termination else ("계약금액",)
+        event.update({
+            "kind": "contract_termination" if termination else "contract",
+            "record_id": event["event_id"], "contract_name": self._field_value(fields, name_tokens),
+            "amount_krw": self._field_value(fields, amount_tokens),
+            "counterparty": self._field_value(fields, ("계약상대", "계약상대방")),
+            "contract_date": self._field_value(fields, ("계약(수주)일자", "계약체결일")),
+            "period_start": self._field_value(fields, ("계약기간 > 시작일",)),
+            "period_end": self._field_value(fields, ("계약기간 > 종료일",)),
+            "termination_date": self._field_value(fields, ("해지일자",)),
+            "termination_reason": self._field_value(fields, ("해지 주요사유", "해지사유")),
+            "related_disclosure": self._field_value(fields, ("관련공시",)),
+            "citation": self.citation_for("event", event["event_id"]), "fields": fields,
+        })
+        return event
+
+    def _contract_match_score(self, chain: Dict[str, Any], termination: Dict[str, Any]) -> tuple[int, List[str]]:
+        """Score explicit identifiers first and reject ambiguous ties in the caller."""
+        current = chain["current"]
+        history = chain.get("history") or [current]
+        score = 0
+        reasons: List[str] = []
+        related_compact = re.sub(r"\D", "", termination.get("related_disclosure") or "")
+        related_digits = set(re.findall(r"20\d{6}", related_compact))
+        version_dates = {(version.get("rcept_dt") or "")[:8] for version in history}
+        if related_digits & version_dates:
+            score += 10
+            reasons.append("related_disclosure_date")
+        name_score = self._name_overlap(current.get("contract_name"), termination.get("contract_name"))
+        if name_score >= 0.75:
+            score += 6
+            reasons.append("contract_name")
+        elif name_score >= 0.5:
+            score += 4
+            reasons.append("contract_name_partial")
+        if (self._normalize_match_text(current.get("counterparty")) and
+                self._normalize_match_text(current.get("counterparty")) == self._normalize_match_text(termination.get("counterparty"))):
+            score += 3
+            reasons.append("counterparty")
+        if (self._date_key(current.get("period_start")) and
+                self._date_key(current.get("period_start")) == self._date_key(termination.get("period_start"))):
+            score += 2
+            reasons.append("period_start")
+        return score, reasons
+
+    @staticmethod
+    def _termination_kind(contract_amount: Optional[str], termination_amount: Optional[str]) -> str:
+        try:
+            contract = abs(Decimal(HybridRetriever._plain_number(contract_amount)))
+            terminated = abs(Decimal(HybridRetriever._plain_number(termination_amount)))
+        except (InvalidOperation, ValueError):
+            return "unknown"
+        if contract == 0:
+            return "unknown"
+        if terminated < contract:
+            return "partial"
+        if terminated == contract:
+            return "total"
+        return "unknown"
+
+    @staticmethod
+    def _normalize_match_text(value: Optional[str]) -> str:
+        return re.sub(r"[^0-9A-Za-z가-힣]", "", value or "").lower()
+
+    @staticmethod
+    def _name_overlap(left: Optional[str], right: Optional[str]) -> float:
+        def tokens(value: Optional[str]) -> set[str]:
+            return {token for token in re.findall(r"[0-9A-Za-z가-힣]+", value or "") if len(token) > 1}
+        a, b = tokens(left), tokens(right)
+        return len(a & b) / max(1, min(len(a), len(b)))
+
+    @staticmethod
+    def _plain_number(value: Optional[str]) -> str:
+        text = (value or "").strip().replace(",", "")
+        negative = text.startswith(("△", "▲")) or (text.startswith("(") and text.endswith(")"))
+        text = text.lstrip("△▲").strip().strip("()").rstrip("%").strip()
+        if not re.fullmatch(r"[+-]?\d+(?:\.\d+)?", text):
+            raise ValueError("not numeric")
+        return "-" + text.lstrip("+") if negative and not text.startswith("-") else text
+
+    @staticmethod
+    def _json_dict(value: Any) -> Dict[str, Any]:
+        if isinstance(value, dict):
+            return value
+        try:
+            parsed = json.loads(value or "{}")
+            return parsed if isinstance(parsed, dict) else {}
+        except (json.JSONDecodeError, TypeError):
+            return {}
+
+    @staticmethod
+    def _json_list(value: Any) -> List[str]:
+        if isinstance(value, list):
+            return [str(item) for item in value]
+        try:
+            parsed = json.loads(value or "[]")
+            return [str(item) for item in parsed] if isinstance(parsed, list) else []
+        except (json.JSONDecodeError, TypeError):
+            return []
+
+    @staticmethod
+    def _last_json_value(value: Any) -> str:
+        values = HybridRetriever._json_list(value)
+        return values[-1] if values else ""
+
+    @staticmethod
+    def _table_ordinal(table_id: str) -> int:
+        match = re.search(r":table:(\d+)$", table_id)
+        return int(match.group(1)) if match else 0
+
     @staticmethod
     def _allowed(item: Dict[str, Any], plan: Dict[str, Any]) -> bool:
         candidate_doc_ids = set(plan.get("_candidate_doc_ids") or [])
@@ -323,6 +1002,16 @@ class HybridRetriever:
         column = " ".join(json.loads(row.get("column_path") or "[]"))
         if plan.get("quarter") and any(token in column for token in ("3개월", "누적")): score += 2
         if row.get("is_latest_version"): score += 2
+        if row.get("doc_subtype") == "annual": score += 2
+        definition = metric_definition(metric or plan.get("metric"))
+        if row.get("statement_type") in definition.get("statement_types", []):
+            score += 8
+        if metric == "capex":
+            compact_label = re.sub(r"\s+", "", row.get("row_label") or "")
+            if compact_label == "유형자산의취득": score += 25
+            if any(token in compact_label for token in ("미지급금", "처분", "현물출자")): score -= 30
+            if row.get("scope") == "consolidated" and not plan.get("scope"): score += 4
+            if row.get("statement_type") == "cash_flow_statement" or "현금흐름표" in (row.get("table_title") or ""): score += 5
         return score
 
     def citation_for(self, kind: str, record_id: str) -> Dict[str, Any]:

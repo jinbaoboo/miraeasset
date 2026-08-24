@@ -6,20 +6,7 @@ import re
 import sqlite3
 from typing import Any, Dict, List, Optional
 
-
-METRICS = {
-    "contract_ratio": ["매출액 대비 비율", "매출액대비"],
-    "capex": ["설비투자", "CAPEX", "유형자산 취득"],
-    "revenue": ["매출액", "매출", "영업수익"],
-    "operating_profit": ["영업이익", "영업손실"],
-    "net_income": ["당기순이익", "당기순손실", "분기순이익", "반기순이익"],
-    "assets": ["자산총계", "총자산"],
-    "liabilities": ["부채총계", "총부채"],
-    "equity": ["자본총계", "총자본"],
-    "rnd": ["연구개발비", "연구개발비용", "R&D"],
-    "contract_amount": ["계약금액"],
-    "holding_ratio": ["보유비율", "비율"],
-}
+from src.domain.metric_ontology import METRICS
 
 CALCULATION_PATTERNS = {
     "growth_rate": ["전년대비", "전년 대비", "전년동기대비", "전년 동기 대비", "증감률", "증가율", "감소율", "성장률", "yoy"],
@@ -76,9 +63,9 @@ class QueryAnalyzer:
         if "분기보고서" in question or quarter:
             doc_subtypes.append("quarter")
         scope = "consolidated" if "연결" in question else "separate" if any(x in question for x in ("별도", "개별")) else None
+        query_type = self._query_type(question, compact_question)
         cross_corpus = any(x in question for x in ("가장", "상위", "하위", "전체 기업", "기업 중", "순위"))
-        metric = next((key for key, aliases in METRICS.items()
-                       if any(re.sub(r"\s+", "", alias).lower() in compact_question for alias in aliases)), None)
+        metric = self._metric(compact_question)
         calculation = self._calculation(question, compact_question, metric, years)
         required_metrics = calculation.get("required_metrics", [metric] if metric else []) if calculation else ([metric] if metric else [])
         if calculation and calculation.get("derived_metric"):
@@ -93,11 +80,25 @@ class QueryAnalyzer:
             groups.append("exchange")
         if any(x in question for x in ("대량보유", "지분", "보유비율", "특별관계자")):
             groups.append("holding")
+        # High-value QA routes use an explicit corpus so a narrative phrase
+        # cannot drift into an unrelated full-text-search result.
+        if query_type in {"investment_plan", "capex_comparison", "business_change"}:
+            groups = ["periodic"]
+        elif query_type == "financial_metric":
+            groups = (["exchange"] if "exchange" in groups else ["holding"] if "holding" in groups
+                      else ["major"] if "major" in groups else ["periodic"])
+        elif query_type == "financing_history":
+            groups = ["major"]
+        elif query_type == "contract_termination":
+            groups = ["exchange"]
+        if (query_type in {"capex_comparison", "business_change"} or
+                metric == "capex" and len(years) >= 2) and not doc_subtypes:
+            doc_subtypes.append("annual")
         intent = "comparison" if cross_corpus or any(x in question for x in ("비교", "차이", "증가", "감소", "증감", "대비", "더 큰", "더 많", "더 적")) else "lookup"
         if calculation or any(x in question for x in ("합계", "총액", "평균", "비중", "증감률")):
             intent = "calculation"
         plan = {
-            "question": question, "companies": companies, "years": years, "months": months,
+            "question": question, "query_type": query_type, "companies": companies, "years": years, "months": months,
             "quarter": quarter, "scope": scope, "metric": metric, "doc_subtypes": list(dict.fromkeys(doc_subtypes)),
             "cross_corpus": cross_corpus,
             "doc_groups": list(dict.fromkeys(groups)), "intent": intent,
@@ -106,9 +107,26 @@ class QueryAnalyzer:
             "calculation": calculation,
             "requires_current_effective": not any(x in question for x in ("정정 전", "변경 전", "최초")),
         }
+        if query_type == "financing_history":
+            plan["funding_instruments"] = self._funding_instruments(question)
+            plan["funding_status_requested"] = self._funding_status(question)
+        if query_type == "correction_history":
+            plan["correction_view"] = self._correction_view(question)
+        if query_type in {"investment_plan", "business_change"}:
+            plan["section_filters"] = ["II. 사업의 내용"]
         plan["missing_slots"] = self._missing_slots(plan)
         plan["warnings"] = self._warnings(question, plan)
         return plan
+
+    @staticmethod
+    def _metric(compact_question: str) -> Optional[str]:
+        matches = []
+        for key, aliases in METRICS.items():
+            for alias in aliases:
+                normalized = re.sub(r"\s+", "", alias).lower()
+                if normalized in compact_question:
+                    matches.append((len(normalized), key))
+        return max(matches, default=(0, None))[1]
 
     def _companies(self, question: str) -> List[Dict[str, Optional[str]]]:
         rows = self.conn.execute("SELECT corp_code,stock_code,corp_name,listed_name FROM companies ORDER BY length(corp_name) DESC").fetchall()
@@ -118,6 +136,68 @@ class QueryAnalyzer:
             if any(name and name in question for name in names):
                 found.append(dict(row))
         return found
+
+    @staticmethod
+    def _query_type(question: str, compact_question: str) -> str:
+        if "정정" in question and any(token in question for token in (
+            "정정 전", "정정 후", "변경 전", "변경 후", "현재 유효", "최신 값", "최초", "정정 내역", "정정공시",
+        )):
+            return "correction_history"
+        if "자금조달" in question and any(
+            token.lower() in compact_question
+            for token in ("유상증자", "cb", "bw", "eb", "전환사채", "신주인수권", "교환사채")
+        ):
+            return "financing_history"
+        if any(token in question for token in ("주요 계약", "공급계약", "판매계약")) and "해지" in question:
+            return "contract_termination"
+        if len(re.findall(r"20\d{2}\s*년?", question)) >= 2 and any(
+            token in question for token in ("핵심 사업", "사업은 어떻게", "사업 변화", "사업의 내용", "투자 방향")
+        ):
+            return "business_change"
+        if (any(token in question for token in ("주요 투자 계획", "투자 계획", "주요 투자 현황")) or
+                "투자계획" in compact_question or "투자현황" in compact_question):
+            return "investment_plan"
+        if any(token.lower() in compact_question for token in ("설비투자", "capex")) and any(
+            token in question for token in ("비교", "더 큰", "더 많")
+        ):
+            return "capex_comparison"
+        if any(alias.replace(" ", "").lower() in compact_question for aliases in METRICS.values() for alias in aliases):
+            return "financial_metric"
+        return "generic"
+
+    @staticmethod
+    def _funding_instruments(question: str) -> List[str]:
+        compact = re.sub(r"\s+", "", question).upper()
+        detected: List[str] = []
+        rules = {
+            "equity": ("유상증자",),
+            "CB": ("CB", "전환사채"),
+            "BW": ("BW", "신주인수권부사채", "신주인수권"),
+            "EB": ("EB", "교환사채"),
+        }
+        for instrument, aliases in rules.items():
+            if any(alias.upper() in compact for alias in aliases):
+                detected.append(instrument)
+        return detected or ["equity", "CB", "BW", "EB"]
+
+    @staticmethod
+    def _funding_status(question: str) -> str:
+        """Separate a financing decision from actual completion evidence."""
+        if any(token in question for token in ("실제 조달", "조달 완료", "납입 완료", "납입된", "발행 완료", "발행 결과", "실시한")):
+            return "completed"
+        if any(token in question for token in ("결정", "계획")):
+            return "decision"
+        return "any"
+
+    @staticmethod
+    def _correction_view(question: str) -> str:
+        if any(token in question for token in ("정정 전후", "정정 전·후", "정정 전/후", "변경 전후", "정정 내역")):
+            return "before_after"
+        if any(token in question for token in ("정정 전", "변경 전", "최초")):
+            return "original"
+        if any(token in question for token in ("현재 유효", "최신 값", "현재 값")):
+            return "current"
+        return "history"
 
     @staticmethod
     def _calculation(question: str, compact_question: str, metric: Optional[str], years: List[int]) -> Optional[Dict[str, Any]]:
@@ -161,9 +241,21 @@ class QueryAnalyzer:
         missing: List[str] = []
         if not plan.get("companies") and not plan.get("cross_corpus"):
             missing.append("company")
-        if plan.get("intent") == "comparison" and not plan.get("cross_corpus") and len(plan.get("companies") or []) < 2:
+        specialized = plan.get("query_type") in {
+            "investment_plan", "financing_history", "contract_termination", "business_change", "correction_history",
+        }
+        needs_period = plan.get("query_type") in {
+            "investment_plan", "capex_comparison", "financing_history", "contract_termination", "business_change",
+        } or (plan.get("query_type") == "financial_metric" and plan.get("doc_groups") == ["periodic"])
+        if needs_period and not plan.get("years"):
+            missing.append("period")
+        if plan.get("query_type") == "business_change" and len(plan.get("years") or []) < 2:
+            missing.append("comparison_periods")
+        if plan.get("query_type") == "capex_comparison" and not plan.get("cross_corpus") and len(plan.get("companies") or []) < 2:
             missing.append("comparison_target")
-        if plan.get("intent") in {"lookup", "comparison", "calculation"} and not plan.get("metric") and not plan.get("required_metrics"):
+        if plan.get("intent") == "comparison" and not specialized and not plan.get("cross_corpus") and len(plan.get("companies") or []) < 2:
+            missing.append("comparison_target")
+        if not specialized and plan.get("intent") in {"lookup", "comparison", "calculation"} and not plan.get("metric") and not plan.get("required_metrics"):
             missing.append("metric")
         calculation = plan.get("calculation") or {}
         if calculation.get("operation") == "growth_rate" and not calculation.get("baseline_year"):

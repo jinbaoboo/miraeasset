@@ -8,6 +8,13 @@ from typing import Any, Dict, List, Optional
 
 from src.domain.metric_ontology import METRICS
 
+
+COMPANY_ALIASES = {
+    "00266961": ("네이버",),       # NAVER
+    "00258689": ("JYP", "제이와이피"),
+    "00261443": ("엔씨", "엔씨소프트"),
+}
+
 CALCULATION_PATTERNS = {
     "growth_rate": ["전년대비", "전년 대비", "전년동기대비", "전년 동기 대비", "증감률", "증가율", "감소율", "성장률", "yoy"],
     "difference": ["차이", "얼마나 증가", "얼마나 감소", "증감액"],
@@ -82,7 +89,7 @@ class QueryAnalyzer:
             groups.append("holding")
         # High-value QA routes use an explicit corpus so a narrative phrase
         # cannot drift into an unrelated full-text-search result.
-        if query_type in {"investment_plan", "capex_comparison", "business_change"}:
+        if query_type in {"investment_plan", "capex_comparison", "business_change", "business_overview"}:
             groups = ["periodic"]
         elif query_type == "financial_metric":
             groups = (["exchange"] if "exchange" in groups else ["holding"] if "holding" in groups
@@ -107,12 +114,17 @@ class QueryAnalyzer:
             "calculation": calculation,
             "requires_current_effective": not any(x in question for x in ("정정 전", "변경 전", "최초")),
         }
+        plan["dimensions"] = self._dimensions(question, metric)
+        if query_type == "business_change":
+            plan["comparison_axis"] = (
+                "doc_subtype" if len(years) == 1 and {"annual", "quarter"}.issubset(set(doc_subtypes)) else "period"
+            )
         if query_type == "financing_history":
             plan["funding_instruments"] = self._funding_instruments(question)
             plan["funding_status_requested"] = self._funding_status(question)
         if query_type == "correction_history":
             plan["correction_view"] = self._correction_view(question)
-        if query_type in {"investment_plan", "business_change"}:
+        if query_type in {"investment_plan", "business_change", "business_overview"}:
             plan["section_filters"] = ["II. 사업의 내용"]
         plan["missing_slots"] = self._missing_slots(plan)
         plan["warnings"] = self._warnings(question, plan)
@@ -132,10 +144,18 @@ class QueryAnalyzer:
         rows = self.conn.execute("SELECT corp_code,stock_code,corp_name,listed_name FROM companies ORDER BY length(corp_name) DESC").fetchall()
         found = []
         for row in rows:
-            names = {row["corp_name"], row["listed_name"], row["stock_code"]}
+            names = {row["corp_name"], row["listed_name"], row["stock_code"], *COMPANY_ALIASES.get(row["corp_code"], ())}
             if any(name and name in question for name in names):
                 found.append(dict(row))
         return found
+
+    @staticmethod
+    def _dimensions(question: str, metric: Optional[str]) -> List[str]:
+        if not metric:
+            return []
+        dimensions = re.findall(r"([0-9A-Za-z가-힣]+(?:부문|기지|사업장|지역))\s*(?=연결\s*|별도\s*|매출|영업이익|순이익|자산|부채)", question)
+        excluded = {"연결부문", "별도부문", "사업부문"}
+        return list(dict.fromkeys(value for value in dimensions if value not in excluded))
 
     @staticmethod
     def _query_type(question: str, compact_question: str) -> str:
@@ -154,6 +174,8 @@ class QueryAnalyzer:
             token in question for token in ("핵심 사업", "사업은 어떻게", "사업 변화", "사업의 내용", "투자 방향")
         ):
             return "business_change"
+        if any(token in question for token in ("사업의 내용", "주요 사업", "사업 내용", "주요 서비스", "주요 제품과 서비스", "자동차 부문 관련")):
+            return "business_overview"
         if (any(token in question for token in ("주요 투자 계획", "투자 계획", "주요 투자 현황")) or
                 "투자계획" in compact_question or "투자현황" in compact_question):
             return "investment_plan"
@@ -243,13 +265,15 @@ class QueryAnalyzer:
             missing.append("company")
         specialized = plan.get("query_type") in {
             "investment_plan", "financing_history", "contract_termination", "business_change", "correction_history",
+            "business_overview",
         }
         needs_period = plan.get("query_type") in {
             "investment_plan", "capex_comparison", "financing_history", "contract_termination", "business_change",
         } or (plan.get("query_type") == "financial_metric" and plan.get("doc_groups") == ["periodic"])
         if needs_period and not plan.get("years"):
             missing.append("period")
-        if plan.get("query_type") == "business_change" and len(plan.get("years") or []) < 2:
+        if (plan.get("query_type") == "business_change" and plan.get("comparison_axis") != "doc_subtype"
+                and len(plan.get("years") or []) < 2):
             missing.append("comparison_periods")
         if plan.get("query_type") == "capex_comparison" and not plan.get("cross_corpus") and len(plan.get("companies") or []) < 2:
             missing.append("comparison_target")

@@ -468,7 +468,7 @@ class StoreAgentTests(unittest.TestCase):
         agent = DisclosureAgent(self.db)
         plan = agent.analyzer.analyze("테스트 자동차 부문 관련 내용을 찾아줘")
         agent.close()
-        self.assertEqual(plan["query_type"], "generic")
+        self.assertEqual(plan["query_type"], "business_overview")
         self.assertIsNone(DisclosureAgent._clarification_answer(plan))
 
     def test_unknown_company_metric_does_not_return_another_company(self):
@@ -476,7 +476,7 @@ class StoreAgentTests(unittest.TestCase):
         result = agent.answer("q-unknown", "존재하지않는ABC 2023년 매출액은?", use_llm=False)
         agent.close()
         self.assertFalse(result["retrieved_context"])
-        self.assertIn("기업을 식별할 수 없", result["answer"])
+        self.assertIn("기업을 확인할 수 없", result["answer"])
 
     def test_cross_corpus_ranking_uses_normalized_values(self):
         cells = [

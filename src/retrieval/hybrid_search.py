@@ -53,6 +53,10 @@ def _fts_query(text: str) -> str:
         expansions.append("신규시설투자등")
     if "단일판매" in compact or "공급계약" in compact:
         expansions.append("단일판매공급계약체결")
+    if any(token in compact for token in ("주요제품", "제품과서비스", "주요서비스")):
+        expansions.extend(("주요 제품", "제품", "서비스", "사업의 개요"))
+    if any(token in compact for token in ("주요사업", "사업내용", "사업의내용")):
+        expansions.extend(("사업의 개요", "주요 제품", "매출 및 수주"))
     tokens = expansions + tokens
     return " OR ".join('"' + token.replace('"', '') + '"' for token in tokens[:20]) or '"공시"'
 
@@ -146,6 +150,10 @@ class HybridRetriever:
                 args.extend(plan["months"]); args.extend(plan["months"])
             if plan.get("requires_current_effective", True):
                 where.append("d.is_latest_version=1")
+            section_filters = plan.get("section_filters") or []
+            if section_filters and kind in {"text", "table"}:
+                where.append("(" + " OR ".join("f.section_path LIKE ?" for _ in section_filters) + ")")
+                args.extend(f"%{section}%" for section in section_filters)
             args.append(limit * 4)
             try:
                 rows = self.conn.execute(
@@ -216,11 +224,85 @@ class HybridRetriever:
         args.append(max(500, limit * 10))
         rows = [dict(row) for row in self.conn.execute(sql, args).fetchall()]
         for row in rows:
+            if row.get("unit_currency") is None or row.get("unit_scale") is None:
+                recovered_unit = self._effective_table_unit(row)
+                if recovered_unit.get("currency") is not None and recovered_unit.get("scale") is not None:
+                    row.update({"unit_raw": recovered_unit.get("raw"),
+                                "unit_currency": recovered_unit.get("currency"),
+                                "unit_scale": recovered_unit.get("scale")})
             row["metric"] = metric
             row["selection_score"] = self._cell_score(row, plan, metric)
             row["citation"] = self.citation_for("cell", row["cell_id"])
         rows.sort(key=lambda row: -row["selection_score"])
-        return rows[:limit]
+        # Preserve at least one candidate for every requested comparison year;
+        # otherwise equal-scored current-year note rows can exhaust the limit
+        # before the baseline year is seen.
+        requested_years = self._candidate_years(plan)
+        balanced: List[Dict[str, Any]] = []
+        chosen = set()
+        for year in requested_years:
+            candidate = next((row for row in rows if row.get("base_year") == year), None)
+            if candidate:
+                balanced.append(candidate); chosen.add(candidate.get("cell_id"))
+        balanced.extend(row for row in rows if row.get("cell_id") not in chosen)
+        return balanced[:limit]
+
+    def find_dimension_metric_cells(self, plan: Dict[str, Any], limit: int = 10) -> List[Dict[str, Any]]:
+        """Resolve segment/site metrics only when the table explicitly links both labels.
+
+        Segment tables often put ``차량부문`` in the row label and ``매출액`` in
+        a neighbouring non-numeric cell.  Treating a consolidated statement
+        total as the segment value is unsafe, so this route requires the
+        dimension and metric marker in the same physical row.
+        """
+        dimensions = plan.get("dimensions") or []
+        metric = plan.get("metric")
+        aliases = METRICS.get(metric or "", [])
+        candidate_doc_ids = plan.get("_candidate_doc_ids") or []
+        if not dimensions or not aliases or not candidate_doc_ids:
+            return []
+        where = ["c.numeric_value IS NOT NULL",
+                 "c.doc_id IN (" + ",".join("?" for _ in candidate_doc_ids) + ")",
+                 "(" + " OR ".join("(c.row_label LIKE ? OR c.row_path LIKE ?)" for _ in dimensions) + ")"]
+        args: List[Any] = list(candidate_doc_ids)
+        for dimension in dimensions:
+            args.extend((f"%{dimension}%", f"%{dimension}%"))
+        rows = self.conn.execute(
+            f"""SELECT c.*,t.table_title,t.section_path,t.statement_type,t.unit_json,
+                       d.corp_code,d.corp_name,d.report_nm,d.rcept_no,d.rcept_dt,d.base_year,d.base_month,
+                       d.doc_id,d.doc_subtype,d.is_latest_version
+                  FROM cells c JOIN logical_tables t ON t.table_id=c.table_id
+                  JOIN documents d ON d.doc_id=c.doc_id
+                 WHERE {' AND '.join(where)}
+                 ORDER BY d.base_year DESC,d.base_month DESC,c.table_id,c.row_index,c.column_index""", args
+        ).fetchall()
+        matched: List[Dict[str, Any]] = []
+        for raw in rows:
+            row = dict(raw)
+            markers = self.conn.execute(
+                """SELECT column_index,original_text FROM cells
+                    WHERE table_id=? AND row_index=? AND numeric_value IS NULL ORDER BY column_index""",
+                (row["table_id"], row["row_index"]),
+            ).fetchall()
+            marker = next((item for item in markers if any(
+                re.sub(r"\s+", "", alias).lower() in re.sub(r"\s+", "", item["original_text"] or "").lower()
+                for alias in aliases)), None)
+            if not marker or int(row.get("column_index") or 0) <= int(marker["column_index"]):
+                continue
+            row["metric"] = metric
+            row["row_label"] = " ".join([*dimensions, metric_definition(metric).get("label", marker["original_text"])])
+            # The first numeric cell after the metric marker is the current
+            # period amount; following cells may be ratios or prior periods.
+            distance = int(row["column_index"]) - int(marker["column_index"])
+            row["selection_score"] = 1000 - distance * 20 + (10 if row.get("is_latest_version") else 0)
+            row["citation"] = self.citation_for("cell", row["cell_id"])
+            matched.append(row)
+        best_by_row: Dict[tuple, Dict[str, Any]] = {}
+        for row in matched:
+            key = (row["table_id"], row["row_index"], row.get("metric"))
+            if key not in best_by_row or row["selection_score"] > best_by_row[key]["selection_score"]:
+                best_by_row[key] = row
+        return sorted(best_by_row.values(), key=lambda item: -item["selection_score"])[:limit]
 
     def find_investment_plan(self, plan: Dict[str, Any], limit: int = 5) -> List[Dict[str, Any]]:
         """Return complete investment-plan rows instead of an FTS table excerpt."""
@@ -535,6 +617,50 @@ class HybridRetriever:
             for year, profile in profiles.items()
         }
         return {"evidence": result, "profiles": normalized_profiles}
+
+    def find_business_document_evidence(self, plan: Dict[str, Any], per_type: int = 8) -> Dict[str, Any]:
+        """Build comparable business profiles for annual vs quarterly filings."""
+        candidate_doc_ids = plan.get("_candidate_doc_ids") or []
+        if not candidate_doc_ids:
+            return {"evidence": [], "profiles": {}}
+        rows = self.conn.execute(
+            f"""SELECT c.chunk_id,c.doc_id,c.heading,c.section_path,c.text,d.corp_code,d.corp_name,d.report_nm,
+                       d.rcept_no,d.rcept_dt,d.base_year,d.base_month,d.doc_subtype
+                  FROM chunks c JOIN documents d ON d.doc_id=c.doc_id
+                 WHERE c.doc_id IN ({','.join('?' for _ in candidate_doc_ids)})
+                   AND c.section_path LIKE '%II. 사업의 내용%'
+                   AND d.doc_subtype IN ('annual','quarter')
+                 ORDER BY d.doc_subtype,d.base_month DESC,c.chunk_id""", candidate_doc_ids
+        ).fetchall()
+        ranked: Dict[str, Dict[str, List[tuple[int, Dict[str, Any]]]]] = defaultdict(lambda: defaultdict(list))
+        profiles: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"categories": set(), "signals": set()})
+        for raw in rows:
+            item = dict(raw); subtype = item.get("doc_subtype")
+            haystack = (item.get("heading") or "") + " " + item.get("section_path", "") + " " + item.get("text", "")
+            categories = self._business_categories(haystack); signals = self._business_signals(haystack)
+            profiles[subtype]["categories"].update(categories); profiles[subtype]["signals"].update(signals)
+            item.update({"kind": "business_evidence", "record_id": item["chunk_id"],
+                         "citation": self.citation_for("text", item["chunk_id"]),
+                         "evidence_categories": categories, "signals": signals})
+            for category in categories:
+                aliases = BUSINESS_EVIDENCE_CATEGORIES[category]
+                score = 8 * sum(alias.lower() in ((item.get("heading") or "") + " " + item.get("section_path", "")).lower()
+                                for alias in aliases)
+                score += 2 * sum(alias.lower() in haystack.lower() for alias in aliases) + min(6, len(signals))
+                ranked[subtype][category].append((score, item))
+        evidence: List[Dict[str, Any]] = []
+        for subtype in ("annual", "quarter"):
+            selected = set()
+            for category in BUSINESS_EVIDENCE_CATEGORIES:
+                options = sorted(ranked[subtype].get(category, []), key=lambda pair: (-pair[0], pair[1]["chunk_id"]))
+                chosen = next((item for _, item in options if item["chunk_id"] not in selected), None)
+                if chosen:
+                    selected.add(chosen["chunk_id"]); evidence.append(chosen)
+                if len(selected) >= per_type:
+                    break
+        normalized = {subtype: {"categories": sorted(value["categories"]), "signals": sorted(value["signals"])}
+                      for subtype, value in profiles.items()}
+        return {"evidence": evidence, "profiles": normalized}
 
     @staticmethod
     def _business_categories(text: str) -> List[str]:

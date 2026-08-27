@@ -22,11 +22,13 @@ class EvidenceReranker:
             coverage = len(query_tokens & content_tokens) / max(1, len(query_tokens))
             section = citation.get("section_path") or item.get("section_path") or ""
             section_match = any(expected in section for expected in (plan.get("section_filters") or []))
+            heading_focus = self._heading_focus(question, section)
             breakdown = {
                 "retrieval": round(float(item.get("score") or 0), 6),
                 "query_coverage": round(coverage * 6, 6),
                 "section_match": 4.0 if section_match else 0.0,
                 "source_preference": self._source_bonus(item, plan),
+                "heading_focus": heading_focus,
             }
             item["score_breakdown"] = breakdown
             item["score"] = sum(breakdown.values())
@@ -45,6 +47,20 @@ class EvidenceReranker:
             return 3.0
         if plan.get("query_type") in {"generic", "business_change"} and item.get("kind") == "text":
             return 2.0
+        return 0.0
+
+    @staticmethod
+    def _heading_focus(question: str, section: str) -> float:
+        compact_question = re.sub(r"\s+", "", question)
+        compact_section = re.sub(r"\s+", "", section)
+        if any(token in compact_question for token in ("제품", "서비스")) and any(
+            token in compact_section for token in ("주요제품", "제품및서비스", "사업의개요")
+        ):
+            return 10.0
+        if any(token in compact_question for token in ("주요사업", "사업내용", "사업의내용")) and any(
+            token in compact_section for token in ("사업의개요", "주요제품", "매출및수주")
+        ):
+            return 7.0
         return 0.0
 
     @staticmethod
@@ -74,4 +90,3 @@ class EvidenceReranker:
             if len(selected) >= limit:
                 break
         return selected
-

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 
+from src.domain.metric_ontology import metric_definition
+
 
 QUESTION_REQUIREMENTS: Dict[str, List[str]] = {
     "financial_metric": ["company", "period", "metric", "value", "unit", "scope", "citation"],
@@ -24,10 +26,19 @@ def evaluate_requirements(plan: Dict[str, Any], answer: str, contexts: List[Dict
     years = plan.get("years") or []
     kinds = {item.get("kind") for item in contexts}
     answer_compact = answer.replace(" ", "").upper()
+    metric_tokens = metric_definition(plan.get("metric")).get("aliases", [])
+    if not metric_tokens:
+        metric_tokens = {
+            "operating_margin": ["영업이익률"], "net_margin": ["순이익률"],
+            "debt_ratio": ["부채비율"], "roe": ["ROE", "자기자본이익률"],
+        }.get(plan.get("metric"), [])
     checks: Dict[str, bool] = {
         "company": bool(companies) and all(company.get("corp_name") in answer for company in companies[:2]),
         "period": not years or all(str(year) in answer for year in years[:2]),
-        "metric": bool(plan.get("metric")) and any(token in answer for token in ("매출", "영업이익", "순이익", "자산", "부채", "자본", "연구개발", "설비투자", "CAPEX", "계약금액", "비율", "보유")),
+        "metric": bool(plan.get("metric")) and any(
+            token.replace(" ", "").upper() in answer_compact
+            for token in metric_tokens if token
+        ),
         "value": bool(contexts) and any(char.isdigit() for char in answer),
         "unit": any(unit in answer for unit in ("원", "백만원", "억원", "%", "주", "단위")),
         "scope": plan.get("scope") is None or any(scope in answer for scope in ("연결", "별도", "기준 미상")),
@@ -45,10 +56,18 @@ def evaluate_requirements(plan: Dict[str, Any], answer: str, contexts: List[Dict
         "decision_basis": query_type != "financing_history" or "결정공시" in answer_compact,
         "contract_search": query_type != "contract_termination" or ("계약" in answer and (bool(contexts) or "찾지 못" in answer)),
         "termination_search": query_type != "contract_termination" or "해지" in answer,
-        "comparison_periods": query_type != "business_change" or len(years) >= 2 and all(str(year) in answer for year in years[:2]),
-        "evidence_for_each_period": query_type != "business_change" or all(
-            any(item.get("citation", {}).get("rcept_no") and str(year) in item.get("content", "") for item in contexts)
-            for year in years[:2]
+        "comparison_periods": query_type != "business_change" or (
+            (plan.get("comparison_axis") == "doc_subtype" and "사업보고서" in answer and "분기보고서" in answer) or
+            (len(years) >= 2 and all(str(year) in answer for year in years[:2]))
+        ),
+        "evidence_for_each_period": query_type != "business_change" or (
+            (plan.get("comparison_axis") == "doc_subtype" and all(
+                any(label in (item.get("citation", {}).get("report_nm") or "") for item in contexts)
+                for label in ("사업보고서", "분기보고서")
+            )) or all(
+                any(item.get("citation", {}).get("rcept_no") and str(year) in item.get("content", "") for item in contexts)
+                for year in years[:2]
+            )
         ),
         "correction_before_after_or_limit": query_type != "correction_history" or (
             (plan.get("correction_view") == "current" and "현재 유효" in answer) or

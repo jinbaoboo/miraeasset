@@ -9,7 +9,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from src.domain.metric_ontology import FINANCIAL_CELL_METRICS
+from src.domain.metric_ontology import FINANCIAL_CELL_METRICS, metric_definition
 from src.retrieval.hybrid_search import HybridRetriever
 from src.retrieval.query_analyzer import QueryAnalyzer
 from src.retrieval.query_planner import QueryPlanner
@@ -65,7 +65,7 @@ class DisclosureAgent:
             trace.append("company_not_identified")
             return self._response(
                 question_id, question, [], trace,
-                "제공 코퍼스의 기업을 식별할 수 없습니다. 회사명 또는 종목코드를 정확히 입력해 주세요.", plan,
+                "제공 코퍼스에서 대상 기업을 확인할 수 없습니다. 회사명 또는 종목코드를 정확히 입력해 주세요.", plan,
             )
         candidate_docs = self.retriever.candidate_documents(plan)
         search_plan = dict(plan)
@@ -79,7 +79,7 @@ class DisclosureAgent:
             trace.append("candidate_documents_filtered")
         elif self._requires_candidate_documents(plan):
             trace.append("candidate_documents_not_found")
-            answer = "질문 조건에 맞는 후보 공시 문서를 찾지 못했습니다. 회사명·기간·공시 유형을 확인해 주세요."
+            answer = "질문 조건에 맞는 공시 자료를 제공 코퍼스에서 확인할 수 없습니다. 회사명·기간·공시 유형을 확인해 주세요."
             return self._response(question_id, question, [], trace, answer, plan)
         contexts: List[Dict[str, Any]] = []
         specialized_data: Any = None
@@ -105,16 +105,29 @@ class DisclosureAgent:
                                if item.get("event_id") not in matched_ids]
             contexts.extend(self._contract_context(item) for item in contract_items[:20])
         elif query_type == "business_change":
-            specialized_data = self.retriever.find_business_change_evidence(search_plan)
+            specialized_data = (self.retriever.find_business_document_evidence(search_plan)
+                                if plan.get("comparison_axis") == "doc_subtype"
+                                else self.retriever.find_business_change_evidence(search_plan))
             if specialized_data.get("evidence"):
-                trace.append("business_sections_compared_by_year")
-                for year, profile in sorted(specialized_data.get("profiles", {}).items()):
-                    contexts.append(self._business_profile_context(int(year), profile, specialized_data["evidence"]))
+                trace.append("business_sections_compared_by_report_type" if plan.get("comparison_axis") == "doc_subtype"
+                             else "business_sections_compared_by_year")
+                for key, profile in sorted(specialized_data.get("profiles", {}).items(), key=lambda item: str(item[0])):
+                    contexts.append(self._business_profile_context(key, profile, specialized_data["evidence"],
+                                                                  plan.get("comparison_axis") or "period"))
                 contexts.extend(self._business_context(item) for item in specialized_data["evidence"])
         elif query_type == "correction_history":
             specialized_data = self.retriever.find_correction_chains(search_plan)
             trace.append("correction_chains_reconstructed")
             for chain in specialized_data.get("chains", []):
+                original = chain.get("original") or {}
+                if original:
+                    contexts.append({
+                        "kind": "correction", "record_id": original.get("doc_id"),
+                        "content": (f"[is_correction] false | {original.get('corp_name')} | "
+                                    f"{original.get('report_nm')} | 원 공시 접수번호 {original.get('rcept_no')}"),
+                        "citation": {key: original.get(key) for key in
+                                     ("doc_id", "corp_name", "report_nm", "rcept_no", "rcept_dt")},
+                    })
                 effective = {self._normalized_item(item.get("item")): item.get("current")
                              for item in chain.get("effective_items", [])}
                 for version in chain.get("versions", []):
@@ -127,6 +140,19 @@ class DisclosureAgent:
         if structured_values.get("missing_metrics"):
             plan["missing_structured_metrics"] = structured_values["missing_metrics"]
         cells = structured_values["cells"]
+        dimension_limit_answer: Optional[str] = None
+        if plan.get("dimensions"):
+            cells = self.retriever.find_dimension_metric_cells(search_plan, limit=12)
+            if cells:
+                trace.append("dimension_metric_cells_retrieved")
+            else:
+                dimension = ", ".join(plan["dimensions"])
+                label = metric_definition(plan.get("metric")).get("label", plan.get("metric") or "요청 지표")
+                plan["missing_dimension_evidence"] = plan["dimensions"]
+                dimension_limit_answer = (
+                    f"{dimension} 단위의 {label}은 제공 코퍼스의 해당 공시에서 확인할 수 없습니다. "
+                    "회사 전체 또는 연결 기준 수치를 해당 세부 차원의 값으로 대신 사용하지 않았습니다."
+                )
         cells = self._prioritize_cells(cells, search_plan)
         if cells:
             trace.append("structured_cells_retrieved")
@@ -160,9 +186,10 @@ class DisclosureAgent:
             trace.append("insufficient_evidence")
             answer = "제공된 공시 코퍼스에서 질문을 뒷받침할 근거를 찾지 못했습니다. 회사명·기간·공시 유형을 더 구체적으로 입력해 주세요."
             return self._response(question_id, question, contexts, trace, answer, plan)
-        answer = specialized_answer
+        answer = specialized_answer or dimension_limit_answer
         if answer:
-            trace.append("deterministic_specialized_answer")
+            trace.append("dimension_evidence_limit" if dimension_limit_answer and not specialized_answer
+                         else "deterministic_specialized_answer")
         calculation_answer = self._calculation_answer(plan, cells, event_fields)
         if not answer and calculation_answer:
             answer = calculation_answer
@@ -300,13 +327,18 @@ class DisclosureAgent:
                 "citation": item["citation"]}
 
     @staticmethod
-    def _business_profile_context(year: int, profile: Dict[str, Any], evidence: List[Dict[str, Any]]) -> Dict[str, Any]:
-        representative = next((item for item in evidence if item.get("base_year") == year), {})
-        content = (f"{representative.get('corp_name')} | {year}년 사업 변화 분류 프로필 | "
+    def _business_profile_context(key: Any, profile: Dict[str, Any], evidence: List[Dict[str, Any]], axis: str = "period") -> Dict[str, Any]:
+        if axis == "doc_subtype":
+            representative = next((item for item in evidence if item.get("doc_subtype") == key), {})
+        else:
+            representative = next((item for item in evidence if item.get("base_year") == int(key)), {})
+        label = ({"annual": "사업보고서", "quarter": "분기보고서"}.get(str(key), str(key))
+                 if axis == "doc_subtype" else f"{key}년")
+        content = (f"{representative.get('corp_name')} | {label} 사업 변화 분류 프로필 | "
                    f"근거분류 {', '.join(profile.get('categories') or [])} | "
                    f"사업신호 {', '.join(profile.get('signals') or [])} | "
                    f"분석한 사업 섹션 청크 {profile.get('section_count') or 0}개")
-        return {"kind": "business_profile", "record_id": f"business_profile:{representative.get('doc_id')}:{year}",
+        return {"kind": "business_profile", "record_id": f"business_profile:{representative.get('doc_id')}:{key}",
                 "content": content, "citation": representative.get("citation") or {},
                 "signal_sources": profile.get("signal_sources") or {}}
 
@@ -384,6 +416,8 @@ class DisclosureAgent:
         if query_type == "contract_termination":
             return DisclosureAgent._contract_termination_answer(plan, data or {})
         if query_type == "business_change":
+            if plan.get("comparison_axis") == "doc_subtype":
+                return DisclosureAgent._business_document_change_answer(plan, data or {"evidence": [], "profiles": {}})
             return DisclosureAgent._business_change_answer(plan, data or {"evidence": [], "profiles": {}})
         if query_type == "correction_history":
             return DisclosureAgent._correction_history_answer(plan, data or {"chains": [], "unlinked_count": 0})
@@ -392,7 +426,8 @@ class DisclosureAgent:
     @staticmethod
     def _correction_item_context(chain: Dict[str, Any], version: Dict[str, Any], item: Dict[str, Any],
                                  current: Optional[str]) -> Dict[str, Any]:
-        content = (f"{version.get('corp_name')} | {version.get('report_nm')} | 정정 항목 {item.get('item') or '미상'} | "
+        content = (f"[is_correction] true | {version.get('corp_name')} | {version.get('report_nm')} | "
+                   f"정정 항목 {item.get('item') or '미상'} | "
                    f"정정 전 {item.get('before_text') or '미상'} | 정정 후 {item.get('after_text') or '미상'} | "
                    f"현재 유효 값 {current or item.get('after_text') or '미상'} | 사유 {item.get('reason') or '미상'}")
         return {"kind": "correction", "record_id": item.get("item_id") or version.get("correction_id"),
@@ -611,6 +646,30 @@ class DisclosureAgent:
         return "\n".join(parts)
 
     @staticmethod
+    def _business_document_change_answer(plan: Dict[str, Any], analysis: Dict[str, Any]) -> Optional[str]:
+        evidence = analysis.get("evidence") or []
+        profiles = analysis.get("profiles") or {}
+        annual = profiles.get("annual") or {}
+        quarter = profiles.get("quarter") or {}
+        if not evidence or not annual or not quarter:
+            return "같은 기준연도의 사업보고서와 분기보고서 'II. 사업의 내용' 근거를 모두 확인할 수 없습니다."
+        annual_signals = set(annual.get("signals") or [])
+        quarter_signals = set(quarter.get("signals") or [])
+        common = sorted(annual_signals & quarter_signals)
+        annual_only = sorted(annual_signals - quarter_signals)
+        quarter_only = sorted(quarter_signals - annual_signals)
+        company = (plan.get("companies") or [{}])[0].get("corp_name", "해당 기업")
+        year = (plan.get("years") or [""])[0]
+        lines = [f"{company}의 {year}년 사업보고서와 분기보고서 'II. 사업의 내용'을 같은 분류로 비교했습니다."]
+        lines.append(f"- 두 보고서에서 공통으로 확인된 사업·전략 축: {', '.join(common) if common else '명확한 공통 신호가 적음'}")
+        lines.append(f"- 사업보고서에서만 상대적으로 확인된 표현: {', '.join(annual_only) if annual_only else '없음'}")
+        lines.append(f"- 분기보고서에서만 상대적으로 확인된 표현: {', '.join(quarter_only) if quarter_only else '없음'}")
+        lines.append("보고서별 표현 차이는 작성 시점과 상세도 차이일 수 있으며, 신규 진출이나 사업 중단으로 단정하지 않습니다.")
+        receipts = [item.get("rcept_no") for item in evidence if item.get("rcept_no")]
+        lines.append(f"근거 접수번호: {', '.join(dict.fromkeys(receipts))}.")
+        return "\n".join(lines)
+
+    @staticmethod
     def _comparison_numeric(item: Dict[str, Any], plan: Dict[str, Any]) -> Decimal:
         value = Decimal(DisclosureAgent._exact_numeric(item)) * Decimal(str(item.get("unit_scale") or 0))
         return abs(value) if plan.get("metric") == "capex" else value
@@ -672,7 +731,8 @@ class DisclosureAgent:
                     basis = ("연결 현금흐름표의 '유형자산의 취득' 현금유출액(절대값) 기준으로 "
                              if plan.get("metric") == "capex" else "")
                     period = f"{max(plan.get('years') or [])}년 " if plan.get("years") else ""
-                    return (f"{period}{basis}{details}이며, 동일 통화·단위로 환산하면 "
+                    metric_label = metric_definition(plan.get("metric")).get("label", "요청 지표")
+                    return (f"{period}{metric_label}은 {basis}{details}이며, 동일 통화·단위로 환산하면 "
                             f"{selected[winner_index]['corp_name']}의 규모가 더 큽니다. "
                             f"근거 접수번호: {receipts}.")
                 details = ", ".join(
@@ -716,8 +776,11 @@ class DisclosureAgent:
             cell = cells[0]
             scope = {"consolidated": "연결", "separate": "별도", "unknown": "기준 미상"}.get(cell.get("scope"), cell.get("scope"))
             unit = cell.get("unit_raw") or "단위가 명시되지 않음"
-            return (f"{cell['corp_name']}의 {cell.get('base_year')}년 {cell.get('base_month')}월 {scope} 기준 "
-                    f"{DisclosureAgent._topic(cell.get('row_label') or '해당 값')} {cell.get('original_text')} {unit}입니다. "
+            display_unit = DisclosureAgent._display_unit(unit)
+            scope_phrase = f"{scope} 기준 " if scope not in {None, "", "기준 미상"} else ""
+            return (f"{cell['corp_name']}의 {cell.get('base_year')}년 {cell.get('base_month')}월 {scope_phrase}"
+                    f"{DisclosureAgent._topic(cell.get('row_label') or '해당 값')} {cell.get('original_text')}{display_unit}입니다. "
+                    f"공시 단위: {unit}. "
                     f"근거: {cell.get('report_nm')}, 접수번호 {cell.get('rcept_no')}, "
                     f"{cell.get('table_title') or '표 제목 미상'}의 해당 행·열.")
         if event_fields:
@@ -763,8 +826,31 @@ class DisclosureAgent:
         metric = (plan.get("required_metrics") or [plan.get("metric")])[0]
         if not target_year or not baseline_year or not metric:
             return None
-        current = DisclosureAgent._best_cell(cells, metric=metric, year=target_year)
-        baseline = DisclosureAgent._best_cell(cells, metric=metric, year=baseline_year)
+        current_candidates = [cell for cell in cells if cell.get("metric") == metric and cell.get("base_year") == target_year]
+        baseline_candidates = [cell for cell in cells if cell.get("metric") == metric and cell.get("base_year") == baseline_year]
+        compatible_pairs = []
+        for current_item in current_candidates:
+            for baseline_item in baseline_candidates:
+                compatible, _ = DisclosureAgent._compatible_numeric_cells([current_item, baseline_item], require_scope=True)
+                if not compatible:
+                    continue
+                score = current_item.get("selection_score", 0) + baseline_item.get("selection_score", 0)
+                if current_item.get("unit_scale") == baseline_item.get("unit_scale"):
+                    score += 8
+                if current_item.get("scope") == baseline_item.get("scope"):
+                    score += 5
+                if current_item.get("table_title") == baseline_item.get("table_title"):
+                    score += 6
+                if re.sub(r"\s*\(.*?\)", "", current_item.get("row_label") or "") == re.sub(
+                        r"\s*\(.*?\)", "", baseline_item.get("row_label") or ""):
+                    score += 4
+                compatible_pairs.append((score, current_item, baseline_item))
+        compatible_pairs.sort(key=lambda item: item[0], reverse=True)
+        if compatible_pairs:
+            _, current, baseline = compatible_pairs[0]
+        else:
+            current = DisclosureAgent._best_cell(cells, metric=metric, year=target_year)
+            baseline = DisclosureAgent._best_cell(cells, metric=metric, year=baseline_year)
         if not current or not baseline:
             return None
         compatible, reason = DisclosureAgent._compatible_numeric_cells([current, baseline], require_scope=True)
@@ -792,8 +878,9 @@ class DisclosureAgent:
             f"{target_year}년 {current.get('original_text')} ({current.get('unit_raw') or '단위 미상'}), "
             f"{baseline_year}년 {baseline.get('original_text')} ({baseline.get('unit_raw') or '단위 미상'})"
         )
+        comparison_label = "전년 동기 대비 " if plan.get("quarter") and baseline_year == target_year - 1 else ""
         return (
-            f"{current['corp_name']}의 {target_year}년 {current.get('row_label')} {verb}은(는) {rendered}{direction}입니다. "
+            f"{current['corp_name']}의 {target_year}년 {comparison_label}{current.get('row_label')} {verb}은(는) {rendered}{direction}입니다. "
             f"입력값은 {inputs}입니다.{calculation_basis} 계산식: {result['formula']}. "
             f"근거 접수번호: {current.get('rcept_no')}, {baseline.get('rcept_no')}."
         )
@@ -875,6 +962,11 @@ class DisclosureAgent:
     def _normalized_unit_label(cell: Dict[str, Any]) -> str:
         currency = cell.get("unit_currency")
         return "원" if currency == "KRW" else f" {currency}" if currency else ""
+
+    @staticmethod
+    def _display_unit(unit_raw: str) -> str:
+        match = re.search(r"(조원|억원|백만원|천원|원|천주|주|명|건|%)", unit_raw or "")
+        return match.group(1) if match else ""
 
     @staticmethod
     def _distinct_cells(cells: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -961,7 +1053,7 @@ class DisclosureAgent:
         query_type = plan.get("query_type")
         core_types = {
             "financial_metric", "investment_plan", "capex_comparison", "financing_history",
-            "contract_termination", "business_change", "correction_history",
+            "contract_termination", "business_change", "business_overview", "correction_history",
         }
         missing = set(plan.get("missing_slots") or [])
         warnings = set(plan.get("warnings") or [])
@@ -970,7 +1062,7 @@ class DisclosureAgent:
         if query_type not in core_types:
             return None
         if "company" in missing:
-            return "missing_company", "대상 기업을 식별할 수 없습니다. 정확한 회사명 또는 종목코드를 입력해 주세요."
+            return "missing_company", "제공 코퍼스에서 대상 기업을 확인할 수 없습니다. 정확한 회사명 또는 종목코드를 입력해 주세요."
         if "comparison_target" in missing:
             return "missing_comparison_target", "비교할 기업이 부족합니다. 두 기업의 회사명 또는 종목코드를 모두 입력해 주세요."
         if "comparison_periods" in missing:

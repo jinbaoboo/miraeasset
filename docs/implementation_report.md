@@ -48,7 +48,8 @@ PDF/HTML만 제공된 정기공시 3건은 페이지별 텍스트와 locator를 
 | 20개 교차 샘플 수동·자동 대조 | 173 / 173 통과 |
 | DB 무결성·참조·FTS·PII 검사 | 14 / 14 통과 |
 | Golden/robustness 질문 평가 | 150 / 150 통과(base 37개 + 의미 보존 변형) |
-| Golden 응답 지연 | median 662.82 ms, p95 5,688.54 ms, max 7,793.09 ms |
+| Golden 응답 지연 | median 325.84 ms, p95 4,448.27 ms, max 5,871.31 ms |
+| Manual QA | 25 / 25 통과(수치·정정·사업·비교·복합·답변불가) |
 | API smoke test | 정상 응답, 422 검증, prompt injection 거절 통과 |
 
 교차 샘플은 annual/half/quarter, 정정 annual/half/quarter, 복잡 표, rowspan/colspan, strict XML 실패, 감사보고서 첨부, PDF fallback, 서로 다른 산업과 네 공시군을 포함한다. DB 검사에서는 manifest와 문서 수 일치, `PRAGMA integrity_check`, orphan 부재, FTS 레코드 수 일치, 최신 정정본 유일성, 검색 파생 필드의 민감 패턴 부재, 원본 경로 존재 여부를 검사했다.

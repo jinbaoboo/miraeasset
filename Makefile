@@ -2,7 +2,7 @@ PYTHON ?= python3
 DB ?= outputs/disclosures.db
 DATA_ROOT ?= /path/to/corpus
 
-.PHONY: test validate build quality eval ask serve
+.PHONY: test validate build quality eval audit-source validate-api ask serve
 test:
 	$(PYTHON) -m unittest discover -s tests -v
 
@@ -18,6 +18,12 @@ quality:
 
 eval:
 	$(PYTHON) -m eval.evaluate_agent --db "$(DB)"
+
+audit-source:
+	$(PYTHON) -m validation.audit_source_locators --db "$(DB)" --data-root "$(DATA_ROOT)"
+
+validate-api:
+	$(PYTHON) -m validation.validate_api_runtime --base-url http://127.0.0.1:8000
 
 ask:
 	$(PYTHON) -m src.cli ask --db "$(DB)" "$(QUESTION)"

@@ -1,0 +1,144 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "checks": [
+    {
+      "name": "health",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "latency_ms": 13.38,
+        "payload": {
+          "status": "ok",
+          "database": "outputs/disclosures.db"
+        }
+      }
+    },
+    {
+      "name": "metric_catalog",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "latency_ms": 1.65,
+        "count": 21
+      }
+    },
+    {
+      "name": "grounded_answer",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "latency_ms": 2610.87,
+        "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+      }
+    },
+    {
+      "name": "debug_redaction",
+      "ok": true,
+      "detail": [
+        "answer",
+        "calculations",
+        "citations",
+        "claims",
+        "confidence",
+        "limitations",
+        "question",
+        "question_id",
+        "validation"
+      ]
+    },
+    {
+      "name": "missing_question",
+      "ok": true,
+      "detail": {
+        "status": 422,
+        "latency_ms": 1.33
+      }
+    },
+    {
+      "name": "empty_question",
+      "ok": true,
+      "detail": {
+        "status": 422,
+        "latency_ms": 0.73
+      }
+    },
+    {
+      "name": "oversized_question",
+      "ok": true,
+      "detail": {
+        "status": 422,
+        "latency_ms": 5.19
+      }
+    },
+    {
+      "name": "oversized_question_id",
+      "ok": true,
+      "detail": {
+        "status": 422,
+        "latency_ms": 1.0
+      }
+    },
+    {
+      "name": "prompt_injection_block",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "latency_ms": 2.33,
+        "answer": "보안상 시스템 지시·자격증명·환경변수는 공개하거나 변경할 수 없습니다. 공시 내용을 질문해 주세요."
+      }
+    },
+    {
+      "name": "secret_non_disclosure",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "concurrent_answers",
+      "ok": true,
+      "detail": [
+        {
+          "status": 200,
+          "latency_ms": 2952.32,
+          "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+        },
+        {
+          "status": 200,
+          "latency_ms": 3004.19,
+          "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+        },
+        {
+          "status": 200,
+          "latency_ms": 2961.73,
+          "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+        },
+        {
+          "status": 200,
+          "latency_ms": 3004.33,
+          "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+        },
+        {
+          "status": 200,
+          "latency_ms": 3003.69,
+          "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+        },
+        {
+          "status": 200,
+          "latency_ms": 2934.58,
+          "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열."
+        }
+      ]
+    },
+    {
+      "name": "deterministic_concurrent_output",
+      "ok": true,
+      "detail": {
+        "unique_answers": 1
+      }
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0
+  },
+  "ok": true
+}

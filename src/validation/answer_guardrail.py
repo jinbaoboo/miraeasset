@@ -168,15 +168,21 @@ class AnswerGuardrail:
                                        "formula": "count(unique lifecycle records)", "result": match.group(1),
                                        "display": f"{match.group(1)}건", "evidence_ids": [summary.get("record_id")]})
         formula_matches = re.findall(r"계산식:\s*(.+?)(?:\.\s*근거 접수번호:|\n|$)", answer)
-        for formula in formula_matches:
-            result_value = self._evaluate_formula(formula)
-            display = None
-            if result_value is not None:
-                percent = re.search(r"[+-]?[0-9,]+(?:\.[0-9]+)?%", answer)
-                display = percent.group(0) if percent else None
-            result.append({"calculation_id": f"calc_{len(result)+1:03d}", "name": plan.get("calculation", {}).get("operation") or "calculation",
-                           "inputs": self._numbers(formula), "formula": formula.strip(), "result": result_value, "display": display,
-                           "evidence_ids": [item.get("record_id") for item in contexts[:2]]})
+        for formula_block in formula_matches:
+            formulas = [re.sub(r"^[^=]+?=", "", part).strip() for part in formula_block.split(";") if part.strip()]
+            for formula in formulas:
+                result_value = self._evaluate_formula(formula)
+                display = None
+                if result_value is not None:
+                    formatted = f"{Decimal(result_value):,}"
+                    candidates = (formatted, formatted.rstrip("0").rstrip("."), result_value)
+                    display = next((candidate for candidate in candidates if candidate and candidate in answer), None)
+                    if not display:
+                        percent = re.search(r"[+-]?[0-9,]+(?:\.[0-9]+)?%", answer)
+                        display = percent.group(0) if percent else None
+                result.append({"calculation_id": f"calc_{len(result)+1:03d}", "name": plan.get("calculation", {}).get("operation") or "calculation",
+                               "inputs": self._numbers(formula), "formula": formula.strip(), "result": result_value, "display": display,
+                               "evidence_ids": [item.get("record_id") for item in contexts[:2]]})
         return result
 
     @staticmethod
@@ -285,6 +291,9 @@ class AnswerGuardrail:
         difference = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)\s*-\s*([+-]?\d+(?:\.\d+)?)", compact)
         if difference:
             return format((Decimal(difference.group(1)) - Decimal(difference.group(2))).normalize(), "f")
+        absolute_difference = re.fullmatch(r"abs\(\s*([+-]?\d+(?:\.\d+)?)\s*-\s*([+-]?\d+(?:\.\d+)?)\s*\)", compact)
+        if absolute_difference:
+            return format(abs(Decimal(absolute_difference.group(1)) - Decimal(absolute_difference.group(2))).normalize(), "f")
         return None
 
     @staticmethod

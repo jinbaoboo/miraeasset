@@ -1,0 +1,420 @@
+{
+  "total": 20,
+  "passed": 3,
+  "failed": 17,
+  "by_category": {
+    "close": {
+      "pass": 3,
+      "fail": 7
+    },
+    "open": {
+      "fail": 10
+    }
+  },
+  "latency_ms": {
+    "median": 3807.53,
+    "max": 7684.03
+  },
+  "results": [
+    {
+      "question_id": "generated-close-001",
+      "category": "close",
+      "question": "카카오의 2025년 1분기 연결 영업수익은 얼마야?",
+      "passed": true,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 5672.4,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "answer": "카카오의 2025년 3월 연결 기준 영업수익은 1,863,730,780,367원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250514001239, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": "연결 포괄손익계산서의 2025년 1분기 영업수익."
+    },
+    {
+      "question_id": "generated-close-002",
+      "category": "close",
+      "question": "기아의 2025년 1분기 연결 영업이익은 얼마야?",
+      "passed": true,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 3833.85,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "answer": "기아의 2025년 3월 연결 기준 영업이익은 3,008,588백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001947, 2-2. 연결 손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": "연결 손익계산서의 영업이익을 사용해야 하며 부문값을 사용하면 안 됨."
+    },
+    {
+      "question_id": "generated-close-003",
+      "category": "close",
+      "question": "NAVER의 2025년 1분기 연결 영업이익은 얼마야?",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 3819.9,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "answer": "NAVER의 2025년 3월 연결 기준 영업이익은 505,301,333,937원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515001302, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": "연결 포괄손익계산서의 영업이익."
+    },
+    {
+      "question_id": "generated-close-004",
+      "category": "close",
+      "question": "삼성전자의 2025년 1분기 연결 당기순이익은 얼마야?",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 3877.31,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "answer": "삼성전자의 2025년 3월 연결 기준 분기순이익은 8,222,878백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": "연결 손익계산서의 분기순이익/당기순이익 동의어 처리 확인."
+    },
+    {
+      "question_id": "generated-close-005",
+      "category": "close",
+      "question": "SK하이닉스의 2025년 1분기 연결 영업이익률을 계산해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": false,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": false
+      },
+      "latency_ms": 3795.15,
+      "validation_action": "blocked",
+      "query_type": "financial_metric",
+      "answer": "질문에 필요한 근거 항목을 모두 확인할 수 없어 답변을 보류했습니다. 누락 항목: scope.",
+      "notes": null,
+      "gold_note": "동일 연결 손익계산서의 영업이익/매출액으로 계산해야 함."
+    },
+    {
+      "question_id": "generated-close-006",
+      "category": "close",
+      "question": "NAVER의 2025년 1분기 연결 영업수익은 전년 동기보다 금액과 비율로 각각 얼마나 증가했어?",
+      "passed": false,
+      "checks": {
+        "context_contains": false,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 4615.93,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "answer": "NAVER의 2025년 3월 연결 기준 영업수익은 2,786,783백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001302, 가. 요약연결재무정보의 해당 행·열.",
+      "notes": null,
+      "gold_note": "증가액 260,729백만원과 증가율 약 10.32%를 모두 요구."
+    },
+    {
+      "question_id": "generated-close-007",
+      "category": "close",
+      "question": "현대자동차와 기아의 2025년 1분기 연결 매출액 차이는 얼마야?",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": false
+      },
+      "latency_ms": 4920.43,
+      "validation_action": "blocked",
+      "query_type": "financial_metric",
+      "answer": "질문에 필요한 근거 항목을 모두 확인할 수 없어 답변을 보류했습니다. 누락 항목: company.",
+      "notes": null,
+      "gold_note": "동일 단위 연결 매출액의 차이 16,390,251백만원."
+    },
+    {
+      "question_id": "generated-close-008",
+      "category": "close",
+      "question": "삼성전자의 2025년 반도체 위탁생산 공급계약 금액은 최근매출액의 몇 퍼센트야?",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 3482.93,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "answer": "삼성전자의 2. 계약내역 > 계약금액(원)은(는) 22,764,764,160,000 원입니다. 근거: [기재정정]단일판매ㆍ공급계약체결, 접수번호 20250731800028의 정형 공시 항목.",
+      "notes": null,
+      "gold_note": "정정된 단일판매·공급계약 공시의 매출액 대비 비율."
+    },
+    {
+      "question_id": "generated-close-009",
+      "category": "close",
+      "question": "현대자동차 2026년 1분기 보고서의 전체 투자계획과 1분기 집행실적, 집행률을 알려줘",
+      "passed": true,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 17.22,
+      "validation_action": "allow",
+      "query_type": "investment_plan",
+      "answer": "현대자동차의 분기보고서 (2026.03) 기준 주요 투자 계획은 다음과 같습니다. (단위 : 억원)\n\n- 전체: 연간 계획 179,976, 1분기 실적 22,952(집행률 12.8%), 2025년 실적 146,172\n- 차량부문 > R&D 투자: 연간 계획 74,474, 1분기 실적 10,608(집행률 14.2%), 2025년 실적 61,405\n- 차량부문 > CAPEX: 연간 계획 89,889, 1분기 실적 12,255(집행률 13.6%), 2025년 실적 68,281\n- 차량부문 > 전략투자: 연간 계획 14,127, 1분기 실적 52(집행률 0.4%), 2025년 실적 15,156\n- 기타부문 > 증설/보완투자: 연간 계획 1,486, 1분기 실적 37(집행률 2.5%), 2025년 실적 1,330\n\n이 숫자는 투자 '계획'과 분기 '실적'이며, 집행 완료 금액으로 해석하지 않았습니다. 근거: 분기보고서 (2026.03), 접수번호 20260515002418, II. 사업의 내용 > 3. (제조서비스업)원재료 및 생산설비 > 라. 설비의 신설ㆍ매입 계획 등.",
+      "notes": null,
+      "gold_note": "전체 투자계획 179,976억원, 1분기 실적 22,952억원, 집행률 약 12.8%."
+    },
+    {
+      "question_id": "generated-close-010",
+      "category": "close",
+      "question": "삼성전자 2025년 반도체 위탁생산 공급계약의 현재 유효한 계약상대는 누구야?",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": false,
+        "guardrail_action": true
+      },
+      "latency_ms": 7684.03,
+      "validation_action": "allow",
+      "query_type": "generic",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 1. 판매ㆍ공급계약 구분 | 기타 판매ㆍ공급계약 - 체결계약명 | 반도체 위탁생산 공급계약 2. 계약내역 | 계약금액(원) | 22,764,764,160,000 2. 계약내역 | 최근매출액(원) | 300,870,903,000,000 2. 계약내역 | 매출액대비(%) | 7.6 2. 계약내역 | 대규모법인여부 | 해당 3. 계약상대 | 테슬라(Tesla, Inc.) - 회사와의 관계 | - 4. 판매ㆍ공급지역 | - 5. 계약기간 | 시작일 | 2025-07-24 5. 계약기간 | 종료일 | 2033-12-31 6. 주요 계약조건 | 계약금ㆍ선급금 유무 | 무 6. 주요 계약조건 | 대금지급 조건 등 | - 7. 계약(수주)일자 | 2025-07-26 8. 공시유보 관련내용 | 유보사유 | 경영상 비밀유지 8. 공시유보 관련내용 | 유보기한 | 2033-12-31 9. 기타 투자판단과 관련한 중요사항 - 상기 2항의 계약금액은 USD 16,544,160,000에 공시일(2025년 7 (출처: 삼성전자, [기재정정]단일판매ㆍ공급계약체결, 접수번호 20250731800028). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "정정공시 기준 현재 유효 계약상대는 테슬라."
+    },
+    {
+      "question_id": "generated-open-001",
+      "category": "open",
+      "question": "KT의 2025년 1분기 분기보고서를 기준으로 주요 사업과 서비스를 항목별로 정리해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 5665.44,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 케이티 분기보고서 (2025.03) II. 사업의 내용 > 2. (제조서비스업)주요 제품 및 서비스 > [1] ICT : ㈜케이티 (1) Cloud Public | 클라우드 기반 IT 인프라(컴퓨팅/스토리지/NW 등)를 고객 니즈 맞춤으로 언제든, 필요한 만큼 사용 가능한 On-demand 서비스 고객의 IT 조달/운영/관리 걱정 없는 최상의 성능과 안정성 제공 CDN | 전세계 어디서든 실시간으로 대용량 컨텐츠를 전송하는 Contents Delivery 서비스 제공 +100국가, +20만개 이상의 Edge 서비스를 지원 Private | 고객 위치에 독립적으로 구축하는 고객 전용 클라우드 서비스 높은 안정성과 우수한 보안으로 고객 비즈니스 환경에 최적화된 맞춤형 서비스 제공 Marketplace | 직접 검증한 업계 최고의 3rd Party 솔루션을 고객 중심으로 큐레이션하여 제공하는 디지털 카탈로그 서비스고객의 비즈니스에 최적화된 솔루션을 간편하게 제공 AI Computing | (출처: 케이티, 분기보고서 (2025.03), 접수번호 20250515002428). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "ICT, 금융, 위성방송, 부동산, 콘텐츠·기타사업을 회사 전체 관점에서 요약."
+    },
+    {
+      "question_id": "generated-open-002",
+      "category": "open",
+      "question": "엔씨소프트의 2025년 1분기 분기보고서에서 주요 제품과 서비스, 대표 게임을 정리해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 5429.73,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: NC 분기보고서 (2025.03) II. 사업의 내용 > 2. 주요 제품 및 서비스 가. 주요 제품 등의 현황 게임 | 상품명 | 리니지M 게임 | 제29기 1분기 > 매출액 | 112,710 게임 | 제29기 1분기 > 비율 | 31% 게임 | 제28기 > 매출액 | 492,760 게임 | 제28기 > 비율 | 31% 게임 | 제27기 > 매출액 | 496,115 게임 | 제27기 > 비율 | 28% 게임 | 상품명 | 리니지2M 게임 | 제29기 1분기 > 매출액 | 37,876 게임 | 제29기 1분기 > 비율 | 11% 게임 | 제28기 > 매출액 | 182,567 게임 | 제28기 > 비율 | 12% 게임 | 제27기 > 매출액 | 262,863 게임 | 제27기 > 비율 | 15% 게임 | 상품명 | 리니지W 게임 | 제29기 1분기 > 매출액 | 53,097 게임 | 제29기 1분기 > 비율 | 15% 게임 | 제28기 > 매출액 | 244,280 게임 | 제28기 >  (출처: NC, 분기보고서 (2025.03), 접수번호 20250515002885). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "게임 개발·서비스와 모바일/온라인 대표 타이틀을 포함해야 함."
+    },
+    {
+      "question_id": "generated-open-003",
+      "category": "open",
+      "question": "현대자동차의 2025년 1분기 분기보고서를 기준으로 차량부문의 사업 현황과 전략을 요약해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": false,
+        "guardrail_action": true
+      },
+      "latency_ms": 3366.3,
+      "validation_action": "allow",
+      "query_type": "generic",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 현대자동차 | 분기보고서 (2025.03) | II. 사업의 내용 > 1. (제조서비스업)사업의 개요 [차량부문]당사는 제 58기 1분기 누계 약 100만대의 판매 실적을 바탕으로 연결기준 차량부문에서 약 35조원의 매출을 기록했습니다. 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다. 상세 내용은 II. 사업의 내용의 7. (제조서비스업)기타 참고사항의 사. 회사의 중ㆍ장기 전략을 참조하시기 바랍니다.[기타부문]현대로템은 1999년 설립되어 K계열 전차와 차륜형장갑차 양산사업, 창정비 사업 등을 수행하는 (출처: 현대자동차, 분기보고서 (2025.03), 접수번호 20250515001159). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "차량 판매·매출과 2030 전략의 두 사업 축을 요약."
+    },
+    {
+      "question_id": "generated-open-004",
+      "category": "open",
+      "question": "삼성전자의 2025년 1분기 분기보고서에서 주요 사업부문과 대표 제품을 정리해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 4494.14,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 삼성전자 | 분기보고서 (2025.03) | II. 사업의 내용 > 2. 주요 제품 및 서비스 > 나. 주요 제품 등의 가격 변동 현황 2025년 1분기 TV의 평균 판매가격은 전년 연간평균 대비 약 6% 하락하였으며,스마트폰은 전년 연간평균 대비 약 11% 상승하였습니다. 그리고 메모리 평균 판매가격은 전년 연간평균 대비 약 1% 상승하였으며, 스마트폰용 OLED 패널은 약 17% 하락하였습니다. 한편 디지털 콕핏의 평균 판매가격은 전년 연간평균과 유사한 수준입니다. (출처: 삼성전자, 분기보고서 (2025.03), 접수번호 20250515001922). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "DX, DS, SDC, Harman과 각 대표 제품을 구분."
+    },
+    {
+      "question_id": "generated-open-005",
+      "category": "open",
+      "question": "SK하이닉스의 2025년 1분기 분기보고서를 기준으로 주력 제품과 사업을 설명해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": false,
+        "guardrail_action": true
+      },
+      "latency_ms": 2841.99,
+      "validation_action": "allow",
+      "query_type": "generic",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: SK하이닉스 | 분기보고서 (2025.03) | II. 사업의 내용 > 1. 사업의 개요 당사는 경기도 이천시에 위치한 본사를 거점으로 4개의 생산기지와 3개의 연구개발법인 및 미국, 중국, 싱가포르, 대만, 홍콩 등 판매법인과 사무소를 운영하고 있는 글로벌 반도체 기업입니다. 당사 및 당사의 종속기업의 주력 제품은 DRAM 및 NAND를 중심으로 하는 메모리 반도체이며, Foundry 사업도 병행하고 있습니다. 반도체는 메모리 반도체와 시스템 반도체로 구분되고, 메모리 반도체는 정보를 저장하고 기억하는 기능을 하며, 일반적으로 '휘발성(Volatile)'과 '비휘발성(Non-volatile)'으로 분류됩니다. 휘발성 메모리 제품은 전원이 끊어지면 정보가 지워지는 반면, 비휘발성 제품은 전원이 끊겨도 저장된 정보가 계속 남아 있습니다. 당사는 휘발성 메모리인 DRAM과 비휘발성 메모리인 NAND Flash를 주력 생산하고 있습니다. 당사의 연결 기준 매출액은 2025년 1분기(누계) (출처: SK하이닉스, 분기보고서 (2025.03), 접수번호 20250515002103). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "DRAM·NAND 중심 메모리 반도체와 Foundry 병행을 설명."
+    },
+    {
+      "question_id": "generated-open-006",
+      "category": "open",
+      "question": "카카오의 2025년 1분기 분기보고서를 기준으로 플랫폼과 콘텐츠 사업을 구분해 정리해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": false,
+        "guardrail_action": true
+      },
+      "latency_ms": 706.77,
+      "validation_action": "allow",
+      "query_type": "generic",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 카카오 | 분기보고서 (2025.03) | II. 사업의 내용 > 1. (제조서비스업)사업의 개요 당사가 운영하는 국내 대표 메신저 카카오톡과 인터넷 포털 사이트 다음(Daum)을 비롯해 종속회사는 모바일ㆍ인터넷 기반의 모빌리티, 금융, 게임, 음악, 스토리IP를 주축으로 사업을 전개하고 있습니다. 연결기준 사업부문은 매출의 성격에 따라 플랫폼 부문과 콘텐츠 부문으로 구분할 수 있습니다. 먼저 플랫폼 부문은 1) 카카오톡이라는 전국민에 도달 가능한 플랫폼을 기반으로 광고, 커머스 관련한 다양한 비즈니스 툴을 제공하면서 파트너들의 성장을 지원하는 톡비즈, 2) 다음(Daum)포털의 사용자와 트래픽을 기반으로 창출되는 온라인 광고 부문이 주영역인 포털비즈와 3) 카카오페이, 카카오모빌리티를 비롯한 연결종속회사들이 전개하는 플랫폼 기타 부문으로 구성되어 있습니다. 이어서 콘텐츠 부문은 1) 카카오게임즈가 PC/콘솔 플랫폼 확장과 모바일 게임의 장르다변화를 통한 글로벌 시장 진출, 자체 개 (출처: 카카오, 분기보고서 (2025.03), 접수번호 20250514001239). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "플랫폼과 콘텐츠 하위 사업을 구분해 설명."
+    },
+    {
+      "question_id": "generated-open-007",
+      "category": "open",
+      "question": "JYP Ent.의 2025년 1분기 분기보고서를 기준으로 수익을 창출하는 주요 사업을 정리해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 2842.54,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: JYP Ent | 분기보고서 (2025.03) | II. 사업의 내용 > 1. 사업의 개요 당사는 종합 엔터테인먼트 기업으로서 지속적으로 아티스트를 발굴, 육성할 수 있는 전문화된 조직과 음악 컨텐츠의 기획, 제작이 가능한 인프라 및 프로세스를 구조적으로 내재화 하였습니다. 이러한 지속가능한 시스템을 기반으로 음반, 음원, 영상 컨텐츠 등을 기획, 제작하여 유통하는 음악 및 영상 컨텐츠 사업, 그리고 공연, 출연 등 소속 아티스트의 용역활동을 통해 수익을 창출하는 매니지먼트 관련 사업을 글로벌 전역에서 영위하고 있습니다. 또한, 당사는 지적재산(IP)을 활용한 IP 라이센싱 사업을 전개하는 한편, 유관 산업 내 유수한 글로벌 파트너들과 전략적 협업 관계를 통해 컨텐츠 산업 내 영향력을 지속적으로 확대해 나가고 있습니다. 당사는 급변하는 음악 산업 트렌드에 유기적으로 대응하고, 아티스트를 효율적으로 운영하고 관리하기 위해 기존 기능 중심의 수직적 조직 구조를 아티스트 단위의 수평적 조 (출처: JYP Ent, 분기보고서 (2025.03), 접수번호 20250514000990). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "콘텐츠 제작·유통, 아티스트 매니지먼트, IP 라이선싱."
+    },
+    {
+      "question_id": "generated-open-008",
+      "category": "open",
+      "question": "NAVER의 2025년 1분기 분기보고서를 기준으로 주요 서비스 사업을 다섯 개 영역으로 정리해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": false,
+        "query_type": true,
+        "guardrail_action": true
+      },
+      "latency_ms": 2601.68,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: NAVER 분기보고서 (2025.03) II. 사업의 내용 > 1. 사업의 개요 1. 사업의 개요 서치플랫폼 | 주요영업 | 검색, 디스플레이 등 커머스 | 주요영업 | 커머스 광고, 중개 및 판매, 멤버십 핀테크 | 주요영업 | 페이, 플랫폼 서비스 등 콘텐츠 | 주요영업 | 웹툰, SNOW 등 엔터프라이즈 | 주요영업 | NCP, 웍스, 클로바 등 (출처: NAVER, 분기보고서 (2025.03), 접수번호 20250515001302). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "공시의 5개 서비스 구분을 모두 포함."
+    },
+    {
+      "question_id": "generated-open-009",
+      "category": "open",
+      "question": "현대자동차의 2023년과 2025년 사업보고서를 비교해 사업 전략의 변화와 유지된 축을 근거와 함께 설명해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": false,
+        "guardrail_action": true
+      },
+      "latency_ms": 893.5,
+      "validation_action": "allow",
+      "query_type": "generic",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 현대자동차 사업보고서 (2025.12) I. 회사의 개요 > 2. 회사의 연혁 > 마. 사업 목적의 중요한 변동 사. 주요종속회사의 연혁 부문 | 회사명 부문 | 주요연혁 차량부문 | 미국공장(HMMA) 차량부문 | - 2021년 : 투싼(NX4) 양산- 2022년 : 싼타페 HEV 양산- 2023년 : GV70 EV 양산- 2024년 : 싼타페(MX5) ICE&HEV, 투싼(NX4a) FL & OB PE 양산 JD Power Midsize Pickup Winner (NX4a OB)- 2025년 : GV70 EV(JK EV) F/L 양산 차량부문 | 미국전기차공장(HMGMA) 차량부문 | - 2024년 : 아이오닉5 (NE PE) 양산- 2025년 : 아이오닉9 (ME) 양산 차량부문 | 인도공장(HMI) 차량부문 | - 2021년 : 신형 크레타(SU2i) LWB, i20(BI3) N라인 출시 i20(BI3) COTY(Car of the Year) 수상 생산누계 1000만대 달성- (출처: 현대자동차, 사업보고서 (2025.12), 접수번호 20260318001394). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "유지된 모빌리티·전동화·수소 축과 2025년 SDV·제조혁신·현지화 강조를 구분하되 단순 키워드 부재를 중단으로 단정하지 않음."
+    },
+    {
+      "question_id": "generated-open-010",
+      "category": "open",
+      "question": "NAVER의 2025년 분기보고서와 사업보고서를 비교해 핵심 사업의 공통점과 달라진 강조점을 설명해줘",
+      "passed": false,
+      "checks": {
+        "context_contains": true,
+        "answer_contains": false,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": false,
+        "guardrail_action": true
+      },
+      "latency_ms": 1165.08,
+      "validation_action": "allow",
+      "query_type": "generic",
+      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: NAVER 분기보고서 (2025.09) II. 사업의 내용 > 7. 기타 참고사항 > 가. 지식재산권 2025년 9월 30일 현재 당사가 보유하고 있는 지식재산권은 총 4,576건입니다.- 지식재산권 현황 (단위: 건) (기준일: 2025년 9월 30일) | (단위: 건) (출처: NAVER, 분기보고서 (2025.09), 접수번호 20251114001436). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
+      "notes": null,
+      "gold_note": "5대 사업축의 공통점을 먼저 확인하고 전략 강조 차이는 직접 근거가 있을 때만 제시."
+    }
+  ]
+}

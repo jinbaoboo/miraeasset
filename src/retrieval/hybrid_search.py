@@ -42,6 +42,58 @@ BUSINESS_SIGNALS = {
     "자동차 금융": ("현대캐피탈", "자동차 금융", "금융부문"),
 }
 
+AUTOMOTIVE_ONLY_SIGNALS = {
+    "전동화·전기차", "하이브리드", "수소", "SDV", "자율주행", "PBV", "AAM",
+    "배터리", "현지생산·현지화", "제조혁신", "제네시스", "자동차 금융",
+}
+
+AUTOMOTIVE_ONLY_TOPICS = {"완성차·모빌리티"}
+TELECOM_ONLY_TOPICS = {"유무선 통신·ICT", "모바일·스마트홈·기업인프라"}
+
+BUSINESS_TOPICS = {
+    "서치플랫폼": ("서치플랫폼", "검색 포털", "검색플랫폼"),
+    "커머스": ("커머스", "쇼핑"),
+    "핀테크": ("핀테크", "네이버페이"),
+    "콘텐츠": ("콘텐츠", "웹툰", "웹소설"),
+    "엔터프라이즈": ("엔터프라이즈", "기업용 솔루션"),
+    "유무선 통신·ICT": ("유무선 통신", "무선통신", "초고속인터넷", "ICT"),
+    "금융": ("금융사업", "신용카드", "카드사업"),
+    "위성방송": ("위성방송",),
+    "부동산": ("부동산사업", "부동산 사업"),
+    "게임": ("게임 개발", "모바일게임", "온라인게임", "게임콘텐츠"),
+    "메모리 반도체": ("메모리 반도체", "DRAM", "NAND"),
+    "파운드리": ("Foundry", "파운드리"),
+    "완성차·모빌리티": ("완성차", "차량부문", "모빌리티"),
+    "음악·영상 콘텐츠": ("음반", "음원", "영상 컨텐츠", "영상 콘텐츠"),
+    "아티스트 매니지먼트": ("매니지먼트", "아티스트"),
+    "플랫폼": ("플랫폼 부문", "톡비즈", "포털비즈"),
+    "DX": ("DX(Device eXperience)",),
+    "DS": ("DS(Device Solutions)",),
+    "SDC·OLED": ("SDC가", "OLED 패널"),
+    "Harman·전장": ("Harman", "전장제품", "디지털 콕핏"),
+    "톡비즈": ("톡비즈",),
+    "카카오페이": ("카카오페이",),
+    "뮤직": ("뮤직 콘텐츠", "음악플랫폼 멜론"),
+    "스토리": ("스토리콘텐츠", "스토리IP"),
+    "음반·음원": ("음반, 음원", "음반ㆍ음원", "음반 및 음원"),
+    "해운·물류": ("종합해운물류", "컨테이너선", "벌크화물"),
+    "CDMO": ("CDMO", "위탁개발생산"),
+    "바이오의약품": ("바이오의약품",),
+    "바이오시밀러·신약": ("바이오시밀러", "항체의약품", "신규 모달리티"),
+    "식품": ("식품사업", "식품 사업", "식품, BIO"),
+    "BIO·F&C": ("BIO 및 F&C", "BIO사업", "F&C 사업"),
+    "종합물류": ("종합물류서비스", "계약물류", "포워딩"),
+    "모바일·스마트홈·기업인프라": ("모바일ㆍ스마트홈ㆍ기업인프라", "모바일·스마트홈·기업인프라"),
+    "철강": ("철강부문", "철강 부문"),
+    "인프라": ("인프라부문", "인프라 부문"),
+    "에너지소재": ("에너지소재부문", "에너지소재 부문", "이차전지소재"),
+    "광학솔루션": ("광학솔루션",),
+    "기판소재": ("기판소재", "기판/소재"),
+    "전장부품": ("전장부품",),
+    "전력기기": ("전력기기", "변압기", "고압차단기", "회전기기", "배전기기"),
+    "건설": ("건축/주택", "토목사업", "플랜트사업", "건설사업"),
+}
+
 
 def _fts_query(text: str) -> str:
     tokens = [token for token in re.findall(r"[0-9A-Za-z가-힣]+", text) if len(token) > 1]
@@ -571,18 +623,28 @@ class HybridRetriever:
         ).fetchall()
         ranked: Dict[int, Dict[str, List[tuple[int, Dict[str, Any]]]]] = defaultdict(lambda: defaultdict(list))
         profiles: Dict[int, Dict[str, Any]] = defaultdict(
-            lambda: {"categories": set(), "signals": set(), "signal_sources": defaultdict(list), "section_count": 0}
+            lambda: {"categories": set(), "signals": set(), "topics": set(),
+                     "signal_sources": defaultdict(list), "topic_sources": defaultdict(list),
+                     "signal_counts": defaultdict(int), "topic_counts": defaultdict(int), "section_count": 0}
         )
         for raw in rows:
             item = dict(raw)
             year = int(item.get("base_year") or 0)
             haystack = (item.get("heading") or "") + " " + (item.get("section_path") or "") + " " + item.get("text", "")
             categories = self._business_categories(haystack)
-            signals = self._business_signals(haystack)
+            signals = self._business_signals(haystack, item.get("corp_name"))
+            primary_business_section = ("사업의 개요" in (item.get("section_path") or "") or
+                                        "주요 제품" in (item.get("section_path") or ""))
+            topics = self._business_topics(haystack, item.get("corp_name")) if primary_business_section else []
             profiles[year]["categories"].update(categories)
             profiles[year]["signals"].update(signals)
+            profiles[year]["topics"].update(topics)
             for signal in signals:
                 profiles[year]["signal_sources"][signal].append(item["chunk_id"])
+                profiles[year]["signal_counts"][signal] += 1
+            for topic in topics:
+                profiles[year]["topic_sources"][topic].append(item["chunk_id"])
+                profiles[year]["topic_counts"][topic] += 1
             profiles[year]["section_count"] += 1
             item.update({"kind": "business_evidence", "record_id": item["chunk_id"],
                          "citation": self.citation_for("text", item["chunk_id"]),
@@ -610,35 +672,191 @@ class HybridRetriever:
             year: {
                 "categories": sorted(profile["categories"]),
                 "signals": sorted(profile["signals"]),
+                "topics": sorted(profile.get("topics", set())),
                 "signal_sources": {signal: list(dict.fromkeys(ids))[:5]
                                    for signal, ids in profile["signal_sources"].items()},
+                "topic_sources": {topic: list(dict.fromkeys(ids))[:5]
+                                  for topic, ids in profile["topic_sources"].items()},
+                "signal_counts": dict(profile["signal_counts"]),
+                "topic_counts": dict(profile["topic_counts"]),
                 "section_count": profile["section_count"],
             }
             for year, profile in profiles.items()
         }
-        return {"evidence": result, "profiles": normalized_profiles}
+        return {"evidence": result, "profiles": normalized_profiles,
+                "revenue_mix_changes": self._business_revenue_mix_changes(candidate_doc_ids, plan.get("years") or [])}
+
+    def _business_revenue_mix_changes(self, doc_ids: List[str], years: List[int]) -> List[Dict[str, Any]]:
+        """Extract only directly comparable segment revenue-share changes.
+
+        A change is emitted only when both requested years appear in the same
+        consolidated table and the row explicitly pairs ``매출액`` with ``비중``.
+        This keeps qualitative keyword changes separate from audited numeric
+        composition changes.
+        """
+        if len(years) < 2 or not doc_ids:
+            return []
+        old_year, new_year = min(years), max(years)
+        tables = self.conn.execute(
+            f"""SELECT t.table_id,t.doc_id,t.table_title,t.section_path,t.unit_json,d.base_year,d.rcept_no
+                  FROM logical_tables t JOIN documents d ON d.doc_id=t.doc_id
+                 WHERE t.doc_id IN ({','.join('?' for _ in doc_ids)})
+                   AND t.scope='consolidated'
+                   AND t.section_path LIKE '%II. 사업의 내용%'
+                   AND (t.table_title LIKE '%매출 비중%' OR t.search_text LIKE '%매출액%비중%')
+                 ORDER BY d.base_year DESC,t.table_id""", doc_ids
+        ).fetchall()
+        for table in tables:
+            cells = [dict(row) for row in self.conn.execute(
+                """SELECT row_index,column_index,row_label,original_text FROM cells
+                     WHERE table_id=? ORDER BY row_index,column_index""", (table["table_id"],)
+            ).fetchall()]
+            matrix = {(cell["row_index"], cell["column_index"]): cell.get("original_text") or "" for cell in cells}
+            year_columns: Dict[int, int] = {}
+            for cell in cells:
+                match = re.search(r"(20\d{2})년", cell.get("original_text") or "")
+                if match:
+                    year_columns[int(match.group(1))] = cell["column_index"]
+            if old_year not in year_columns or new_year not in year_columns:
+                continue
+            changes: List[Dict[str, Any]] = []
+            for row_index in sorted({cell["row_index"] for cell in cells}):
+                row = [cell for cell in cells if cell["row_index"] == row_index]
+                if not any((cell.get("original_text") or "").strip() == "매출액" for cell in row):
+                    continue
+                segment = next((cell.get("row_label") for cell in row if cell.get("row_label")), None)
+                if not segment or segment in {"주요제품", "구분", "합계"}:
+                    continue
+                try:
+                    old_share = Decimal(self._plain_number(matrix[(row_index, year_columns[old_year] + 1)]))
+                    new_share = Decimal(self._plain_number(matrix[(row_index, year_columns[new_year] + 1)]))
+                except (KeyError, InvalidOperation, ValueError):
+                    continue
+                changes.append({
+                    "segment": segment, "old_year": old_year, "new_year": new_year,
+                    "old_share": str(old_share), "new_share": str(new_share),
+                    "change_pp": str(new_share - old_share), "unit": "%",
+                    "table_id": table["table_id"], "citation": self.citation_for("table", table["table_id"]),
+                })
+            if changes:
+                return changes
+        return []
+
+    def find_business_overview_evidence(self, plan: Dict[str, Any], limit: int = 4) -> List[Dict[str, Any]]:
+        """Return concise, section-prioritized evidence for open business questions.
+
+        The report's own ``1. 사업의 개요`` is the primary source.  Product/service
+        sections are supplementary, which prevents a detailed price table from
+        replacing the company-wide business description.
+        """
+        candidate_doc_ids = plan.get("_candidate_doc_ids") or []
+        if not candidate_doc_ids:
+            return []
+        rows = self.conn.execute(
+            f"""SELECT c.chunk_id,c.doc_id,c.heading,c.section_path,c.text,d.corp_code,d.corp_name,
+                       d.report_nm,d.rcept_no,d.rcept_dt,d.base_year,d.base_month,d.doc_subtype
+                  FROM chunks c JOIN documents d ON d.doc_id=c.doc_id
+                 WHERE c.doc_id IN ({','.join('?' for _ in candidate_doc_ids)})
+                   AND c.section_path LIKE '%II. 사업의 내용%'
+                 ORDER BY d.base_month DESC,c.chunk_id""", candidate_doc_ids
+        ).fetchall()
+        question = plan.get("question") or ""
+        focus_tokens = [token for token in re.findall(r"[0-9A-Za-z가-힣]+", question)
+                        if len(token) >= 2 and token not in {"기준으로", "분기보고서", "사업보고서", "정리해줘", "설명해줘"}]
+        ranked = []
+        for raw in rows:
+            item = dict(raw)
+            path = item.get("section_path") or ""
+            text = item.get("text") or ""
+            score = 0
+            if re.search(r">\s*1\.\s*\([^)]*\)?사업의 개요|>\s*1\.\s*사업의 개요", path):
+                score += 100
+            elif "사업의 개요" in path:
+                score += 80
+            if "주요 제품 및 서비스" in path or "주요 제품" in path:
+                score += 35
+            if "연결회사의 각 부분" in text and "구분" in text:
+                score += 35
+            if any(token in text for token in ("사업별로 보면", "주력 제품", "주요 사업은", "주요 사업을")):
+                score += 30
+            if "금융업" in path and not any(token in question for token in ("금융", "카드", "보험")):
+                score -= 20
+            score += min(20, 3 * sum(token.lower() in (path + " " + text).lower() for token in focus_tokens))
+            if any(token in question for token in ("차량", "자동차")) and "차량부문" in text:
+                score += 50
+            if len(text) >= 120:
+                score += 5
+            item.update({
+                "kind": "business_overview",
+                "record_id": item["chunk_id"],
+                "citation": self.citation_for("text", item["chunk_id"]),
+                "evidence_categories": self._business_categories(path + " " + text),
+                "topics": self._business_topics(text, item.get("corp_name")),
+            })
+            ranked.append((score, item))
+        ranked.sort(key=lambda pair: (-pair[0], pair[1]["chunk_id"]))
+        selected: List[Dict[str, Any]] = []
+        seen_paths = set()
+        for _, item in ranked:
+            exact_path = item.get("section_path") or ""
+            if exact_path in seen_paths:
+                continue
+            selected.append(item)
+            seen_paths.add(exact_path)
+            if len(selected) >= limit:
+                break
+        return selected
 
     def find_business_document_evidence(self, plan: Dict[str, Any], per_type: int = 8) -> Dict[str, Any]:
         """Build comparable business profiles for annual vs quarterly filings."""
         candidate_doc_ids = plan.get("_candidate_doc_ids") or []
         if not candidate_doc_ids:
             return {"evidence": [], "profiles": {}}
+        document_rows = self.conn.execute(
+            f"""SELECT doc_id,doc_subtype,base_month,rcept_dt FROM documents
+                 WHERE doc_id IN ({','.join('?' for _ in candidate_doc_ids)})
+                   AND doc_subtype IN ('annual','quarter')""", candidate_doc_ids
+        ).fetchall()
+        # An unspecified "quarterly report" means the latest available quarter
+        # in that base year.  Mixing Q1 and Q3 duplicates the same prose and can
+        # falsely turn one repeated keyword into a strong change signal.
+        selected_doc_ids = []
+        for subtype in ("annual", "quarter"):
+            choices = [row for row in document_rows if row["doc_subtype"] == subtype]
+            if choices:
+                selected_doc_ids.append(max(choices, key=lambda row: (
+                    row["base_month"] or 0, row["rcept_dt"] or "", row["doc_id"]
+                ))["doc_id"])
+        if len(selected_doc_ids) < 2:
+            return {"evidence": [], "profiles": {}}
         rows = self.conn.execute(
             f"""SELECT c.chunk_id,c.doc_id,c.heading,c.section_path,c.text,d.corp_code,d.corp_name,d.report_nm,
                        d.rcept_no,d.rcept_dt,d.base_year,d.base_month,d.doc_subtype
                   FROM chunks c JOIN documents d ON d.doc_id=c.doc_id
-                 WHERE c.doc_id IN ({','.join('?' for _ in candidate_doc_ids)})
+                 WHERE c.doc_id IN ({','.join('?' for _ in selected_doc_ids)})
                    AND c.section_path LIKE '%II. 사업의 내용%'
                    AND d.doc_subtype IN ('annual','quarter')
-                 ORDER BY d.doc_subtype,d.base_month DESC,c.chunk_id""", candidate_doc_ids
+                 ORDER BY d.doc_subtype,d.base_month DESC,c.chunk_id""", selected_doc_ids
         ).fetchall()
         ranked: Dict[str, Dict[str, List[tuple[int, Dict[str, Any]]]]] = defaultdict(lambda: defaultdict(list))
-        profiles: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"categories": set(), "signals": set()})
+        profiles: Dict[str, Dict[str, Any]] = defaultdict(
+            lambda: {"categories": set(), "signals": set(), "topics": set(),
+                     "signal_counts": defaultdict(int), "topic_counts": defaultdict(int)}
+        )
         for raw in rows:
             item = dict(raw); subtype = item.get("doc_subtype")
             haystack = (item.get("heading") or "") + " " + item.get("section_path", "") + " " + item.get("text", "")
-            categories = self._business_categories(haystack); signals = self._business_signals(haystack)
+            categories = self._business_categories(haystack)
+            signals = self._business_signals(haystack, item.get("corp_name"))
+            primary_business_section = ("사업의 개요" in (item.get("section_path") or "") or
+                                        "주요 제품" in (item.get("section_path") or ""))
+            topics = self._business_topics(haystack, item.get("corp_name")) if primary_business_section else []
             profiles[subtype]["categories"].update(categories); profiles[subtype]["signals"].update(signals)
+            profiles[subtype]["topics"].update(topics)
+            for signal in signals:
+                profiles[subtype]["signal_counts"][signal] += 1
+            for topic in topics:
+                profiles[subtype]["topic_counts"][topic] += 1
             item.update({"kind": "business_evidence", "record_id": item["chunk_id"],
                          "citation": self.citation_for("text", item["chunk_id"]),
                          "evidence_categories": categories, "signals": signals})
@@ -658,7 +876,10 @@ class HybridRetriever:
                     selected.add(chosen["chunk_id"]); evidence.append(chosen)
                 if len(selected) >= per_type:
                     break
-        normalized = {subtype: {"categories": sorted(value["categories"]), "signals": sorted(value["signals"])}
+        normalized = {subtype: {"categories": sorted(value["categories"]), "signals": sorted(value["signals"]),
+                                "topics": sorted(value["topics"]),
+                                "signal_counts": dict(value["signal_counts"]),
+                                "topic_counts": dict(value["topic_counts"])}
                       for subtype, value in profiles.items()}
         return {"evidence": evidence, "profiles": normalized}
 
@@ -669,10 +890,24 @@ class HybridRetriever:
                 if any(alias.lower() in lowered for alias in aliases)] or ["overview"]
 
     @staticmethod
-    def _business_signals(text: str) -> List[str]:
+    def _business_signals(text: str, corp_name: Optional[str] = None) -> List[str]:
         lowered = text.lower()
-        return [signal for signal, aliases in BUSINESS_SIGNALS.items()
-                if any(alias.lower() in lowered for alias in aliases)]
+        signals = [signal for signal, aliases in BUSINESS_SIGNALS.items()
+                   if any(alias.lower() in lowered for alias in aliases)]
+        if corp_name and not any(token in corp_name for token in ("현대자동차", "기아")):
+            signals = [signal for signal in signals if signal not in AUTOMOTIVE_ONLY_SIGNALS]
+        return signals
+
+    @staticmethod
+    def _business_topics(text: str, corp_name: Optional[str] = None) -> List[str]:
+        lowered = text.lower()
+        topics = [topic for topic, aliases in BUSINESS_TOPICS.items()
+                  if any(alias.lower() in lowered for alias in aliases)]
+        if corp_name and not any(token in corp_name for token in ("현대자동차", "기아")):
+            topics = [topic for topic in topics if topic not in AUTOMOTIVE_ONLY_TOPICS]
+        if corp_name and not any(token in corp_name for token in ("케이티", "KT", "LG유플러스", "SK텔레콤", "LG헬로비전")):
+            topics = [topic for topic in topics if topic not in TELECOM_ONLY_TOPICS]
+        return topics
 
     def find_event_fields(self, plan: Dict[str, Any], limit: int = 20) -> List[Dict[str, Any]]:
         return self.find_event_fields_for_metric(plan, plan.get("metric"), limit=limit)
@@ -892,7 +1127,7 @@ class HybridRetriever:
         groups = {
             "유상증자": ("유상증자",), "전환사채": ("전환사채", "CB"),
             "신주인수권부사채": ("신주인수권부사채", "BW"), "교환사채": ("교환사채", "EB"),
-            "단일판매": ("공급계약", "판매계약", "주요 계약"), "사업보고서": ("사업보고서",),
+            "단일판매": ("공급계약", "판매계약", "주요 계약", "위탁생산"), "사업보고서": ("사업보고서",),
             "반기보고서": ("반기보고서",), "분기보고서": ("분기보고서",),
         }
         compact = question.upper()
@@ -1126,7 +1361,14 @@ class HybridRetriever:
         if plan.get("scope") == row.get("scope"): score += 5
         if row.get("period_role") == "current": score += 2
         column = " ".join(json.loads(row.get("column_path") or "[]"))
-        if plan.get("quarter") and any(token in column for token in ("3개월", "누적")): score += 2
+        requested_aggregation = plan.get("period_aggregation")
+        if requested_aggregation:
+            if row.get("period_aggregation") == requested_aggregation:
+                score += 20
+            elif row.get("period_aggregation") in {"three_month", "ytd"}:
+                score -= 20
+        elif plan.get("quarter") and any(token in column for token in ("3개월", "누적")):
+            score += 2
         if row.get("is_latest_version"): score += 2
         if row.get("doc_subtype") == "annual": score += 2
         definition = metric_definition(metric or plan.get("metric"))

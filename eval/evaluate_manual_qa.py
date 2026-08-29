@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import statistics
 import time
 from collections import Counter
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -30,6 +32,56 @@ def _context_audit_text(response: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+LIMIT_MARKERS = (
+    "확인할 수 없습니다", "찾지 못했습니다", "근거를 찾지 못했습니다",
+    "자료가 필요", "구체적으로 입력", "질문 조건에 해당", "보안상", "질문이 비어",
+)
+
+
+def _numbers(text: str) -> List[Decimal]:
+    """Return display numbers without guessing their source unit.
+
+    Unit/scope/period are checked separately.  This intentionally validates the
+    number shown to a user rather than a binary floating-point field in SQLite.
+    """
+    values: List[Decimal] = []
+    for token in re.findall(r"(?<![0-9A-Za-z])[-+]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?", text or ""):
+        try:
+            values.append(Decimal(token.replace(",", "")))
+        except InvalidOperation:
+            continue
+    return values
+
+
+def _numeric_expectations(answer: str, expectations: List[Dict[str, Any]]) -> tuple[bool, List[Dict[str, Any]]]:
+    actual = _numbers(answer)
+    details: List[Dict[str, Any]] = []
+    passed = True
+    for expectation in expectations:
+        target = Decimal(str(expectation["value"]))
+        tolerance = Decimal(str(expectation.get("tolerance", 0)))
+        matched = next((value for value in actual if abs(value - target) <= tolerance), None)
+        ok = matched is not None
+        passed = passed and ok
+        details.append({"target": str(target), "tolerance": str(tolerance),
+                        "matched": str(matched) if matched is not None else None, "passed": ok})
+    return passed, details
+
+
+def _answerability_check(answer: str, response: Dict[str, Any], expected: str | None) -> bool:
+    if not expected:
+        return True
+    action = (response.get("validation") or {}).get("action")
+    limited = any(marker in answer for marker in LIMIT_MARKERS)
+    if expected == "answerable":
+        return not limited and action == "allow"
+    if expected == "unanswerable":
+        return limited and action in {"limit", "clarify", "blocked"}
+    if expected == "clarify":
+        return action == "clarify"
+    return False
+
+
 def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
     cases = [json.loads(line) for line in questions.read_text(encoding="utf-8").splitlines() if line.strip()]
     agent = DisclosureAgent(db); results = []
@@ -40,21 +92,55 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
             latency_ms = round((time.perf_counter() - started) * 1000, 2)
             answer = response.get("answer") or ""
             context_text = _context_audit_text(response)
+            query_type = ((response.get("think_trace") or {}).get("query_plan") or {}).get("query_type")
+            cited_doc_ids = {item.get("doc_id") for item in response.get("citations") or [] if item.get("doc_id")}
+            cited_doc_ids.update(
+                item.get("citation", {}).get("doc_id")
+                for item in response.get("retrieved_context") or []
+                if item.get("citation", {}).get("doc_id")
+            )
+            numeric_ok, numeric_details = _numeric_expectations(answer, case.get("expected_numeric", []))
+            required_evidence = case.get("required_evidence", case.get("expected_context_contains", []))
+            required_doc_ids = set(case.get("required_doc_ids", []))
+            max_chars = case.get("max_answer_chars")
+            max_lines = case.get("max_answer_lines")
             checks = {
-                "context_contains": all(_normalized(expected) in _normalized(context_text)
-                                        for expected in case.get("expected_context_contains", [])),
+                "required_evidence": all(_normalized(expected) in _normalized(context_text)
+                                         for expected in required_evidence),
                 "answer_contains": all(_normalized(expected) in _normalized(answer)
                                        for expected in case.get("expected_answer_contains", [])),
+                "answer_contains_any": not case.get("expected_answer_any") or any(
+                    _normalized(expected) in _normalized(answer)
+                    for expected in case.get("expected_answer_any", [])
+                ),
                 "answer_excludes": all(_normalized(expected) not in _normalized(answer)
                                        for expected in case.get("expected_answer_not_contains", [])),
-                "guardrail_action": (response.get("validation") or {}).get("action") in {"allow", "limit", "clarify"},
+                "query_type": not case.get("expected_query_type") or query_type == case["expected_query_type"],
+                "numeric_tolerance": numeric_ok,
+                "unit": all(_normalized(unit) in _normalized(answer) for unit in case.get("expected_units", [])),
+                "scope": all(_normalized(scope) in _normalized(answer) for scope in case.get("expected_scopes", [])),
+                "period": all(_normalized(period) in _normalized(answer) for period in case.get("expected_periods", [])),
+                "required_citation_docs": not required_doc_ids or required_doc_ids.issubset(cited_doc_ids),
+                "answer_citation": not case.get("require_answer_citation", case.get("category") in {"close", "open"}) or (
+                    "접수번호" in answer and bool(response.get("citations"))
+                ),
+                "answerability": _answerability_check(answer, response, case.get("expected_answerability")),
+                "answer_length": (max_chars is None or len(answer) <= int(max_chars)) and (
+                    max_lines is None or len(answer.splitlines()) <= int(max_lines)
+                ),
+                "guardrail_action": (response.get("validation") or {}).get("action") in
+                                    {"allow", "limit", "clarify", "blocked"},
             }
             results.append({
                 "question_id": case["question_id"], "category": case["category"], "question": case["question"],
                 "passed": all(checks.values()), "checks": checks, "latency_ms": latency_ms,
                 "validation_action": (response.get("validation") or {}).get("action"),
-                "query_type": ((response.get("think_trace") or {}).get("query_plan") or {}).get("query_type"),
+                "query_type": query_type,
+                "numeric_details": numeric_details,
+                "cited_doc_ids": sorted(cited_doc_ids),
+                "answer_chars": len(answer), "answer_lines": len(answer.splitlines()),
                 "answer": answer, "notes": case.get("notes"),
+                "gold_note": case.get("gold_note"),
             })
     finally:
         agent.close()

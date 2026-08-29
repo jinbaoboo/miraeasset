@@ -83,6 +83,7 @@ class StoreAgentTests(unittest.TestCase):
         agent.close()
         self.assertFalse(result["retrieved_context"])
         self.assertIn("보안상", result["answer"])
+        self.assertEqual(result["validation"]["action"], "blocked")
         self.assertIn("prompt_injection_or_secret_request_blocked", result["think_trace"]["steps"])
 
     def test_capex_question_is_classified_as_periodic_comparison(self):
@@ -99,6 +100,36 @@ class StoreAgentTests(unittest.TestCase):
         agent.close()
         self.assertEqual(plan["doc_subtypes"], ["quarter"])
         self.assertEqual(plan["quarter"], 1)
+
+    def test_quarter_aggregation_intent_distinguishes_ytd_and_three_months(self):
+        agent = DisclosureAgent(self.db)
+        ytd = agent.analyzer.analyze("테스트 2025년 3분기 누적 연결 매출액은?")
+        standalone = agent.analyzer.analyze("테스트 2025년 3분기 3개월 연결 매출액은?")
+        agent.close()
+        self.assertEqual(ytd["period_aggregation"], "ytd")
+        self.assertEqual(standalone["period_aggregation"], "three_month")
+        self.assertIn("누적", DisclosureAgent._period_label(ytd))
+        self.assertIn("3개월", DisclosureAgent._period_label(standalone))
+
+    def test_industry_specific_topics_do_not_treat_product_ict_as_telecom(self):
+        text = "전력기기(변압기, 고압차단기) 및 ICT 전력제어 제품을 판매한다."
+        topics = HybridRetriever._business_topics(text, "HD현대일렉트릭")
+        self.assertIn("전력기기", topics)
+        self.assertNotIn("유무선 통신·ICT", topics)
+
+    def test_biosimilar_business_topic_is_retained_for_biopharma(self):
+        topics = HybridRetriever._business_topics(
+            "항체의약품 바이오시밀러와 신규 모달리티를 개발한다.", "셀트리온"
+        )
+        self.assertIn("바이오시밀러·신약", topics)
+
+    def test_business_strategy_penalizes_sales_route_blob(self):
+        candidates = [
+            "판매조직과 판매경로, 판매방법 및 가격정책을 포함한 판매전략을 운영하고 있습니다.",
+            "해운 시황 변동에 대응하기 위해 운항 제휴를 강화하고 고수익 노선을 확대하는 전략을 추진합니다.",
+        ]
+        selected = DisclosureAgent._select_business_sentence(candidates, "주요 사업과 전략", strategy=True)
+        self.assertIn("운항 제휴", selected)
 
     def test_candidate_documents_use_metadata_filters(self):
         agent = DisclosureAgent(self.db)
@@ -260,6 +291,87 @@ class StoreAgentTests(unittest.TestCase):
         signals = HybridRetriever._business_signals("SDV와 Manufacturing Excellence, HMGMA 현지화 및 Waymo 자율주행 협업")
         self.assertTrue({"SDV", "제조혁신", "현지생산·현지화", "자율주행", "전략적 파트너십"}.issubset(set(signals)))
 
+    def test_non_automotive_company_drops_vehicle_only_business_signals(self):
+        signals = HybridRetriever._business_signals(
+            "AI 로봇 협업과 하이브리드 현지화", corp_name="NAVER"
+        )
+        self.assertIn("AI", signals)
+        self.assertIn("로보틱스", signals)
+        self.assertNotIn("하이브리드", signals)
+        self.assertNotIn("현지생산·현지화", signals)
+
+    def test_open_business_phrasings_use_business_overview_route(self):
+        agent = DisclosureAgent(self.db)
+        questions = (
+            "테스트의 주력 제품과 사업을 설명해줘",
+            "테스트의 주요 사업부문과 대표 제품을 정리해줘",
+            "테스트의 사업 현황과 전략을 요약해줘",
+        )
+        plans = [agent.analyzer.analyze(question) for question in questions]
+        agent.close()
+        self.assertTrue(all(plan["query_type"] == "business_overview" for plan in plans))
+
+    def test_compact_year_quarter_and_open_phrasings_are_normalized(self):
+        agent = DisclosureAgent(self.db)
+        compact = agent.analyzer.analyze("테스트 25년 1Q 연결 영업이익은?")
+        overview = agent.analyzer.analyze("테스트 25년 1Q 회사 전체 사업 포트폴리오를 짧게 분류해줘")
+        agent.close()
+        self.assertEqual(compact["years"], [2025])
+        self.assertEqual(compact["quarter"], 1)
+        self.assertEqual(compact["doc_subtypes"], ["quarter"])
+        self.assertEqual(overview["query_type"], "business_overview")
+
+    def test_business_mix_change_phrasing_uses_change_route(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze(
+            "테스트 2023→2025 사업보고서에서 유지 사업, 새 강조 전략, 매출 비중 변화를 구분해줘"
+        )
+        agent.close()
+        self.assertEqual(plan["query_type"], "business_change")
+        self.assertEqual(plan["years"], [2023, 2025])
+
+    def test_business_report_comparison_phrasings_use_change_route(self):
+        agent = DisclosureAgent(self.db)
+        year_plan = agent.analyzer.analyze(
+            "테스트의 2023년과 2025년 사업보고서를 비교해 사업 전략의 변화를 설명해줘"
+        )
+        subtype_plan = agent.analyzer.analyze(
+            "테스트의 2025년 분기보고서와 사업보고서를 비교해 핵심 사업의 공통점을 설명해줘"
+        )
+        agent.close()
+        self.assertEqual(year_plan["query_type"], "business_change")
+        self.assertEqual(subtype_plan["query_type"], "business_change")
+        self.assertEqual(subtype_plan["comparison_axis"], "doc_subtype")
+
+    def test_current_effective_contract_counterparty_uses_correction_route(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 공급계약의 현재 유효한 계약상대는 누구야?")
+        agent.close()
+        self.assertEqual(plan["query_type"], "correction_history")
+        self.assertEqual(plan["correction_view"], "current")
+
+    def test_disclosed_contract_counterparty_uses_correction_route(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 공급계약 이후 계약상대가 공개됐어?")
+        agent.close()
+        self.assertEqual(plan["query_type"], "correction_history")
+        self.assertEqual(plan["correction_view"], "current")
+
+    def test_growth_amount_and_rate_is_explicit_calculation(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze(
+            "테스트의 2025년 1분기 연결 매출액은 전년 동기보다 금액과 비율로 각각 얼마나 증가했어?"
+        )
+        agent.close()
+        self.assertEqual(plan["calculation"]["operation"], "growth_amount_and_rate")
+        self.assertEqual(plan["calculation"]["baseline_year"], 2024)
+
+    def test_contract_recent_revenue_percent_prefers_contract_ratio(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트의 2025년 공급계약 금액은 최근매출액의 몇 퍼센트야?")
+        agent.close()
+        self.assertEqual(plan["metric"], "contract_ratio")
+
     def test_business_change_answer_does_not_equate_absence_with_discontinuation(self):
         plan = {"companies": [{"corp_name": "테스트"}], "years": [2023, 2025]}
         evidence = [
@@ -273,6 +385,27 @@ class StoreAgentTests(unittest.TestCase):
         answer = DisclosureAgent._business_change_answer(plan, analysis)
         self.assertIn("추가로 강조", answer)
         self.assertIn("사업 중단을 뜻하지 않습니다", answer)
+
+    def test_business_change_separates_semantic_and_numeric_changes(self):
+        plan = {"companies": [{"corp_name": "테스트"}], "years": [2023, 2025]}
+        analysis = {
+            "evidence": [{"base_year": 2023, "rcept_no": "r1"}, {"base_year": 2025, "rcept_no": "r2"}],
+            "profiles": {
+                2023: {"topics": ["완성차"], "signals": ["전동화"], "topic_counts": {"완성차": 2}},
+                2025: {"topics": ["완성차"], "signals": ["전동화", "SDV"], "topic_counts": {"완성차": 2}},
+            },
+            "revenue_mix_changes": [{"segment": "차량", "old_share": "80.0", "new_share": "78.2",
+                                     "change_pp": "-1.8"}],
+        }
+        answer = DisclosureAgent._business_change_answer(plan, analysis)
+        self.assertIn("유지된 핵심 사업: 완성차", answer)
+        self.assertIn("추가로 강조된 전략 변화: SDV", answer)
+        self.assertIn("80.0%→78.2%", answer)
+
+    def test_ascii_strategy_acronym_does_not_match_inside_word(self):
+        sentence = "중국에는 SCS(Xian) 등 생산법인이 운영되고 있습니다."
+        selected = DisclosureAgent._select_business_sentence([sentence], "사업 전략", strategy=True)
+        self.assertEqual(selected, "")
 
     def test_business_comparison_claims_link_both_year_profiles(self):
         from src.validation import AnswerGuardrail
@@ -330,7 +463,7 @@ class StoreAgentTests(unittest.TestCase):
                          {"column_label": "2026년 1분기실적", "original_text": "125"},
                          {"column_label": "2025년실적", "original_text": "900"},
                      ]}]}
-        answer = DisclosureAgent._investment_plan_answer([table])
+        answer = DisclosureAgent._investment_plan_answer({"years": [2026], "quarter": 1}, [table])
         self.assertIn("1,000", answer)
         self.assertIn("집행률 12.5%", answer)
         self.assertIn("단위 : 억원", answer)
@@ -659,6 +792,11 @@ class StoreAgentTests(unittest.TestCase):
         self.assertEqual(plan["metric"], "gross_profit")
         self.assertIn("gross_profit", FINANCIAL_CELL_METRICS)
         self.assertEqual(metric_definition("capex")["sign_policy"], "absolute_cash_outflow_for_size_comparison")
+
+    def test_income_metrics_prioritize_comprehensive_income_statement(self):
+        statement_types = metric_definition("revenue")["statement_types"]
+        self.assertIn("income_statement", statement_types)
+        self.assertIn("comprehensive_income_statement", statement_types)
 
     def test_reranker_adds_score_breakdown_and_diversifies_sections(self):
         candidates = [

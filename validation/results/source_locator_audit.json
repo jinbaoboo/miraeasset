@@ -1,0 +1,887 @@
+{
+  "database": "outputs/disclosures.db",
+  "sample_size": 30,
+  "passed": 30,
+  "failed": 0,
+  "coverage": {
+    "by_subtype": {
+      "quarter": 14,
+      "annual": 10,
+      "half": 6
+    },
+    "corrections": 9,
+    "companies": 15
+  },
+  "results": [
+    {
+      "doc_id": "periodic_20250515000050",
+      "corp_name": "LG이노텍",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/LG이노텍/20250515000050_quarter_2025_03/20250515000050.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515000050:main:table:00046:p2:r10:c1",
+        "table_id": "periodic_20250515000050:main:table:00046",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "비유동자산",
+        "column_path": "[\"제 50 기 1분기말\"]",
+        "original_text": "5,316,736",
+        "unit_raw": "(단위 : 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515002264",
+      "corp_name": "삼성바이오로직스",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/삼성바이오로직스/20250515002264_quarter_2025_03/20250515002264.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515002264:main:table:00040:p2:r10:c1",
+        "table_id": "periodic_20250515002264:main:table:00040",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "비유동자산",
+        "column_path": "[\"제 15 기 1분기말\"]",
+        "original_text": "12,173,748,126,449",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250514000594",
+      "corp_name": "HMM",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/HMM/20250514000594_quarter_2025_03/20250514000594.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250514000594:main:table:00026:p2:r10:c1",
+        "table_id": "periodic_20250514000594:main:table:00026",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산",
+        "column_path": "[\"제 50 기 1분기말\"]",
+        "original_text": "79,149",
+        "unit_raw": "(단위 : 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515002651",
+      "corp_name": "HD현대일렉트릭",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/HD현대일렉트릭/20250515002651_quarter_2025_03/20250515002651.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515002651:main:table:00042:p2:r10:c1",
+        "table_id": "periodic_20250515002651:main:table:00042",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "당기법인세자산",
+        "column_path": "[\"제 9 기 1분기말\"]",
+        "original_text": "14,363,782,580",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515002741",
+      "corp_name": "POSCO홀딩스",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/POSCO홀딩스/20250515002741_quarter_2025_03/20250515002741.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515002741:main:table:00150:p2:r10:c1",
+        "table_id": "periodic_20250515002741:main:table:00150",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산 (주14)",
+        "column_path": "[\"제 58 기 1분기말\"]",
+        "original_text": "968,261,826,193",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515001154",
+      "corp_name": "LG유플러스",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/LG유플러스/20250515001154_quarter_2025_03/20250515001154.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515001154:main:table:00067:p2:r10:c1",
+        "table_id": "periodic_20250515001154:main:table:00067",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "비유동자산",
+        "column_path": "[\"제 30 기 1분기말\"]",
+        "original_text": "14,119,648",
+        "unit_raw": "(단위 : 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515001455",
+      "corp_name": "CJ제일제당",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20250515001455_quarter_2025_03/20250515001455.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515001455:main:table:00037:p2:r10:c1",
+        "table_id": "periodic_20250515001455:main:table:00037",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산",
+        "column_path": "[\"제 19 기 1분기말\"]",
+        "original_text": "452,210,274",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515002745",
+      "corp_name": "셀트리온",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/셀트리온/20250515002745_quarter_2025_03/20250515002745.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515002745:main:table:00041:p2:r10:c1",
+        "table_id": "periodic_20250515002745:main:table:00041",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "비유동자산",
+        "column_path": "[\"제 35 기 1분기말\"]",
+        "original_text": "15,497,630,322,661",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515002283",
+      "corp_name": "크래프톤",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/크래프톤/20250515002283_quarter_2025_03/20250515002283.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515002283:main:table:00053:p2:r10:c1",
+        "table_id": "periodic_20250515002283:main:table:00053",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "관계기업 및 공동기업투자 (주6)",
+        "column_path": "[\"제 19 기 1분기말\"]",
+        "original_text": "742,096,761,565",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250515001248",
+      "corp_name": "현대건설",
+      "report_nm": "분기보고서 (2025.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/현대건설/20250515001248_quarter_2025_03/20250515001248.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250515001248:main:table:00059:p2:r10:c1",
+        "table_id": "periodic_20250515001248:main:table:00059",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "재고자산",
+        "column_path": "[\"제 76 기 1분기말\"]",
+        "original_text": "785,654",
+        "unit_raw": "(단위 : 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250321001604",
+      "corp_name": "CJ제일제당",
+      "report_nm": "[기재정정]사업보고서 (2024.12)",
+      "doc_subtype": "annual",
+      "is_correction": true,
+      "source_path": "raw/periodic/CJ제일제당/20250321001604_annual_2024_12/20250321001604.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250321001604:main:table:00064:p2:r10:c1",
+        "table_id": "periodic_20250321001604:main:table:00064",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타의 유동자산",
+        "column_path": "[\"제 18 기\"]",
+        "original_text": "393,173,032",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250320001309",
+      "corp_name": "HD현대일렉트릭",
+      "report_nm": "[기재정정]사업보고서 (2024.12)",
+      "doc_subtype": "annual",
+      "is_correction": true,
+      "source_path": "raw/periodic/HD현대일렉트릭/20250320001309_annual_2024_12/20250320001309.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250320001309:main:table:00062:p2:r10:c1",
+        "table_id": "periodic_20250320001309:main:table:00062",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "당기법인세자산",
+        "column_path": "[\"제 8 기\"]",
+        "original_text": "17,734,498,726",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20240328001188",
+      "corp_name": "HMM",
+      "report_nm": "[기재정정]사업보고서 (2023.12)",
+      "doc_subtype": "annual",
+      "is_correction": true,
+      "source_path": "raw/periodic/HMM/20240328001188_annual_2023_12/20240328001188.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240328001188:main:table:00057:p2:r10:c1",
+        "table_id": "periodic_20240328001188:main:table:00057",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동금융자산",
+        "column_path": "[\"제 48 기\"]",
+        "original_text": "8,507,042",
+        "unit_raw": "(단위 : 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20231005000482",
+      "corp_name": "KB금융",
+      "report_nm": "[기재정정]반기보고서 (2023.06)",
+      "doc_subtype": "half",
+      "is_correction": true,
+      "source_path": "raw/periodic/KB금융/20231005000482_half_2023_06/20231005000482.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20231005000482:main:table:00163:p2:r10:c1",
+        "table_id": "periodic_20231005000482:main:table:00163",
+        "table_title": "주) 보험업감독업무시행세칙에 따른 손익계산서의 순보험금을 기준으로 작성함",
+        "statement_type": "income_statement",
+        "row_label": "합 계",
+        "column_path": "[\"2023년 반기말\"]",
+        "original_text": "81.5",
+        "unit_raw": "(단위 : %)",
+        "scope": "unknown",
+        "period_aggregation": null
+      }
+    },
+    {
+      "doc_id": "periodic_20260324000813",
+      "corp_name": "KB금융",
+      "report_nm": "[기재정정]반기보고서 (2024.06)",
+      "doc_subtype": "half",
+      "is_correction": true,
+      "source_path": "raw/periodic/KB금융/20260324000813_half_2024_06/20260324000813.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20260324000813:main:table:00418:p2:r10:c1",
+        "table_id": "periodic_20260324000813:main:table:00418",
+        "table_title": "가. 요약연결재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "투자부동산",
+        "column_path": "[\"제17기 반기말\"]",
+        "original_text": "3,929,357",
+        "unit_raw": "(단위: 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": null
+      }
+    },
+    {
+      "doc_id": "periodic_20260324000827",
+      "corp_name": "KB금융",
+      "report_nm": "[기재정정]반기보고서 (2025.06)",
+      "doc_subtype": "half",
+      "is_correction": true,
+      "source_path": "raw/periodic/KB금융/20260324000827_half_2025_06/20260324000827.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20260324000827:main:table:00339:p2:r1:c1",
+        "table_id": "periodic_20260324000827:main:table:00339",
+        "table_title": "<손익계산서>",
+        "statement_type": "income_statement",
+        "row_label": "영업수익",
+        "column_path": "[\"2025년 반기\"]",
+        "original_text": "19,909",
+        "unit_raw": "(단위:백만원)",
+        "scope": "unknown",
+        "period_aggregation": null
+      }
+    },
+    {
+      "doc_id": "periodic_20240514001580",
+      "corp_name": "HMM",
+      "report_nm": "[기재정정]분기보고서 (2024.03)",
+      "doc_subtype": "quarter",
+      "is_correction": true,
+      "source_path": "raw/periodic/HMM/20240514001580_quarter_2024_03/20240514001580.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240514001580:main:table:00030:p2:r10:c1",
+        "table_id": "periodic_20240514001580:main:table:00030",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산",
+        "column_path": "[\"제 49 기 1분기말\"]",
+        "original_text": "71,151",
+        "unit_raw": "(단위 : 백만원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20231005000478",
+      "corp_name": "KB금융",
+      "report_nm": "[기재정정]분기보고서 (2023.03)",
+      "doc_subtype": "quarter",
+      "is_correction": true,
+      "source_path": "raw/periodic/KB금융/20231005000478_quarter_2023_03/20231005000478.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20231005000478:main:table:00127:p2:r10:c1",
+        "table_id": "periodic_20231005000478:main:table:00127",
+        "table_title": "주) 보험업감독업무시행세칙에 따른 손익계산서의 순보험금을 기준으로 작성함",
+        "statement_type": "income_statement",
+        "row_label": "합 계",
+        "column_path": "[\"2023년 1분기\"]",
+        "original_text": "81.5",
+        "unit_raw": "(단위 : %)",
+        "scope": "unknown",
+        "period_aggregation": null
+      }
+    },
+    {
+      "doc_id": "periodic_20240326001023",
+      "corp_name": "KB금융",
+      "report_nm": "[기재정정]분기보고서 (2023.09)",
+      "doc_subtype": "quarter",
+      "is_correction": true,
+      "source_path": "raw/periodic/KB금융/20240326001023_quarter_2023_09/20240326001023.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240326001023:main:table:00125:p2:r10:c1",
+        "table_id": "periodic_20240326001023:main:table:00125",
+        "table_title": "주) 보험업감독업무시행세칙에 따른 손익계산서의 순보험금을 기준으로 작성함",
+        "statement_type": "income_statement",
+        "row_label": "합 계",
+        "column_path": "[\"2023년 3분기말\"]",
+        "original_text": "81.5",
+        "unit_raw": "(단위 : %)",
+        "scope": "unknown",
+        "period_aggregation": null
+      }
+    },
+    {
+      "doc_id": "periodic_20240319000861",
+      "corp_name": "CJ제일제당",
+      "report_nm": "사업보고서 (2023.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20240319000861_annual_2023_12/20240319000861.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240319000861:main:table:00061:p2:r10:c1",
+        "table_id": "periodic_20240319000861:main:table:00061",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타의 유동자산",
+        "column_path": "[\"제 17 기\"]",
+        "original_text": "444,359,456",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250317000648",
+      "corp_name": "CJ제일제당",
+      "report_nm": "사업보고서 (2024.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20250317000648_annual_2024_12/20250317000648.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250317000648:main:table:00064:p2:r10:c1",
+        "table_id": "periodic_20250317000648:main:table:00064",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타의 유동자산",
+        "column_path": "[\"제 18 기\"]",
+        "original_text": "393,173,032",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20260316001116",
+      "corp_name": "CJ제일제당",
+      "report_nm": "사업보고서 (2025.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20260316001116_annual_2025_12/20260316001116.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20260316001116:main:table:00067:p2:r10:c1",
+        "table_id": "periodic_20260316001116:main:table:00067",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산",
+        "column_path": "[\"제 19 기\"]",
+        "original_text": "480,724,902",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20230814002371",
+      "corp_name": "CJ제일제당",
+      "report_nm": "반기보고서 (2023.06)",
+      "doc_subtype": "half",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20230814002371_half_2023_06/20230814002371.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20230814002371:main:table:00055:p2:r10:c1",
+        "table_id": "periodic_20230814002371:main:table:00055",
+        "table_title": "연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동금융자산",
+        "column_path": "[\"제 17 기 반기말\"]",
+        "original_text": "421,078,264",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20240814002078",
+      "corp_name": "CJ제일제당",
+      "report_nm": "반기보고서 (2024.06)",
+      "doc_subtype": "half",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20240814002078_half_2024_06/20240814002078.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240814002078:main:table:00057:p2:r10:c1",
+        "table_id": "periodic_20240814002078:main:table:00057",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타의 유동자산",
+        "column_path": "[\"제 18 기 반기말\"]",
+        "original_text": "443,161,664",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20250814002788",
+      "corp_name": "CJ제일제당",
+      "report_nm": "반기보고서 (2025.06)",
+      "doc_subtype": "half",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20250814002788_half_2025_06/20250814002788.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20250814002788:main:table:00056:p2:r10:c1",
+        "table_id": "periodic_20250814002788:main:table:00056",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산",
+        "column_path": "[\"제 19 기 반기말\"]",
+        "original_text": "526,616,117",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20230515002270",
+      "corp_name": "CJ제일제당",
+      "report_nm": "분기보고서 (2023.03)",
+      "doc_subtype": "quarter",
+      "is_correction": false,
+      "source_path": "raw/periodic/CJ제일제당/20230515002270_quarter_2023_03/20230515002270.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20230515002270:main:table:00037:p2:r10:c1",
+        "table_id": "periodic_20230515002270:main:table:00037",
+        "table_title": "연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동금융자산",
+        "column_path": "[\"제 17 기 1분기말\"]",
+        "original_text": "425,457,983",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20240318000459",
+      "corp_name": "HD현대중공업",
+      "report_nm": "사업보고서 (2023.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/HD현대중공업/20240318000459_annual_2023_12/20240318000459.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240318000459:main:table:00100:p2:r10:c1",
+        "table_id": "periodic_20240318000459:main:table:00100",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "당기법인세자산",
+        "column_path": "[\"제 5 기\"]",
+        "original_text": "5,481,784",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20240318000479",
+      "corp_name": "JYP Ent",
+      "report_nm": "사업보고서 (2023.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/JYP Ent/20240318000479_annual_2023_12/20240318000479.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240318000479:main:table:00043:p2:r10:c1",
+        "table_id": "periodic_20240318000479:main:table:00043",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "비유동자산",
+        "column_path": "[\"제 29 기\"]",
+        "original_text": "202,777,637,642",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20240318000511",
+      "corp_name": "LG생활건강",
+      "report_nm": "사업보고서 (2023.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/LG생활건강/20240318000511_annual_2023_12/20240318000511.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240318000511:main:table:00077:p2:r10:c1",
+        "table_id": "periodic_20240318000511:main:table:00077",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "비유동자산",
+        "column_path": "[\"제 23 기\"]",
+        "original_text": "4,790,702,208,151",
+        "unit_raw": "(단위 : 원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    },
+    {
+      "doc_id": "periodic_20240401003467",
+      "corp_name": "LG씨엔에스",
+      "report_nm": "사업보고서 (2023.12)",
+      "doc_subtype": "annual",
+      "is_correction": false,
+      "source_path": "raw/periodic/LG씨엔에스/20240401003467_annual_2023_12/20240401003467.xml",
+      "passed": true,
+      "checks": {
+        "source_file_exists": true,
+        "numeric_cell_selected": true,
+        "cell_locator_complete": true,
+        "logical_table_structure": true,
+        "scope_period_unit_relation": true,
+        "original_text_in_raw_xml": true
+      },
+      "cell_example": {
+        "cell_id": "periodic_20240401003467:main:table:00061:p2:r10:c1",
+        "table_id": "periodic_20240401003467:main:table:00061",
+        "table_title": "2-1. 연결 재무상태표",
+        "statement_type": "balance_sheet",
+        "row_label": "기타유동자산",
+        "column_path": "[\"제 37 기\"]",
+        "original_text": "722,322,855",
+        "unit_raw": "(단위 : 천원)",
+        "scope": "consolidated",
+        "period_aggregation": "unknown"
+      }
+    }
+  ]
+}

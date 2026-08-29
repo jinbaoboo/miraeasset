@@ -27,6 +27,7 @@
 - 검색 점수 breakdown과 문서·섹션 중복을 줄이는 근거 재정렬, 재무지표 ontology
 - 선택적 HyperCLOVA X 생성 어댑터와 `GET /answer` API
 - 25개 수동 QA 회귀셋: 별칭·부문 수치·정정·사업내용·비교·복합·답변불가
+- 40개 산업 확장 회귀셋: 10개 신규 기업, 3분기 3개월/누적, 주석/주재무제표 충돌, 정보 한계·보안
 
 다른 LLM 공급자 연동은 코드에 포함하지 않았다. `HCX_*` 환경변수가 없으면 근거 기반 결정론 템플릿으로 동작한다.
 
@@ -71,6 +72,10 @@ API 실행:
     .venv/bin/python -m src.pipeline.report_quality --db outputs/disclosures.db
     .venv/bin/python -m eval.evaluate_agent --db outputs/disclosures.db
     PYTHONPATH=. .venv/bin/python eval/evaluate_manual_qa.py --db outputs/disclosures.db
+    PYTHONPATH=. .venv/bin/python validation/audit_source_locators.py \
+      --db outputs/disclosures.db --data-root "/absolute/path/to/corpus"
+    PYTHONPATH=. .venv/bin/python validation/validate_api_runtime.py \
+      --base-url http://127.0.0.1:8000
 
 Docker API 실행(구조화 DB는 read-only mount):
 
@@ -93,11 +98,16 @@ Docker API 실행(구조화 DB는 read-only mount):
 
 20개 교차 샘플은 annual/half/quarter, 각 정정 유형, PDF fallback, 복잡 표, strict XML 실패, 세 종류의 malformed 속성, 감사보고서 첨부, 여러 산업, 거래소 HTML, 일반·약식 지분공시를 포함한다.
 
-전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위 테스트 74/74, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가도 150/150 통과했으며 `eval/golden_questions.jsonl`과 `eval/evaluate_agent.py`로 재현할 수 있다. 전체 레코드 수와 경고 해석, 재현 절차는 [implementation_report.md](docs/implementation_report.md)에 정리했다.
+전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 92/92, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`이다.
 
 추가 수동 질문 25개도 `eval/manual_qa_questions.jsonl`로 편입해 25/25 통과했다. 다만 일부
 질문은 정답값이 아니라 회사·근거 존재만 검사하므로, 통과율의 해석과 현재 부분 완료 영역은
 [manual_qa_progress.md](docs/manual_qa_progress.md)에 구분해 두었다.
+
+강한 골드 평가와 Open 답변 압축·사업 변화 비교 개선 내용은
+[strong_gold_open_business.md](docs/strong_gold_open_business.md)에 정리했다.
+산업 확장·원문 locator·API 동시성 검증은
+[cross_industry_validation.md](docs/cross_industry_validation.md)에 정리했다.
 
 ## 중요한 한계
 

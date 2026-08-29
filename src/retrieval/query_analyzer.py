@@ -58,10 +58,15 @@ class QueryAnalyzer:
     def analyze(self, question: str) -> Dict[str, Any]:
         compact_question = re.sub(r"\s+", "", question).lower()
         companies = self._companies(question)
-        years = sorted({int(value) for value in re.findall(r"(20\d{2})\s*년?", question)})
+        years = {int(value) for value in re.findall(r"(20\d{2})\s*년?", question)}
+        years.update(2000 + int(value) for value in re.findall(r"(?<!\d)(2[3-6])\s*년", question))
+        years = sorted(years)
         months = [int(value) for value in re.findall(r"(?<!\d)(1[0-2]|[1-9])\s*월", question)]
-        quarter_match = re.search(r"([1-4])\s*분기", question)
-        quarter = int(quarter_match.group(1)) if quarter_match else None
+        quarter_match = re.search(r"([1-4])\s*(?:분기|[Qq])", question)
+        if not quarter_match and "첫 분기" in question:
+            quarter_match = re.search(r"(첫)\s*분기", question)
+        quarter = (1 if quarter_match and quarter_match.group(1) == "첫" else
+                   int(quarter_match.group(1)) if quarter_match else None)
         doc_subtypes: List[str] = []
         if "사업보고서" in question:
             doc_subtypes.append("annual")
@@ -73,6 +78,10 @@ class QueryAnalyzer:
         query_type = self._query_type(question, compact_question)
         cross_corpus = any(x in question for x in ("가장", "상위", "하위", "전체 기업", "기업 중", "순위"))
         metric = self._metric(compact_question)
+        if (any(token in question for token in ("공급계약", "계약액", "계약금액")) and
+                "최근매출액" in compact_question and
+                any(token in compact_question for token in ("몇퍼센트", "매출액대비", "비율"))):
+            metric = "contract_ratio"
         calculation = self._calculation(question, compact_question, metric, years)
         required_metrics = calculation.get("required_metrics", [metric] if metric else []) if calculation else ([metric] if metric else [])
         if calculation and calculation.get("derived_metric"):
@@ -83,7 +92,7 @@ class QueryAnalyzer:
         if any(x in question for x in ("유상증자", "자기주식", "합병", "분할", "사채", "주요사항", "자금조달",
                                        "CB", "BW", "EB", "전환사채", "신주인수권", "교환사채")):
             groups.append("major")
-        if any(x in question for x in ("공급계약", "주요 계약", "계약 해지", "수주", "시설투자", "투자판단", "거래소", "콜옵션", "주주간계약")):
+        if any(x in question for x in ("공급계약", "계약액", "계약금액", "위탁생산 계약", "주요 계약", "계약 해지", "수주", "시설투자", "투자판단", "거래소", "콜옵션", "주주간계약")):
             groups.append("exchange")
         if any(x in question for x in ("대량보유", "지분", "보유비율", "특별관계자")):
             groups.append("holding")
@@ -114,6 +123,7 @@ class QueryAnalyzer:
             "calculation": calculation,
             "requires_current_effective": not any(x in question for x in ("정정 전", "변경 전", "최초")),
         }
+        plan["period_aggregation"] = self._period_aggregation(question)
         plan["dimensions"] = self._dimensions(question, metric)
         if query_type == "business_change":
             plan["comparison_axis"] = (
@@ -159,9 +169,13 @@ class QueryAnalyzer:
 
     @staticmethod
     def _query_type(question: str, compact_question: str) -> str:
-        if "정정" in question and any(token in question for token in (
-            "정정 전", "정정 후", "변경 전", "변경 후", "현재 유효", "최신 값", "최초", "정정 내역", "정정공시",
-        )):
+        if ("공급계약" in question and "계약상대" in question and
+                any(token in question for token in ("공개", "밝혀", "확인됐"))):
+            return "correction_history"
+        if (("정정" in question or any(token in question for token in ("현재 유효", "최신 값", "최신 유효", "현재 값"))) and
+                any(token in question for token in (
+            "정정 전", "정정 후", "변경 전", "변경 후", "현재 유효", "최신 값", "최신 유효", "최초", "정정 내역", "정정공시",
+        ))):
             return "correction_history"
         if "자금조달" in question and any(
             token.lower() in compact_question
@@ -170,13 +184,25 @@ class QueryAnalyzer:
             return "financing_history"
         if any(token in question for token in ("주요 계약", "공급계약", "판매계약")) and "해지" in question:
             return "contract_termination"
-        if len(re.findall(r"20\d{2}\s*년?", question)) >= 2 and any(
-            token in question for token in ("핵심 사업", "사업은 어떻게", "사업 변화", "사업의 내용", "투자 방향")
-        ):
+        years = re.findall(r"20\d{2}\s*년?", question)
+        report_type_comparison = (
+            "사업보고서" in question and "분기보고서" in question and
+            any(token in question for token in ("비교", "공통점", "달라진", "변화", "강조"))
+        )
+        if (len(years) >= 2 and any(token in question for token in (
+                "핵심 사업", "사업은 어떻게", "사업 변화", "사업의 내용", "투자 방향", "사업 전략", "전략의 변화",
+                "유지 사업", "새 강조", "매출 비중 변화"
+        ))) or report_type_comparison:
             return "business_change"
-        if any(token in question for token in ("사업의 내용", "주요 사업", "사업 내용", "주요 서비스", "주요 제품과 서비스", "자동차 부문 관련")):
+        if any(token in question for token in (
+            "사업의 내용", "주요 사업", "사업 내용", "주요 서비스", "주요 제품과 서비스", "자동차 부문 관련",
+            "주요 사업부문", "대표 제품", "주력 제품", "주력 메모리 제품", "제품과 사업", "사업 현황과 전략",
+            "플랫폼과 콘텐츠 사업", "사업 포트폴리오", "온라인·모바일 게임", "사업 실적 개요",
+            "무엇을 파는지", "병행 사업", "수익모델", "서비스 축", "세부 사업", "주요 게임",
+        )):
             return "business_overview"
         if (any(token in question for token in ("주요 투자 계획", "투자 계획", "주요 투자 현황")) or
+                ("투자" in question and "집행" in question) or
                 "투자계획" in compact_question or "투자현황" in compact_question):
             return "investment_plan"
         if any(token.lower() in compact_question for token in ("설비투자", "capex")) and any(
@@ -217,7 +243,9 @@ class QueryAnalyzer:
             return "before_after"
         if any(token in question for token in ("정정 전", "변경 전", "최초")):
             return "original"
-        if any(token in question for token in ("현재 유효", "최신 값", "현재 값")):
+        if any(token in question for token in ("현재 유효", "최신 값", "최신 유효", "현재 값")):
+            return "current"
+        if "계약상대" in question and any(token in question for token in ("공개", "밝혀", "확인됐")):
             return "current"
         return "history"
 
@@ -233,14 +261,20 @@ class QueryAnalyzer:
                     "derived_metric": name,
                 }
         operation = None
+        if (any(token in compact_question for token in ("전년동기", "전년대비", "yoy")) and
+                any(token in compact_question for token in ("금액", "증감액")) and
+                any(token in compact_question for token in ("비율", "증가율", "증감률"))):
+            operation = "growth_amount_and_rate"
         for candidate, aliases in CALCULATION_PATTERNS.items():
+            if operation:
+                break
             if any(re.sub(r"\s+", "", alias).lower() in compact_question for alias in aliases):
                 operation = candidate
                 break
         if operation is None:
             return None
         calculation: Dict[str, Any] = {"operation": operation}
-        if operation == "growth_rate":
+        if operation in {"growth_rate", "growth_amount_and_rate"}:
             calculation["formula"] = "(current - baseline) / abs(baseline) * 100"
             if metric:
                 calculation["required_metrics"] = [metric]
@@ -257,6 +291,15 @@ class QueryAnalyzer:
         if "periodic" in groups or any(x in question for x in ("사업보고서", "반기보고서", "분기보고서", "재무", "매출", "영업이익")):
             return "base_period"
         return "unspecified"
+
+    @staticmethod
+    def _period_aggregation(question: str) -> Optional[str]:
+        compact = re.sub(r"\s+", "", question).lower()
+        if any(token in compact for token in ("누적", "연초이후", "ytd", "1~3분기", "1-3분기")):
+            return "ytd"
+        if any(token in compact for token in ("3개월", "당분기만", "분기단독", "분기자체")):
+            return "three_month"
+        return None
 
     @staticmethod
     def _missing_slots(plan: Dict[str, Any]) -> List[str]:

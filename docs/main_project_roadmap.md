@@ -12,7 +12,8 @@
 - 6대 핵심 질의 전용 실행 경로
 - FastAPI `/answer`와 Swagger UI
 - 복합 질의 planner, 근거 재정렬·다양성 제어, 재무지표 ontology
-- 단위 테스트 74개, base 37개에서 파생한 robustness 평가 150개
+- 단위·통합 테스트 92개, base 37개에서 파생한 robustness 평가 150개
+- 강한 골드 50개, 산업 확장·충돌·한계 40개, DB-원문 감사 30개, API 런타임 12개
 
 ## HyperCLOVA 연동 전 완료 상태
 

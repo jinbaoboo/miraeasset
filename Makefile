@@ -2,7 +2,7 @@ PYTHON ?= python3
 DB ?= outputs/disclosures.db
 DATA_ROOT ?= /path/to/corpus
 
-.PHONY: test validate build quality eval audit-source validate-api ask serve
+.PHONY: test validate build quality eval eval-operational submission-check audit-source validate-api ask serve
 test:
 	$(PYTHON) -m unittest discover -s tests -v
 
@@ -18,6 +18,14 @@ quality:
 
 eval:
 	$(PYTHON) -m eval.evaluate_agent --db "$(DB)"
+
+eval-operational:
+	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --db "$(DB)" \
+		--questions eval/operational_edge_questions.jsonl \
+		--output eval/operational_edge_results.json
+
+submission-check:
+	$(PYTHON) -m validation.validate_submission_package
 
 audit-source:
 	$(PYTHON) -m validation.audit_source_locators --db "$(DB)" --data-root "$(DATA_ROOT)"

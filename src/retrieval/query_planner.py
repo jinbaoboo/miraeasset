@@ -56,7 +56,17 @@ class QueryPlanner:
         if len(metrics) < 2:
             return []
         prefix = self._prefix(base)
-        return [f"{prefix} {METRIC_QUESTION_LABELS[metric]}은?" for metric in metrics]
+        return [f"{prefix} {self._question_metric_label(question, metric)}은?" for metric in metrics]
+
+    @staticmethod
+    def _question_metric_label(question: str, metric: str) -> str:
+        """Preserve the user's metric wording when generating subtasks."""
+        compact = re.sub(r"\s+", "", question).casefold()
+        matches = [
+            alias for alias in METRICS.get(metric, [])
+            if re.sub(r"\s+", "", alias).casefold() in compact
+        ]
+        return max(matches, key=lambda alias: len(re.sub(r"\s+", "", alias))) if matches else METRIC_QUESTION_LABELS[metric]
 
     @staticmethod
     def _mentioned_metrics(question: str) -> List[str]:

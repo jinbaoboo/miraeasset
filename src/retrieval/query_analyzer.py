@@ -62,7 +62,7 @@ class QueryAnalyzer:
         years.update(2000 + int(value) for value in re.findall(r"(?<!\d)(2[3-6])\s*년", question))
         years = sorted(years)
         months = [int(value) for value in re.findall(r"(?<!\d)(1[0-2]|[1-9])\s*월", question)]
-        quarter_match = re.search(r"([1-4])\s*(?:분기|[Qq])", question)
+        quarter_match = re.search(r"([1-4])\s*(?:사분기|/\s*4\s*분기|분기|[Qq])", question)
         if not quarter_match and "첫 분기" in question:
             quarter_match = re.search(r"(첫)\s*분기", question)
         quarter = (1 if quarter_match and quarter_match.group(1) == "첫" else
@@ -151,13 +151,25 @@ class QueryAnalyzer:
         return max(matches, default=(0, None))[1]
 
     def _companies(self, question: str) -> List[Dict[str, Optional[str]]]:
-        rows = self.conn.execute("SELECT corp_code,stock_code,corp_name,listed_name FROM companies ORDER BY length(corp_name) DESC").fetchall()
+        rows = self.conn.execute(
+            "SELECT corp_code,stock_code,corp_name,listed_name,corp_eng_name "
+            "FROM companies ORDER BY length(corp_name) DESC"
+        ).fetchall()
+        normalized_question = self._normalized_company_text(question)
         found = []
         for row in rows:
-            names = {row["corp_name"], row["listed_name"], row["stock_code"], *COMPANY_ALIASES.get(row["corp_code"], ())}
-            if any(name and name in question for name in names):
+            names = {
+                row["corp_name"], row["listed_name"], row["corp_eng_name"], row["stock_code"],
+                *COMPANY_ALIASES.get(row["corp_code"], ()),
+            }
+            if any(name and self._normalized_company_text(name) in normalized_question for name in names):
                 found.append(dict(row))
         return found
+
+    @staticmethod
+    def _normalized_company_text(value: str) -> str:
+        """Normalize harmless user variations without fuzzy company matching."""
+        return re.sub(r"\s+", "", value or "").casefold()
 
     @staticmethod
     def _dimensions(question: str, metric: Optional[str]) -> List[str]:
@@ -336,4 +348,27 @@ class QueryAnalyzer:
             warnings.append("ambiguous_return_metric")
         if any(year < 2023 or year > 2026 for year in plan.get("years", [])):
             warnings.append("year_outside_corpus_range")
+        if plan.get("query_type") == "generic" and QueryAnalyzer._topicless_generic_question(question, plan):
+            warnings.append("ambiguous_topic")
         return warnings
+
+    @staticmethod
+    def _topicless_generic_question(question: str, plan: Dict[str, Any]) -> bool:
+        """Detect a company/period shell that contains no subject to retrieve.
+
+        Generic narrative questions must remain searchable, so this is
+        deliberately narrower than treating every metric-less question as
+        incomplete.
+        """
+        residual = question.casefold()
+        for company in plan.get("companies") or []:
+            for value in (company.get("corp_name"), company.get("listed_name"), company.get("stock_code")):
+                if value:
+                    compact_name = re.sub(r"\s+", "", value.casefold())
+                    residual = re.sub("".join(f"{re.escape(char)}\\s*" for char in compact_name), "", residual)
+        residual = re.sub(r"20\d{2}\s*년(?:도)?|(?<!\d)2[3-6]\s*년(?:도)?", "", residual)
+        residual = re.sub(r"[1-4]\s*(?:사분기|/\s*4\s*분기|분기|q)|첫\s*분기", "", residual)
+        residual = re.sub(r"사업보고서|반기보고서|분기보고서|공시|자료|연결|별도|개별|기준", "", residual)
+        residual = re.sub(r"알려\s*줘|말해\s*줘|뭐야|무엇이야|어때", "", residual)
+        residual = re.sub(r"[\s\W_]+", "", residual, flags=re.UNICODE)
+        return not residual or residual in {"은", "는", "이", "가", "의", "에", "에서", "를", "을"}

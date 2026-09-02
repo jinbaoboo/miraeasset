@@ -1,6 +1,7 @@
 # 미래에셋증권 AI Festival 공시 Agent
 
 주최 측이 제공한 4,204건의 공시 코퍼스만 사용해 정기·주요사항·거래소·지분공시를 구조화하고, 검색·수치 조회·계산·정정 이력·근거 기반 답변을 제공하는 프로젝트다. 원본 `raw` 파일은 읽기 전용이며 외부 뉴스나 웹 데이터는 답변 근거로 사용하지 않는다.
+제출 패키지 구성과 평가자용 실행 순서는 [SUBMISSION.md](SUBMISSION.md)에 정리했다.
 
 현재는 샘플 분석 단계가 아니라 전체 공시 4,204건을 구조화한 메인 프로젝트 단계다.
 현재 개발 순서는 [메인 프로젝트 로드맵](docs/main_project_roadmap.md)을 기준으로 한다.
@@ -28,6 +29,7 @@
 - 선택적 HyperCLOVA X 생성 어댑터와 `GET /answer` API
 - 25개 수동 QA 회귀셋: 별칭·부문 수치·정정·사업내용·비교·복합·답변불가
 - 40개 산업 확장 회귀셋: 10개 신규 기업, 3분기 3개월/누적, 주석/주재무제표 충돌, 정보 한계·보안
+- 18개 운영 경계 회귀셋: 영문 대소문자·회사명 공백·분기 표현, 역질문 reason code, 복합 질의, 보안·범위 제한
 
 다른 LLM 공급자 연동은 코드에 포함하지 않았다. `HCX_*` 환경변수가 없으면 근거 기반 결정론 템플릿으로 동작한다.
 
@@ -40,6 +42,7 @@
 테스트:
 
     python3 -m unittest discover -s tests -v
+    make submission-check
 
 전체 또는 공시군별 구조화:
 
@@ -72,6 +75,7 @@ API 실행:
     .venv/bin/python -m src.pipeline.report_quality --db outputs/disclosures.db
     .venv/bin/python -m eval.evaluate_agent --db outputs/disclosures.db
     PYTHONPATH=. .venv/bin/python eval/evaluate_manual_qa.py --db outputs/disclosures.db
+    make eval-operational DB=outputs/disclosures.db
     PYTHONPATH=. .venv/bin/python validation/audit_source_locators.py \
       --db outputs/disclosures.db --data-root "/absolute/path/to/corpus"
     PYTHONPATH=. .venv/bin/python validation/validate_api_runtime.py \
@@ -98,7 +102,7 @@ Docker API 실행(구조화 DB는 read-only mount):
 
 20개 교차 샘플은 annual/half/quarter, 각 정정 유형, PDF fallback, 복잡 표, strict XML 실패, 세 종류의 malformed 속성, 감사보고서 첨부, 여러 산업, 거래소 HTML, 일반·약식 지분공시를 포함한다.
 
-전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 92/92, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`이다.
+전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 97/97, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, 운영 경계 평가는 18/18, DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`, `eval/operational_edge_questions.jsonl`이다.
 
 추가 수동 질문 25개도 `eval/manual_qa_questions.jsonl`로 편입해 25/25 통과했다. 다만 일부
 질문은 정답값이 아니라 회사·근거 존재만 검사하므로, 통과율의 해석과 현재 부분 완료 영역은
@@ -108,6 +112,8 @@ Docker API 실행(구조화 DB는 read-only mount):
 [strong_gold_open_business.md](docs/strong_gold_open_business.md)에 정리했다.
 산업 확장·원문 locator·API 동시성 검증은
 [cross_industry_validation.md](docs/cross_industry_validation.md)에 정리했다.
+입력 정규화·역질문·복합 질의·보안 경계 검증은
+[operational_edge_validation.md](docs/operational_edge_validation.md)에 정리했다.
 
 ## 중요한 한계
 

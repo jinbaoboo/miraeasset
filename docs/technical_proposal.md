@@ -117,4 +117,4 @@ flowchart LR
 
 ## 9. 재현과 제출
 
-소스, `requirements.txt`, `pyproject.toml`, Dockerfile, Makefile, README, API 명세, 교환 JSON Schema, 파서·검색·계산 테스트, 교차 대표 문서 검증, 37개 golden 질의 평가 스크립트와 로컬 DB 생성 명령을 제공한다. 실제 HyperCLOVA X key/endpoint, 배포 endpoint, 대회 GitHub Organization push는 제출 권한을 가진 사용자가 최종 주입·승인한다.
+소스, `requirements.txt`, `pyproject.toml`, Dockerfile, Makefile, README, API 명세, 교환 JSON Schema, 파서·검색·계산 테스트, 교차 대표 문서 검증, base 37개에서 파생한 150개 robustness·50개 strong gold·4040개 산업 확장·18개 운영 경계 질의 평가와 로컬 DB 생성 명령을 제공한다. `submission-check`는 필수 파일과 Git 추적 금지 산출물을 검사한다. 실제 HyperCLOVA X key/endpoint, 배포 endpoint, 대회 GitHub Organization push는 제출 권한을 가진 사용자가 최종 주입·승인한다.

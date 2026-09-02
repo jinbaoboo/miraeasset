@@ -314,12 +314,39 @@ class StoreAgentTests(unittest.TestCase):
     def test_compact_year_quarter_and_open_phrasings_are_normalized(self):
         agent = DisclosureAgent(self.db)
         compact = agent.analyzer.analyze("테스트 25년 1Q 연결 영업이익은?")
+        korean_ordinal = agent.analyzer.analyze("테스트 2025년 1사분기 연결 영업이익은?")
         overview = agent.analyzer.analyze("테스트 25년 1Q 회사 전체 사업 포트폴리오를 짧게 분류해줘")
         agent.close()
         self.assertEqual(compact["years"], [2025])
         self.assertEqual(compact["quarter"], 1)
         self.assertEqual(compact["doc_subtypes"], ["quarter"])
+        self.assertEqual(korean_ordinal["quarter"], 1)
+        self.assertEqual(korean_ordinal["doc_subtypes"], ["quarter"])
         self.assertEqual(overview["query_type"], "business_overview")
+
+    def test_company_matching_normalizes_case_and_spacing(self):
+        agent = DisclosureAgent(self.db)
+        lower_latin = agent.analyzer.analyze("test 2025년 1분기 연결 영업이익은?")
+        spaced_korean = agent.analyzer.analyze("테 스 트 2025년 1분기 연결 영업이익은?")
+        agent.close()
+        self.assertEqual([item["corp_name"] for item in lower_latin["companies"]], ["테스트"])
+        self.assertEqual([item["corp_name"] for item in spaced_korean["companies"]], ["테스트"])
+
+    def test_topicless_company_period_question_requests_clarification(self):
+        agent = DisclosureAgent(self.db)
+        result = agent.answer("q-topic", "테스트 2025년 1분기는?", use_llm=False)
+        agent.close()
+        self.assertEqual(result["validation"]["action"], "clarify")
+        self.assertEqual(result["think_trace"]["query_plan"]["resolution"]["reason_code"], "missing_topic")
+        self.assertIn("알고 싶은 항목", result["answer"])
+
+    def test_vague_financial_question_requests_metric_clarification(self):
+        agent = DisclosureAgent(self.db)
+        result = agent.answer("q-metric", "테스트 2025년 1분기 재무 수치를 알려줘", use_llm=False)
+        agent.close()
+        self.assertEqual(result["validation"]["action"], "clarify")
+        self.assertEqual(result["think_trace"]["query_plan"]["resolution"]["reason_code"], "missing_metric")
+        self.assertIn("재무 지표", result["answer"])
 
     def test_business_mix_change_phrasing_uses_change_route(self):
         agent = DisclosureAgent(self.db)
@@ -426,10 +453,12 @@ class StoreAgentTests(unittest.TestCase):
     def test_query_planner_splits_multiple_financial_metrics(self):
         agent = DisclosureAgent(self.db)
         composite = agent.planner.plan("테스트 2023년 1분기 연결 매출액과 영업이익을 알려줘")
+        alias_composite = agent.planner.plan("테스트 2023년 1분기 연결 영업수익과 영업이익을 알려줘")
         agent.close()
         self.assertTrue(composite["is_composite"])
         self.assertEqual(len(composite["subtasks"]), 2)
         self.assertEqual({task["plan"]["metric"] for task in composite["subtasks"]}, {"revenue", "operating_profit"})
+        self.assertIn("영업수익", alias_composite["subtasks"][0]["question"])
 
     def test_query_planner_splits_capex_growth_and_direction(self):
         agent = DisclosureAgent(self.db)

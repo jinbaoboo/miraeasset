@@ -82,6 +82,12 @@ def _answerability_check(answer: str, response: Dict[str, Any], expected: str | 
     return False
 
 
+def _effective_plan(response: Dict[str, Any]) -> Dict[str, Any]:
+    """Return the analyzer plan for both single and composite questions."""
+    plan = (response.get("think_trace") or {}).get("query_plan") or {}
+    return plan.get("base_plan") or plan
+
+
 def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
     cases = [json.loads(line) for line in questions.read_text(encoding="utf-8").splitlines() if line.strip()]
     agent = DisclosureAgent(db); results = []
@@ -92,7 +98,9 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
             latency_ms = round((time.perf_counter() - started) * 1000, 2)
             answer = response.get("answer") or ""
             context_text = _context_audit_text(response)
-            query_type = ((response.get("think_trace") or {}).get("query_plan") or {}).get("query_type")
+            raw_plan = (response.get("think_trace") or {}).get("query_plan") or {}
+            effective_plan = _effective_plan(response)
+            query_type = effective_plan.get("query_type")
             cited_doc_ids = {item.get("doc_id") for item in response.get("citations") or [] if item.get("doc_id")}
             cited_doc_ids.update(
                 item.get("citation", {}).get("doc_id")
@@ -104,6 +112,13 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
             required_doc_ids = set(case.get("required_doc_ids", []))
             max_chars = case.get("max_answer_chars")
             max_lines = case.get("max_answer_lines")
+            expected_actions = case.get("expected_validation_actions") or (
+                [case["expected_validation_action"]] if case.get("expected_validation_action") else []
+            )
+            plan_companies = {item.get("corp_name") for item in effective_plan.get("companies") or []}
+            limitation_codes = {item.get("code") for item in response.get("limitations") or []}
+            required_citation_fields = case.get("required_citation_fields", [])
+            citations = response.get("citations") or []
             checks = {
                 "required_evidence": all(_normalized(expected) in _normalized(context_text)
                                          for expected in required_evidence),
@@ -130,6 +145,27 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
                 ),
                 "guardrail_action": (response.get("validation") or {}).get("action") in
                                     {"allow", "limit", "clarify", "blocked"},
+                "expected_validation_action": not expected_actions or
+                    (response.get("validation") or {}).get("action") in expected_actions,
+                "plan_companies": all(company in plan_companies for company in case.get("expected_companies", [])),
+                "plan_years": all(year in (effective_plan.get("years") or []) for year in case.get("expected_years", [])),
+                "plan_quarter": case.get("expected_quarter") is None or
+                    effective_plan.get("quarter") == case.get("expected_quarter"),
+                "plan_metric": not case.get("expected_metric") or
+                    effective_plan.get("metric") == case.get("expected_metric"),
+                "plan_doc_subtypes": all(
+                    subtype in (effective_plan.get("doc_subtypes") or [])
+                    for subtype in case.get("expected_doc_subtypes", [])
+                ),
+                "limitation_codes": all(code in limitation_codes for code in case.get("expected_limitation_codes", [])),
+                "composite_subtasks": case.get("expected_subtask_count") is None or (
+                    raw_plan.get("is_composite") is True and
+                    len(raw_plan.get("subtasks") or []) == int(case["expected_subtask_count"])
+                ),
+                "citation_fields": not required_citation_fields or bool(citations) and all(
+                    all(citation.get(field) not in (None, "") for field in required_citation_fields)
+                    for citation in citations
+                ),
             }
             results.append({
                 "question_id": case["question_id"], "category": case["category"], "question": case["question"],

@@ -14,7 +14,7 @@
         "type": "object",
         "required": ["kind", "record_id", "content", "citation"],
         "properties": {
-          "kind": {"enum": ["cell", "text", "table", "event", "event_field", "correction", "investment_plan", "financing", "contract", "contract_termination", "contract_lifecycle", "business_evidence", "business_profile"]},
+          "kind": {"enum": ["cell", "text", "table", "event", "event_field", "correction", "investment_plan", "financing", "contract", "contract_termination", "contract_lifecycle", "business_evidence", "business_overview", "business_profile", "business_revenue_mix"]},
           "record_id": {"type": ["string", "null"]},
           "content": {"type": "string"},
           "citation": {

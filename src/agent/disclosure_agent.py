@@ -1342,6 +1342,12 @@ class DisclosureAgent:
         warnings = set(plan.get("warnings") or [])
         if "ambiguous_return_metric" in warnings:
             return "ambiguous_metric", "어떤 수익률을 뜻하는지 확인이 필요합니다. 영업이익률, 순이익률, ROE 중 하나를 지정해 주세요."
+        if "ambiguous_topic" in warnings:
+            return "missing_topic", "알고 싶은 항목을 지정해 주세요. 예: 연결 매출액, 영업이익, 주요 사업, 공급계약."
+        if query_type == "generic" and "metric" in missing and any(
+            token in plan.get("question", "") for token in ("재무", "수치", "실적", "계정", "지표")
+        ):
+            return "missing_metric", "조회할 재무 지표를 지정해 주세요. 예: 연결 매출액, 영업이익, 당기순이익."
         if query_type not in core_types:
             return None
         if "company" in missing:

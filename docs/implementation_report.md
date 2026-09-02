@@ -1,6 +1,6 @@
 # 공시 Agent 로컬 구현 완료 보고서
 
-작성 기준일: 2026-08-29
+작성 기준일: 2026-09-02
 
 ## 완료 범위
 
@@ -44,12 +44,13 @@ PDF/HTML만 제공된 정기공시 3건은 페이지별 텍스트와 locator를 
 
 | 검증 | 결과 |
 |---|---:|
-| 단위·통합 테스트 | 92 / 92 통과 |
+| 단위·통합 테스트 | 97 / 97 통과 |
 | 20개 교차 샘플 수동·자동 대조 | 173 / 173 통과 |
 | DB 무결성·참조·FTS·PII 검사 | 14 / 14 통과 |
 | Golden/robustness 질문 평가 | 150 / 150 통과(base 37개 + 의미 보존 변형) |
 | Strong gold 질문 평가 | 50 / 50 통과(숫자 허용오차·단위·scope·기간·필수 근거·답변불가) |
 | 산업 확장·기간/출처 충돌·정보 한계 | 40 / 40 통과 |
+| 운영 경계 질문(입력 정규화·역질문·복합·보안) | 18 / 18 통과 |
 | DB-원문 locator 감사 | 30 / 30 통과 |
 | Golden 응답 지연 | median 325.84 ms, p95 4,448.27 ms, max 5,871.31 ms |
 | Manual QA | 25 / 25 통과(수치·정정·사업·비교·복합·답변불가) |
@@ -82,6 +83,10 @@ python3 -m venv .venv
   --db outputs/disclosures.db \
   --data-root "/absolute/path/to/corpus"
 .venv/bin/python -m eval.evaluate_agent --db outputs/disclosures.db
+.venv/bin/python eval/evaluate_manual_qa.py --db outputs/disclosures.db \
+  --questions eval/operational_edge_questions.jsonl \
+  --output eval/operational_edge_results.json
+make submission-check
 DISCLOSURE_DB=outputs/disclosures.db \
   .venv/bin/uvicorn src.api.app:app --host 0.0.0.0 --port 8000
 ```

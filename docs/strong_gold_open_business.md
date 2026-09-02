@@ -76,4 +76,5 @@ PYTHONPATH=. .venv/bin/python -m unittest discover -s tests -v
 - 생성 Close/Open: 20/20
 - 수동 QA: 25/25
 - 강건성 변형: 150/150
-- 단위·통합 테스트: 92/92
+- 단위·통합 테스트: 97/97
+- 운영 경계 질문: 18/18

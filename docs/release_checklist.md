@@ -32,8 +32,10 @@
 
 ```bash
 python3 -m unittest discover -s tests -v
+make submission-check
 python3 -m validation.validate_cross_group_samples --data-root "/absolute/path/to/corpus"
 python3 -m eval.evaluate_agent --db outputs/disclosures.db
+make eval-operational DB=outputs/disclosures.db
 python3 -m src.pipeline.report_quality --db outputs/disclosures.db
 DISCLOSURE_DB=outputs/disclosures.db uvicorn src.api.app:app --host 0.0.0.0 --port 8000
 ```

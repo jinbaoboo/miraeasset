@@ -20,9 +20,11 @@ from .hyperclova_client import HyperClovaClient
 
 
 OUT_OF_SCOPE = ("주가 전망", "목표주가", "매수", "매도", "추천", "뉴스", "실시간 주가",
-                "코퍼스에 없는", "비상장회사")
+                "실시간", "투자의견", "컨센서스", "호재", "악재", "주식을 살", "주식 살",
+                "살까", "팔까", "코퍼스에 없는", "비상장회사")
 SECURITY_TERMS = ("API 키", "API키", "비밀키", "시스템 프롬프트", "프롬프트를 공개", "이전 지시를 무시",
-                  "지시를 무시하고", "환경변수를 출력")
+                  "지시를 무시하고", "환경변수를 출력", "api key", "secret key", "system prompt",
+                  "developer message", "ignore previous instructions", "ignore the previous instructions")
 
 
 class DisclosureAgent:
@@ -1342,6 +1344,8 @@ class DisclosureAgent:
         warnings = set(plan.get("warnings") or [])
         if "ambiguous_return_metric" in warnings:
             return "ambiguous_metric", "어떤 수익률을 뜻하는지 확인이 필요합니다. 영업이익률, 순이익률, ROE 중 하나를 지정해 주세요."
+        if "relative_period_needs_explicit_year" in warnings:
+            return "relative_period_needs_explicit_year", "최근·올해·작년 같은 상대 기간은 자동 해석하지 않습니다. 명확한 기준연도와 분기·반기를 입력해 주세요."
         if "ambiguous_topic" in warnings:
             return "missing_topic", "알고 싶은 항목을 지정해 주세요. 예: 연결 매출액, 영업이익, 주요 사업, 공급계약."
         if query_type == "generic" and "metric" in missing and any(

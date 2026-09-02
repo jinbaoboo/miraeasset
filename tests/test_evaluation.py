@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter
 from decimal import Decimal
 from pathlib import Path
 
@@ -41,12 +42,17 @@ class GoldenEvaluationTests(unittest.TestCase):
 
     def test_operational_edge_set_covers_runtime_boundaries(self):
         cases = load_cases(Path("eval/operational_edge_questions.jsonl"))
-        self.assertEqual(len(cases), 18)
-        self.assertEqual(len({case["question_id"] for case in cases}), 18)
+        self.assertEqual(len(cases), 29)
+        self.assertEqual(len({case["question_id"] for case in cases}), 29)
         self.assertEqual(
             {case["category"] for case in cases},
             {"input_normalization", "clarification", "multi_intent", "safety_limit"},
         )
+        by_category = Counter(case["category"] for case in cases)
+        self.assertGreaterEqual(by_category["input_normalization"], 10)
+        self.assertGreaterEqual(by_category["clarification"], 8)
+        self.assertGreaterEqual(by_category["multi_intent"], 3)
+        self.assertGreaterEqual(by_category["safety_limit"], 5)
 
 
 if __name__ == "__main__":

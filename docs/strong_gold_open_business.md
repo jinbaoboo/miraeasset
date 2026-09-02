@@ -77,4 +77,4 @@ PYTHONPATH=. .venv/bin/python -m unittest discover -s tests -v
 - 수동 QA: 25/25
 - 강건성 변형: 150/150
 - 단위·통합 테스트: 97/97
-- 운영 경계 질문: 18/18
+- 운영 경계 질문: 기존 18/18 통과, 질문셋 29개로 확장

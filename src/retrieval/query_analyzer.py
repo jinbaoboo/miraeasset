@@ -15,6 +15,14 @@ COMPANY_ALIASES = {
     "00261443": ("엔씨", "엔씨소프트"),
 }
 
+COMPANY_NAME_ALIASES = {
+    "삼성전자": ("삼전", "삼성전자주식회사", "samsung", "samsung electronics"),
+    "SK하이닉스": ("하이닉스", "sk hynix", "skhynix"),
+    "현대자동차": ("현차", "현대차", "hyundai", "hyundai motor", "hyundai motor company"),
+    "기아": ("kia", "kia corporation"),
+    "카카오": ("kakao",),
+}
+
 CALCULATION_PATTERNS = {
     "growth_rate": ["전년대비", "전년 대비", "전년동기대비", "전년 동기 대비", "증감률", "증가율", "감소율", "성장률", "yoy"],
     "difference": ["차이", "얼마나 증가", "얼마나 감소", "증감액"],
@@ -62,15 +70,15 @@ class QueryAnalyzer:
         years.update(2000 + int(value) for value in re.findall(r"(?<!\d)(2[3-6])\s*년", question))
         years = sorted(years)
         months = [int(value) for value in re.findall(r"(?<!\d)(1[0-2]|[1-9])\s*월", question)]
-        quarter_match = re.search(r"([1-4])\s*(?:사분기|/\s*4\s*분기|분기|[Qq])", question)
+        quarter_match = re.search(r"([1-4])\s*(?:사분기|/\s*4\s*분기|분기|[Qq])|[Qq]\s*([1-4])", question)
         if not quarter_match and "첫 분기" in question:
             quarter_match = re.search(r"(첫)\s*분기", question)
-        quarter = (1 if quarter_match and quarter_match.group(1) == "첫" else
-                   int(quarter_match.group(1)) if quarter_match else None)
+        quarter_token = next((group for group in (quarter_match.groups() if quarter_match else ()) if group), None)
+        quarter = (1 if quarter_token == "첫" else int(quarter_token) if quarter_token else None)
         doc_subtypes: List[str] = []
         if "사업보고서" in question:
             doc_subtypes.append("annual")
-        if "반기보고서" in question or re.search(r"\b반기\b", question):
+        if "반기보고서" in question or re.search(r"\b반기\b", question) or "상반기" in question:
             doc_subtypes.append("half")
         if "분기보고서" in question or quarter:
             doc_subtypes.append("quarter")
@@ -161,10 +169,18 @@ class QueryAnalyzer:
             names = {
                 row["corp_name"], row["listed_name"], row["corp_eng_name"], row["stock_code"],
                 *COMPANY_ALIASES.get(row["corp_code"], ()),
+                *self._company_name_aliases(row),
             }
             if any(name and self._normalized_company_text(name) in normalized_question for name in names):
                 found.append(dict(row))
         return found
+
+    @staticmethod
+    def _company_name_aliases(row: sqlite3.Row) -> tuple[str, ...]:
+        aliases: List[str] = []
+        for value in (row["corp_name"], row["listed_name"], row["corp_eng_name"]):
+            aliases.extend(COMPANY_NAME_ALIASES.get(value or "", ()))
+        return tuple(dict.fromkeys(aliases))
 
     @staticmethod
     def _normalized_company_text(value: str) -> str:
@@ -348,9 +364,22 @@ class QueryAnalyzer:
             warnings.append("ambiguous_return_metric")
         if any(year < 2023 or year > 2026 for year in plan.get("years", [])):
             warnings.append("year_outside_corpus_range")
+        if QueryAnalyzer._has_relative_period(question):
+            warnings.append("relative_period_needs_explicit_year")
         if plan.get("query_type") == "generic" and QueryAnalyzer._topicless_generic_question(question, plan):
             warnings.append("ambiguous_topic")
         return warnings
+
+    @staticmethod
+    def _has_relative_period(question: str) -> bool:
+        compact = re.sub(r"\s+", "", question)
+        if "최근매출액" in compact:
+            return False
+        return any(re.search(pattern, question) for pattern in (
+            r"최근\s*(?:분기|반기|사업보고서|보고서|공시)",
+            r"최신\s*(?:분기|반기|사업보고서|보고서|공시)",
+            r"올해|금년|작년|지난해",
+        ))
 
     @staticmethod
     def _topicless_generic_question(question: str, plan: Dict[str, Any]) -> bool:

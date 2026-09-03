@@ -30,6 +30,7 @@
 - 25개 수동 QA 회귀셋: 별칭·부문 수치·정정·사업내용·비교·복합·답변불가
 - 40개 산업 확장 회귀셋: 10개 신규 기업, 3분기 3개월/누적, 주석/주재무제표 충돌, 정보 한계·보안
 - 29개 운영 경계 회귀셋: 영문 대소문자·회사명 공백·운영 별칭·분기 표현, 상대 기간 역질문 reason code, 복합 질의, 보안·범위 제한
+- 자체 개발 QA 100개: 신규 작성 `close` 50개·`open` 50개, 수치·단위·기간·scope·접수번호·서술 근거 동시 판정
 
 다른 LLM 공급자 연동은 코드에 포함하지 않았다. `HCX_*` 환경변수가 없으면 근거 기반 결정론 템플릿으로 동작한다.
 
@@ -76,6 +77,7 @@ API 실행:
     .venv/bin/python -m eval.evaluate_agent --db outputs/disclosures.db
     PYTHONPATH=. .venv/bin/python eval/evaluate_manual_qa.py --db outputs/disclosures.db
     make eval-operational DB=outputs/disclosures.db
+    make eval-development DB=outputs/disclosures.db
     PYTHONPATH=. .venv/bin/python validation/audit_source_locators.py \
       --db outputs/disclosures.db --data-root "/absolute/path/to/corpus"
     PYTHONPATH=. .venv/bin/python validation/validate_api_runtime.py \
@@ -102,7 +104,7 @@ Docker API 실행(구조화 DB는 read-only mount):
 
 20개 교차 샘플은 annual/half/quarter, 각 정정 유형, PDF fallback, 복잡 표, strict XML 실패, 세 종류의 malformed 속성, 감사보고서 첨부, 여러 산업, 거래소 HTML, 일반·약식 지분공시를 포함한다.
 
-전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 97/97, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, 운영 경계 기존 평가는 18/18 통과했고 질문셋은 29개로 확장했다. DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`, `eval/operational_edge_questions.jsonl`이다.
+전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 110/110, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, 운영 경계 평가는 29/29, 자체 작성 개발 QA는 `close` 50/50·`open` 50/50으로 총 100/100을 통과했다. DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`, `eval/operational_edge_questions.jsonl`, `eval/development_qa_100_questions.jsonl`이다.
 
 추가 수동 질문 25개도 `eval/manual_qa_questions.jsonl`로 편입해 25/25 통과했다. 다만 일부
 질문은 정답값이 아니라 회사·근거 존재만 검사하므로, 통과율의 해석과 현재 부분 완료 영역은
@@ -114,6 +116,8 @@ Docker API 실행(구조화 DB는 read-only mount):
 [cross_industry_validation.md](docs/cross_industry_validation.md)에 정리했다.
 입력 정규화·역질문·복합 질의·보안 경계 검증은
 [operational_edge_validation.md](docs/operational_edge_validation.md)에 정리했다.
+자체 작성 100문항의 구성·실행·개선 과정은
+[development_qa_100_validation.md](docs/development_qa_100_validation.md)에 정리했다.
 
 ## 중요한 한계
 

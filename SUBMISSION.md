@@ -29,6 +29,7 @@ DISCLOSURE_DB=outputs/disclosures.db \
 make test
 make submission-check
 make eval-operational DB=outputs/disclosures.db
+make eval-development DB=outputs/disclosures.db
 ```
 
 `submission-check`는 필수 제출 파일, Git에 추적된 DB·코퍼스·secret 파일,
@@ -40,6 +41,7 @@ make eval-operational DB=outputs/disclosures.db
 - API 명세: [docs/api_spec.md](docs/api_spec.md)
 - API 응답 JSON Schema: [schemas/answer_response.schema.json](schemas/answer_response.schema.json)
 - 구현·검증 보고서: [docs/implementation_report.md](docs/implementation_report.md)
+- 자체 개발 QA 100문항 검증: [docs/development_qa_100_validation.md](docs/development_qa_100_validation.md)
 - 배포 전 체크리스트: [docs/release_checklist.md](docs/release_checklist.md)
 - 환경변수 키 예시: [.env.example](.env.example)
 

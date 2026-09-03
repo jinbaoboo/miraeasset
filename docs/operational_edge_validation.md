@@ -34,8 +34,7 @@
 
 ## 실행 결과
 
-2026-09-02 기준 전체 `outputs/disclosures.db`에 대해 18/18을 통과했다.
-이후 운영 별칭·상대 기간·보안 경계 케이스를 추가해 질문셋은 29개로 확장했다.
+2026-09-03 기준 전체 `outputs/disclosures.db`에 대해 확장된 질문셋 29/29를 통과했다.
 
 ```bash
 make eval-operational DB=outputs/disclosures.db

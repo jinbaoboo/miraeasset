@@ -21,11 +21,12 @@ COMPANY_NAME_ALIASES = {
     "현대자동차": ("현차", "현대차", "hyundai", "hyundai motor", "hyundai motor company"),
     "기아": ("kia", "kia corporation"),
     "카카오": ("kakao",),
+    "POSCO홀딩스": ("포스코홀딩스", "posco holdings"),
 }
 
 CALCULATION_PATTERNS = {
     "growth_rate": ["전년대비", "전년 대비", "전년동기대비", "전년 동기 대비", "증감률", "증가율", "감소율", "성장률", "yoy"],
-    "difference": ["차이", "얼마나 증가", "얼마나 감소", "증감액"],
+    "difference": ["차이", "격차", "얼마나 증가", "얼마나 감소", "얼마 더 큰", "증감액"],
     "sum": ["합계", "총액", "총합"],
     "average": ["평균"],
     "ratio": ["비중", "비율"],
@@ -88,7 +89,7 @@ class QueryAnalyzer:
         metric = self._metric(compact_question)
         if (any(token in question for token in ("공급계약", "계약액", "계약금액")) and
                 "최근매출액" in compact_question and
-                any(token in compact_question for token in ("몇퍼센트", "매출액대비", "비율"))):
+                any(token in compact_question for token in ("몇퍼센트", "매출액대비", "비율", "비중"))):
             metric = "contract_ratio"
         calculation = self._calculation(question, compact_question, metric, years)
         required_metrics = calculation.get("required_metrics", [metric] if metric else []) if calculation else ([metric] if metric else [])
@@ -163,7 +164,6 @@ class QueryAnalyzer:
             "SELECT corp_code,stock_code,corp_name,listed_name,corp_eng_name "
             "FROM companies ORDER BY length(corp_name) DESC"
         ).fetchall()
-        normalized_question = self._normalized_company_text(question)
         found = []
         for row in rows:
             names = {
@@ -171,9 +171,27 @@ class QueryAnalyzer:
                 *COMPANY_ALIASES.get(row["corp_code"], ()),
                 *self._company_name_aliases(row),
             }
-            if any(name and self._normalized_company_text(name) in normalized_question for name in names):
+            if any(name and self._company_name_in_question(str(name), question) for name in names):
                 found.append(dict(row))
         return found
+
+    @staticmethod
+    def _company_name_in_question(name: str, question: str) -> bool:
+        """Match spacing/case variants without crossing unrelated Korean words.
+
+        Removing all spaces made the short alias ``현차`` match ``표현 차이``.
+        A whitespace-flexible pattern keeps support for ``삼성 전자`` while
+        requiring a real word boundary before the company name.
+        """
+        candidate = name.strip().casefold()
+        if not candidate:
+            return False
+        if candidate.isdigit():
+            return re.search(rf"(?<!\d){re.escape(candidate)}(?!\d)", question.casefold()) is not None
+        compact = re.sub(r"\s+", "", candidate)
+        pattern = r"\s*".join(re.escape(char) for char in compact)
+        suffix = r"(?=$|[^A-Za-z가-힣]|(?:은|는|이|가|의|을|를|와|과|에서|에게|보다|으로|로)(?=$|[^A-Za-z가-힣]))"
+        return re.search(rf"(?<![A-Za-z가-힣]){pattern}{suffix}", question.casefold()) is not None
 
     @staticmethod
     def _company_name_aliases(row: sqlite3.Row) -> tuple[str, ...]:
@@ -197,6 +215,9 @@ class QueryAnalyzer:
 
     @staticmethod
     def _query_type(question: str, compact_question: str) -> str:
+        if ("계약상대" in compact_question and
+                any(token in question for token in ("최신", "현재 유효", "정정 후", "공개", "밝혀", "확인됐"))):
+            return "correction_history"
         if ("공급계약" in question and "계약상대" in question and
                 any(token in question for token in ("공개", "밝혀", "확인됐"))):
             return "correction_history"
@@ -215,11 +236,11 @@ class QueryAnalyzer:
         years = re.findall(r"20\d{2}\s*년?", question)
         report_type_comparison = (
             "사업보고서" in question and "분기보고서" in question and
-            any(token in question for token in ("비교", "공통점", "달라진", "변화", "강조"))
+            any(token in question for token in ("비교", "대조", "공통점", "달라진", "달라졌", "변화", "강조"))
         )
         if (len(years) >= 2 and any(token in question for token in (
                 "핵심 사업", "사업은 어떻게", "사업 변화", "사업의 내용", "투자 방향", "사업 전략", "전략의 변화",
-                "유지 사업", "새 강조", "매출 비중 변화"
+                "유지 사업", "유지된 사업", "새 강조", "새로 강조", "매출 비중 변화"
         ))) or report_type_comparison:
             return "business_change"
         if any(token in question for token in (
@@ -228,6 +249,29 @@ class QueryAnalyzer:
             "플랫폼과 콘텐츠 사업", "사업 포트폴리오", "온라인·모바일 게임", "사업 실적 개요",
             "무엇을 파는지", "병행 사업", "수익모델", "서비스 축", "세부 사업", "주요 게임",
         )):
+            return "business_overview"
+        # Narrative business questions vary much more than numeric lookups.
+        # Require both a descriptive action and a concrete business topic so
+        # ordinary requests such as "영업이익을 설명해줘" remain financial.
+        narrative_action = any(token in question for token in (
+            "정리", "설명", "요약", "분류", "구분", "분석",
+        ))
+        narrative_topic = any(token in question for token in (
+            "핵심 서비스", "대표 서비스", "제품군", "대표 제품", "주요 제품", "주력 제품",
+            "게임 사업", "서비스 사업", "사업 구성", "사업 영역", "사업 활동", "사업모델",
+            "사업 포트폴리오", "사업 전략", "성장 전략", "중장기 방향", "추진 전략",
+            "연구개발 방향", "R&D 초점", "수익 사업", "두 축", "세부 항목",
+            "각 사업부문", "사업부문별", "전력기기 사업", "건설 사업", "바이오 사업",
+            "CDMO 사업", "자동차 사업", "차량부문", "플랫폼·콘텐츠", "플랫폼과 콘텐츠",
+        ))
+        has_financial_metric = any(
+            re.sub(r"\s+", "", alias).lower() in compact_question
+            for aliases in METRICS.values() for alias in aliases
+        )
+        narrative_topic = narrative_topic or (
+            ("사업" in question or "서비스" in question) and not has_financial_metric
+        )
+        if narrative_action and narrative_topic:
             return "business_overview"
         if (any(token in question for token in ("주요 투자 계획", "투자 계획", "주요 투자 현황")) or
                 ("투자" in question and "집행" in question) or
@@ -271,7 +315,8 @@ class QueryAnalyzer:
             return "before_after"
         if any(token in question for token in ("정정 전", "변경 전", "최초")):
             return "original"
-        if any(token in question for token in ("현재 유효", "최신 값", "최신 유효", "현재 값")):
+        if (any(token in question for token in ("현재 유효", "최신 값", "최신 유효", "현재 값")) or
+                ("계약상대" in question and "최신" in question)):
             return "current"
         if "계약상대" in question and any(token in question for token in ("공개", "밝혀", "확인됐")):
             return "current"
@@ -289,9 +334,14 @@ class QueryAnalyzer:
                     "derived_metric": name,
                 }
         operation = None
-        if (any(token in compact_question for token in ("전년동기", "전년대비", "yoy")) and
-                any(token in compact_question for token in ("금액", "증감액")) and
-                any(token in compact_question for token in ("비율", "증가율", "증감률"))):
+        year_comparison = any(token in compact_question for token in (
+            "전년동기", "전년대비", "전년같은분기", "yoy",
+        ))
+        amount_and_rate = (
+            any(token in compact_question for token in ("금액", "증감액", "증가액", "감소액")) and
+            any(token in compact_question for token in ("비율", "증가율", "감소율", "증감률", "몇%"))
+        ) or ("얼마" in compact_question and any(token in compact_question for token in ("몇%", "몇퍼센트")))
+        if year_comparison and amount_and_rate:
             operation = "growth_amount_and_rate"
         for candidate, aliases in CALCULATION_PATTERNS.items():
             if operation:

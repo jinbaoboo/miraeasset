@@ -1181,9 +1181,14 @@ class DisclosureAgent:
 
     @staticmethod
     def _requested_metric_label(question: str, plan: Dict[str, Any], fallback: str) -> str:
-        aliases = metric_definition(plan.get("metric")).get("aliases") or []
+        definition = metric_definition(plan.get("metric"))
+        aliases = definition.get("aliases") or []
         matches = [alias for alias in aliases if alias and alias.lower() in question.lower()]
-        return max(matches, key=len) if matches else metric_definition(plan.get("metric")).get("label", fallback)
+        canonical = definition.get("label", fallback)
+        if not matches:
+            return canonical
+        requested = max(matches, key=len)
+        return requested if canonical in requested else f"{requested}({canonical})"
 
     @staticmethod
     def _period_label(plan: Dict[str, Any], cell: Optional[Dict[str, Any]] = None) -> str:
@@ -1287,7 +1292,8 @@ class DisclosureAgent:
 
     @staticmethod
     def _topic(label: str) -> str:
-        last = label.rstrip()[-1]
+        semantic = re.findall(r"[0-9A-Za-z가-힣]", label.rstrip())
+        last = semantic[-1] if semantic else label.rstrip()[-1]
         code = ord(last)
         has_final_consonant = 0xAC00 <= code <= 0xD7A3 and (code - 0xAC00) % 28 != 0
         return label + ("은" if has_final_consonant else "는")

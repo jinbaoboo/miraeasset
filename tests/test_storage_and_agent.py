@@ -41,7 +41,8 @@ class StoreAgentTests(unittest.TestCase):
             "00000001,000001,테스트,테스트,TEST,KOSPI,IT,테스트,2020-01-01,12월\n"
             "00126380,005930,삼성전자,삼성전자,Samsung Electronics,KOSPI,전기전자,반도체,1975-06-11,12월\n"
             "00164779,000660,SK하이닉스,SK하이닉스,SK hynix,KOSPI,전기전자,반도체,1996-12-26,12월\n"
-            "00164742,005380,현대자동차,현대자동차,Hyundai Motor,KOSPI,운수장비,자동차,1974-06-28,12월\n",
+            "00164742,005380,현대자동차,현대자동차,Hyundai Motor,KOSPI,운수장비,자동차,1974-06-28,12월\n"
+            "00155319,005490,POSCO홀딩스,POSCO홀딩스,POSCO HOLDINGS INC.,KOSPI,철강금속,철강,1988-06-10,12월\n",
             encoding="utf-8",
         )
         self.record = {"doc_id": "periodic_1", "corp_code": "00000001", "corp_name": "테스트", "listed_name": "테스트",
@@ -61,6 +62,9 @@ class StoreAgentTests(unittest.TestCase):
         self.assertTrue(result["retrieved_context"])
         self.assertIn("candidate_documents_filtered", result["think_trace"]["steps"])
         self.assertIn("citations_attached", result["think_trace"]["steps"])
+
+    def test_metric_label_particle_ignores_parentheses(self):
+        self.assertEqual(DisclosureAgent._topic("영업수익(매출액)"), "영업수익(매출액)은")
 
     def test_answer_contains_evaluation_guardrail_artifacts(self):
         agent = DisclosureAgent(self.db)
@@ -318,6 +322,20 @@ class StoreAgentTests(unittest.TestCase):
         agent.close()
         self.assertTrue(all(plan["query_type"] == "business_overview" for plan in plans))
 
+    def test_descriptive_business_phrasings_use_business_overview_route(self):
+        agent = DisclosureAgent(self.db)
+        questions = (
+            "테스트의 게임 사업과 성장 전략을 공시 내용으로 요약해줘",
+            "테스트의 주력 의약품 사업과 R&D 초점을 설명해줘",
+            "테스트의 사업부문별 주요 제품을 정리해줘",
+            "테스트가 영위한 토목·건축 관련 사업을 정리해줘",
+        )
+        plans = [agent.analyzer.analyze(question) for question in questions]
+        financial = agent.analyzer.analyze("테스트의 영업이익을 설명해줘")
+        agent.close()
+        self.assertTrue(all(plan["query_type"] == "business_overview" for plan in plans))
+        self.assertEqual(financial["query_type"], "financial_metric")
+
     def test_compact_year_quarter_and_open_phrasings_are_normalized(self):
         agent = DisclosureAgent(self.db)
         compact = agent.analyzer.analyze("테스트 25년 1Q 연결 영업이익은?")
@@ -339,6 +357,14 @@ class StoreAgentTests(unittest.TestCase):
         self.assertEqual([item["corp_name"] for item in lower_latin["companies"]], ["테스트"])
         self.assertEqual([item["corp_name"] for item in spaced_korean["companies"]], ["테스트"])
 
+    def test_short_company_alias_does_not_cross_word_boundaries(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze(
+            "삼성전자의 2025 사업보고서와 분기보고서의 표현 차이를 비교해줘"
+        )
+        agent.close()
+        self.assertEqual([item["corp_name"] for item in plan["companies"]], ["삼성전자"])
+
     def test_company_matching_uses_operational_aliases(self):
         agent = DisclosureAgent(self.db)
         samsung = agent.analyzer.analyze("samsung electronics 2025년 1분기 연결 매출액은?")
@@ -350,6 +376,12 @@ class StoreAgentTests(unittest.TestCase):
         self.assertEqual([item["corp_name"] for item in samsung_short["companies"]], ["삼성전자"])
         self.assertEqual([item["corp_name"] for item in hynix["companies"]], ["SK하이닉스"])
         self.assertEqual([item["corp_name"] for item in hyundai["companies"]], ["현대자동차"])
+
+    def test_company_matching_accepts_posco_korean_alias(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("포스코홀딩스 2025년 1분기 연결 매출액은?")
+        agent.close()
+        self.assertEqual([item["corp_name"] for item in plan["companies"]], ["POSCO홀딩스"])
 
     def test_q_first_quarter_and_half_year_phrasings_are_normalized(self):
         agent = DisclosureAgent(self.db)
@@ -422,10 +454,14 @@ class StoreAgentTests(unittest.TestCase):
         subtype_plan = agent.analyzer.analyze(
             "테스트의 2025년 분기보고서와 사업보고서를 비교해 핵심 사업의 공통점을 설명해줘"
         )
+        contrasted = agent.analyzer.analyze(
+            "테스트의 2025년 분기보고서와 사업보고서를 대조해 무엇이 달라졌는지 설명해줘"
+        )
         agent.close()
         self.assertEqual(year_plan["query_type"], "business_change")
         self.assertEqual(subtype_plan["query_type"], "business_change")
         self.assertEqual(subtype_plan["comparison_axis"], "doc_subtype")
+        self.assertEqual(contrasted["query_type"], "business_change")
 
     def test_current_effective_contract_counterparty_uses_correction_route(self):
         agent = DisclosureAgent(self.db)
@@ -450,11 +486,44 @@ class StoreAgentTests(unittest.TestCase):
         self.assertEqual(plan["calculation"]["operation"], "growth_amount_and_rate")
         self.assertEqual(plan["calculation"]["baseline_year"], 2024)
 
+    def test_growth_amount_and_rate_accepts_natural_variants(self):
+        agent = DisclosureAgent(self.db)
+        increase = agent.analyzer.analyze(
+            "테스트의 2025년 1분기 매출은 전년동기 대비 증가액과 증가율이 얼마야?"
+        )
+        same_quarter = agent.analyzer.analyze(
+            "테스트의 2025년 첫 분기 매출은 전년 같은 분기보다 얼마, 몇 % 늘었나?"
+        )
+        agent.close()
+        self.assertEqual(increase["calculation"]["operation"], "growth_amount_and_rate")
+        self.assertEqual(same_quarter["calculation"]["operation"], "growth_amount_and_rate")
+
+    def test_company_difference_accepts_gap_phrasings(self):
+        agent = DisclosureAgent(self.db)
+        gap = agent.analyzer.analyze("테스트와 다른회사의 2025년 매출액 격차를 계산해줘")
+        larger = agent.analyzer.analyze("테스트가 다른회사보다 매출액이 얼마 더 큰가?")
+        agent.close()
+        self.assertEqual(gap["calculation"]["operation"], "difference")
+        self.assertEqual(larger["calculation"]["operation"], "difference")
+
     def test_contract_recent_revenue_percent_prefers_contract_ratio(self):
         agent = DisclosureAgent(self.db)
         plan = agent.analyzer.analyze("테스트의 2025년 공급계약 금액은 최근매출액의 몇 퍼센트야?")
         agent.close()
         self.assertEqual(plan["metric"], "contract_ratio")
+
+    def test_contract_ratio_accepts_share_wording(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 공급계약의 계약금액/최근매출액 비중은?")
+        agent.close()
+        self.assertEqual(plan["metric"], "contract_ratio")
+
+    def test_latest_contract_counterparty_uses_correction_route(self):
+        agent = DisclosureAgent(self.db)
+        plan = agent.analyzer.analyze("테스트 2025년 공급계약의 최신 계약상대방 명칭은?")
+        agent.close()
+        self.assertEqual(plan["query_type"], "correction_history")
+        self.assertEqual(plan["correction_view"], "current")
 
     def test_business_change_answer_does_not_equate_absence_with_discontinuation(self):
         plan = {"companies": [{"corp_name": "테스트"}], "years": [2023, 2025]}

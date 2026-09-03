@@ -14,9 +14,10 @@
     }
   },
   "latency_ms": {
-    "median": 19.11,
-    "max": 5597.96
+    "median": 31.52,
+    "max": 10281.84
   },
+  "transport": "direct",
   "results": [
     {
       "question_id": "strong-close-001",
@@ -48,7 +49,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5597.96,
+      "latency_ms": 10281.84,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -98,7 +99,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2559.8,
+      "latency_ms": 4484.05,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -148,7 +149,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2154.58,
+      "latency_ms": 4594.1,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -198,7 +199,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1938.91,
+      "latency_ms": 3074.41,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -248,7 +249,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2093.57,
+      "latency_ms": 3097.78,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -298,7 +299,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1970.77,
+      "latency_ms": 4035.17,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -355,7 +356,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2225.62,
+      "latency_ms": 4922.53,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -418,7 +419,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1729.27,
+      "latency_ms": 2683.59,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -468,7 +469,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 21.94,
+      "latency_ms": 27.85,
       "validation_action": "allow",
       "query_type": "investment_plan",
       "numeric_details": [
@@ -530,7 +531,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5.31,
+      "latency_ms": 8.39,
       "validation_action": "allow",
       "query_type": "correction_history",
       "numeric_details": [],
@@ -574,7 +575,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 31.81,
+      "latency_ms": 55.23,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -617,7 +618,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10.73,
+      "latency_ms": 21.94,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -660,16 +661,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 19.08,
+      "latency_ms": 33.3,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001159"
       ],
-      "answer_chars": 427,
-      "answer_lines": 5,
-      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 완성차·모빌리티, 금융\n- 주요 제품·서비스: 당사는 제 58기 1분기 누계 약 100만대의 판매 실적을 바탕으로 연결기준 차량부문에서 약 35조원의 매출을 기록했습니다.\n- 전략·현황: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n근거 접수번호: 20250515001159.",
+      "answer_chars": 354,
+      "answer_lines": 4,
+      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 차량부문(완성차·모빌리티), 금융\n- 주요 제품·서비스: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n근거 접수번호: 20250515001159.",
       "notes": null,
       "gold_note": null
     },
@@ -703,16 +704,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 13.43,
+      "latency_ms": 26.61,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
-      "answer_chars": 446,
+      "answer_chars": 556,
       "answer_lines": 5,
-      "answer": "삼성전자의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, DX, DS, SDC·OLED, Harman·전장, 전장부품\n- 주요 제품·서비스: 사업별로 보면, Set 사업은 DX(Device eXperience) 부문이 TV를 비롯하여 모니터, 냉장고, 세탁기, 에어컨, 스마트폰, 네트워크시스템, PC 등을 생산ㆍ판매하며, 부품 사업은 DS(Device Solutions) 부문에서 DRAM, NAND Flash, 모바일AP 등의 제품을 생산ㆍ판매하고, SDC가 스마트폰용 OLED 패널 등을 생산ㆍ판매하고 있습니다.\n- 전략·현황: 판매전략 ㆍ프리미엄 제품을 중심으로 한 시장 우위 강화 ㆍ브랜드, 제품, 서비스를 통해 고객에게 차별화된 가치 제공 ㆍ고객ㆍ시장 중심의 수요 촉발 마케팅 강화 마.\n근거 접수번호: 20250515001922.",
+      "answer": "삼성전자의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, DX, DS, SDC·OLED, Harman·전장, 전장부품, 음악·영상 콘텐츠\n- 주요 제품·서비스: 사업별로 보면, Set 사업은 DX(Device eXperience) 부문이 TV를 비롯하여 모니터, 냉장고, 세탁기, 에어컨, 스마트폰, 네트워크시스템, PC 등을 생산ㆍ판매하며, 부품 사업은 DS(Device Solutions) 부문에서 DRAM, NAND Flash, 모바일AP 등의 제품을 생산ㆍ판매하고, SDC가 스마트폰용 OLED 패널 등을 생산ㆍ판매하고 있습니다.\n- 전략·현황: 이에, Harman은 자동차의 SDV로 변화에 대응할 수 있는 SW 기술역량을 강화하고, In-Cabin Experience의 핵심 전장부품과 고성장이 예상되는 AR HUD, 디스플레이, 운전자 모니터링 등 신제품을 육성하는 한편 전자의 SW/서비스 역량을 차량에 접목하여 보다 편리하고 차별화된 사용자 경험을 제공하는데 주력할 계획입니다.\n근거 접수번호: 20250515001922.",
       "notes": null,
       "gold_note": null
     },
@@ -746,7 +747,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.86,
+      "latency_ms": 22.03,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -789,16 +790,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 19.14,
+      "latency_ms": 27.52,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250514001239"
       ],
-      "answer_chars": 691,
+      "answer_chars": 625,
       "answer_lines": 5,
-      "answer": "카카오의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 커머스, 콘텐츠, 게임, 아티스트 매니지먼트, 플랫폼, 톡비즈, 카카오페이, 뮤직, 스토리\n- 주요 제품·서비스: 이어서 콘텐츠 부문은 1) 카카오게임즈가 PC/콘솔 플랫폼 확장과 모바일 게임의 장르다변화를 통한 글로벌 시장 진출, 자체 개발 게임을 위해 지속적으로 노력하고 있는 게임콘텐츠 , 2) 카카오엔터테인먼트와 에스엠엔터테인먼트가 진행하는 글로벌 K-pop 아티스트를 양성하고 음악 기반의 다양한 콘텐츠를 제작 및 음악플랫폼 멜론(Melon)을 영위하는 뮤직 콘텐츠 , 3) 카카오픽코마와 카카오엔터테인먼트에서 경쟁력 있는 스토리IP를 발굴하고 국내외 콘텐츠 시장에서 이용자 저변을 키워가고 있는 스토리콘텐츠, 그리고 4) 카카오엔터테인먼트의 아티스트IP를 활용한 매니지먼트 사업 및 영상콘텐츠 제작 사업을 펼치고 있는 미디어콘텐츠로 구성되어 있습니다.\n- 전략·현황: 카카오데이터센터는 10만대 이상의 서버를 운영할 수 있는 초대형 데이터센터로, 데이터센터 건립을 통해 고도화된 인공지능(AI), 빅데이터, 사물인터넷(IoT) 등의 기술의 관리 운영을 강화하고 기업, 교육, 의료 등 사회 전반에 걸쳐 급증하고 있는 디지털 전환 수요에 적극 대응 할 수 있을 것으로 기대하고 있습니다.\n근거 접수번호: 20250514001239.",
+      "answer": "카카오의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 커머스, 콘텐츠, 게임, 아티스트 매니지먼트, 플랫폼, 톡비즈, 카카오페이, 뮤직, 스토리, 음악·영상 콘텐츠\n- 주요 제품·서비스: 이어서 콘텐츠 부문은 1) 카카오게임즈가 PC/콘솔 플랫폼 확장과 모바일 게임의 장르다변화를 통한 글로벌 시장 진출, 자체 개발 게임을 위해 지속적으로 노력하고 있는 게임콘텐츠 , 2) 카카오엔터테인먼트와 에스엠엔터테인먼트가 진행하는 글로벌 K-pop 아티스트를 양성하고 음악 기반의 다양한 콘텐츠를 제작 및 음악플랫폼 멜론(Melon)을 영위하는 뮤직 콘텐츠 , 3) 카카오픽코마와 카카오엔터테인먼트에서 경쟁력 있는 스토리IP를 발굴하고 국내외 콘텐츠 시장에서 이용자 저변을 키워가고 있는 스토리콘텐츠, 그리고 4) 카카오엔터테인먼트의 아티스트IP를 활용한 매니지먼트 사업 및 영상콘텐츠 제작 사업을 펼치고 있는 미디어콘텐츠로 구성되어 있습니다.\n- 전략·현황: 톡비즈(커머스)는 글로벌 하이앤드 브랜드를 럭스탭에 입접시키며 프리미엄 라인업을 강화해왔고, 이에 따른 객단가 증가 및 자기구매 거래액 확대로 안정적인 성장을 이어나가고 있습니다.\n근거 접수번호: 20250514001239.",
       "notes": null,
       "gold_note": null
     },
@@ -832,16 +833,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.49,
+      "latency_ms": 21.15,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250514000990"
       ],
-      "answer_chars": 505,
+      "answer_chars": 510,
       "answer_lines": 5,
-      "answer": "JYP Ent의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 음악·영상 콘텐츠, 아티스트 매니지먼트, 음반·음원\n- 주요 제품·서비스: 이러한 지속가능한 시스템을 기반으로 음반, 음원, 영상 컨텐츠 등을 기획, 제작하여 유통하는 음악 및 영상 컨텐츠 사업, 그리고 공연, 출연 등 소속 아티스트의 용역활동을 통해 수익을 창출하는 매니지먼트 관련 사업을 글로벌 전역에서 영위하고 있습니다.\n- 전략·현황: 레이블 조직으로의 점진적 개편을 통해 2016년을 기점으로 이전 데뷔하였던 DAY6, TWICE 등 주요 아티스트의 구조적 성장과 더불어 2018년 Stray Kids, 2019년 ITZY, 2020년 NiziU, 2021년 Xdinary Heroes, 2022년 NMIXX, 2024년 VCHA, NEXZ 등 신규 아티스트 라인업을 확대하였고, 2025년 1월에는 신규 보이그룹 KickFlip이 데뷔하였습니다.\n근거 접수번호: 20250514000990.",
+      "answer": "JYP Ent의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 음악·영상 콘텐츠, 아티스트 매니지먼트, 음반·음원, 콘텐츠\n- 주요 제품·서비스: 이러한 지속가능한 시스템을 기반으로 음반, 음원, 영상 컨텐츠 등을 기획, 제작하여 유통하는 음악 및 영상 컨텐츠 사업, 그리고 공연, 출연 등 소속 아티스트의 용역활동을 통해 수익을 창출하는 매니지먼트 관련 사업을 글로벌 전역에서 영위하고 있습니다.\n- 전략·현황: 레이블 조직으로의 점진적 개편을 통해 2016년을 기점으로 이전 데뷔하였던 DAY6, TWICE 등 주요 아티스트의 구조적 성장과 더불어 2018년 Stray Kids, 2019년 ITZY, 2020년 NiziU, 2021년 Xdinary Heroes, 2022년 NMIXX, 2024년 VCHA, NEXZ 등 신규 아티스트 라인업을 확대하였고, 2025년 1월에는 신규 보이그룹 KickFlip이 데뷔하였습니다.\n근거 접수번호: 20250514000990.",
       "notes": null,
       "gold_note": null
     },
@@ -875,7 +876,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.9,
+      "latency_ms": 29.75,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -918,7 +919,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 93.4,
+      "latency_ms": 151.72,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [
@@ -981,7 +982,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 28.19,
+      "latency_ms": 51.67,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [],
@@ -1025,7 +1026,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.71,
+      "latency_ms": 6.2,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1066,7 +1067,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.04,
+      "latency_ms": 5.16,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1107,7 +1108,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2511.91,
+      "latency_ms": 5134.12,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1152,7 +1153,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.54,
+      "latency_ms": 4.94,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1193,7 +1194,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1.83,
+      "latency_ms": 3.33,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1234,7 +1235,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.03,
+      "latency_ms": 0.09,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],
@@ -1275,7 +1276,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.03,
+      "latency_ms": 0.05,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1316,7 +1317,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.09,
+      "latency_ms": 4.97,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1357,7 +1358,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.0,
+      "latency_ms": 4.97,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1398,7 +1399,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.08,
+      "latency_ms": 3.22,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1439,7 +1440,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1054.67,
+      "latency_ms": 1501.52,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1489,7 +1490,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5310.08,
+      "latency_ms": 6661.8,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1539,7 +1540,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1975.02,
+      "latency_ms": 4826.15,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1589,7 +1590,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1521.69,
+      "latency_ms": 2572.02,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1639,7 +1640,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4502.21,
+      "latency_ms": 6767.35,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1689,7 +1690,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1523.97,
+      "latency_ms": 1979.7,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1746,7 +1747,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2267.09,
+      "latency_ms": 4576.79,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1797,7 +1798,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2884.84,
+      "latency_ms": 4163.4,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1847,7 +1848,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 15.97,
+      "latency_ms": 27.52,
       "validation_action": "allow",
       "query_type": "investment_plan",
       "numeric_details": [
@@ -1909,7 +1910,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5.07,
+      "latency_ms": 8.42,
       "validation_action": "allow",
       "query_type": "correction_history",
       "numeric_details": [],
@@ -1953,7 +1954,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 31.25,
+      "latency_ms": 49.15,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1996,16 +1997,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10.92,
+      "latency_ms": 20.21,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002885"
       ],
-      "answer_chars": 334,
+      "answer_chars": 329,
       "answer_lines": 5,
-      "answer": "NC의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사 주력 모바일게임으로는 리니지M, 리니지2M, 리니지W, 블레이드 & 소울 2, 호연, 저니 오브 모나크 등이 있으며, 온라인게임으로는 리니지, 리니지2, 아이온, 블레이드 & 소울, 길드워2, 쓰론 앤 리버티 등이 있습니다.\n- 전략·현황: 당사는 '글로벌 게임사로의 더 확고한 도약'이라는 목표를 바탕으로 플랫폼 다변화, 포트폴리오 확장 등의 전략을 추진하고 있으며 R&D의 중요성을 경영 전반에 적용하고 있습니다.\n근거 접수번호: 20250515002885.",
+      "answer": "NC의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임\n- 주요 제품·서비스: 당사 주력 모바일게임으로는 리니지M, 리니지2M, 리니지W, 블레이드 & 소울 2, 호연, 저니 오브 모나크 등이 있으며, 온라인게임으로는 리니지, 리니지2, 아이온, 블레이드 & 소울, 길드워2, 쓰론 앤 리버티 등이 있습니다.\n- 전략·현황: 당사는 '글로벌 게임사로의 더 확고한 도약'이라는 목표를 바탕으로 플랫폼 다변화, 포트폴리오 확장 등의 전략을 추진하고 있으며 R&D의 중요성을 경영 전반에 적용하고 있습니다.\n근거 접수번호: 20250515002885.",
       "notes": null,
       "gold_note": null
     },
@@ -2039,7 +2040,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 18.45,
+      "latency_ms": 36.72,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2082,7 +2083,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.16,
+      "latency_ms": 27.64,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2125,7 +2126,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.7,
+      "latency_ms": 24.86,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2168,7 +2169,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.89,
+      "latency_ms": 29.36,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2211,16 +2212,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.81,
+      "latency_ms": 18.93,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250514000990"
       ],
-      "answer_chars": 482,
+      "answer_chars": 510,
       "answer_lines": 5,
-      "answer": "JYP Ent의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 음악·영상 콘텐츠, 아티스트 매니지먼트, 음반·음원, 콘텐츠\n- 주요 제품·서비스: 레이블 조직으로의 점진적 개편을 통해 2016년을 기점으로 이전 데뷔하였던 DAY6, TWICE 등 주요 아티스트의 구조적 성장과 더불어 2018년 Stray Kids, 2019년 ITZY, 2020년 NiziU, 2021년 Xdinary Heroes, 2022년 NMIXX, 2024년 VCHA, NEXZ 등 신규 아티스트 라인업을 확대하였고, 2025년 1월에는 신규 보이그룹 KickFlip이 데뷔하였습니다.\n- 전략·현황: 또한, 당사는 지적재산(IP)을 활용한 IP 라이센싱 사업을 전개하는 한편, 유관 산업 내 유수한 글로벌 파트너들과 전략적 협업 관계를 통해 컨텐츠 산업 내 영향력을 지속적으로 확대해 나가고 있습니다.\n근거 접수번호: 20250514000990.",
+      "answer": "JYP Ent의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 음악·영상 콘텐츠, 아티스트 매니지먼트, 음반·음원, 콘텐츠\n- 주요 제품·서비스: 이러한 지속가능한 시스템을 기반으로 음반, 음원, 영상 컨텐츠 등을 기획, 제작하여 유통하는 음악 및 영상 컨텐츠 사업, 그리고 공연, 출연 등 소속 아티스트의 용역활동을 통해 수익을 창출하는 매니지먼트 관련 사업을 글로벌 전역에서 영위하고 있습니다.\n- 전략·현황: 레이블 조직으로의 점진적 개편을 통해 2016년을 기점으로 이전 데뷔하였던 DAY6, TWICE 등 주요 아티스트의 구조적 성장과 더불어 2018년 Stray Kids, 2019년 ITZY, 2020년 NiziU, 2021년 Xdinary Heroes, 2022년 NMIXX, 2024년 VCHA, NEXZ 등 신규 아티스트 라인업을 확대하였고, 2025년 1월에는 신규 보이그룹 KickFlip이 데뷔하였습니다.\n근거 접수번호: 20250514000990.",
       "notes": null,
       "gold_note": null
     },
@@ -2254,16 +2255,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.49,
+      "latency_ms": 21.74,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001302"
       ],
-      "answer_chars": 202,
+      "answer_chars": 238,
       "answer_lines": 4,
-      "answer": "NAVER의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 서치플랫폼, 커머스, 핀테크, 콘텐츠, 엔터프라이즈\n- 주요 제품·서비스: 또한, 네이버는 지속적인 성장을 목표로 기술, 서비스 등에 대한 선제적 투자를 진행하며, 핵심 사업의 경쟁력을 끊임없이 강화해 나가고 있습니다.\n근거 접수번호: 20250515001302.",
+      "answer": "NAVER의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 서치플랫폼, 커머스, 핀테크, 콘텐츠, 엔터프라이즈\n- 주요 제품·서비스: 아울러 금융 씬파일러(Thin Filer)들을 위한 핀테크, 웹툰, 스노우 등의 콘텐츠 서비스, 기업용 솔루션을 제공하는 엔터프라이즈 등 다각화된 사업 포트폴리오를 기반으로 안정적인 성장을 이어가고 있습니다.\n근거 접수번호: 20250515001302.",
       "notes": null,
       "gold_note": null
     },
@@ -2297,7 +2298,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 748.85,
+      "latency_ms": 1292.09,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [
@@ -2354,7 +2355,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 25.39,
+      "latency_ms": 42.36,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [],

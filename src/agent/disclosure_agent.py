@@ -749,7 +749,8 @@ class DisclosureAgent:
         lines = [f"{company}의 {report} 'II. 사업의 내용' 기준 요약입니다."]
         topics = list(dict.fromkeys(topic for item in evidence for topic in item.get("topics", [])))
         if topics:
-            lines.append(f"- 핵심 사업: {', '.join(topics)}")
+            display_topics = DisclosureAgent._display_business_topics(topics, question)
+            lines.append(f"- 핵심 사업: {', '.join(display_topics)}")
         texts = [DisclosureAgent._strip_business_prefix(item.get("text") or "", item) for item in evidence]
         primary_text = DisclosureAgent._business_excerpt(texts[0], question, max_chars=6000) if texts else ""
         primary_sentences = DisclosureAgent._business_sentences(primary_text)
@@ -757,11 +758,17 @@ class DisclosureAgent:
         # The report's own business-overview section has already won retrieval
         # ranking.  Keep sentence selection inside it so a later price, capacity
         # or sales-route paragraph cannot replace the company-wide description.
-        detail = DisclosureAgent._select_business_sentence(primary_sentences, question, strategy=False)
+        companies = plan.get("companies") or []
+        detail = DisclosureAgent._select_business_sentence(primary_sentences, question, strategy=False,
+                                                            companies=companies)
         if not detail:
-            detail = DisclosureAgent._select_business_sentence(all_sentences, question, strategy=False)
-        strategy = ("" if any(token in question for token in ("만 간결", "축만", "사업만")) else
-                    DisclosureAgent._select_business_sentence(all_sentences, question, strategy=True, exclude=detail))
+            detail = DisclosureAgent._select_business_sentence(all_sentences, question, strategy=False,
+                                                                companies=companies)
+        detail_has_strategy = any(token in detail for token in ("2030", "중장기", "전략", "목표", "추진"))
+        strategy = ("" if any(token in question for token in ("만 간결", "축만", "사업만")) or
+                    ("전략" in question and detail_has_strategy) else
+                    DisclosureAgent._select_business_sentence(all_sentences, question, strategy=True, exclude=detail,
+                                                               companies=companies))
         if detail:
             lines.append(f"- 주요 제품·서비스: {DisclosureAgent._clip_sentence(detail, 420)}")
         if strategy:
@@ -771,6 +778,17 @@ class DisclosureAgent:
         if receipts:
             lines.append(f"근거 접수번호: {', '.join(dict.fromkeys(receipts))}.")
         return "\n".join(lines) if detail or topics else None
+
+    @staticmethod
+    def _display_business_topics(topics: List[str], question: str) -> List[str]:
+        """Preserve the filing taxonomy while echoing an explicitly requested label."""
+        displayed = []
+        for topic in topics:
+            if topic == "완성차·모빌리티" and any(token in question for token in ("차량부문", "자동차 사업")):
+                displayed.append("차량부문(완성차·모빌리티)")
+            else:
+                displayed.append(topic)
+        return displayed
 
     @staticmethod
     def _strip_business_prefix(text: str, item: Dict[str, Any]) -> str:
@@ -793,9 +811,9 @@ class DisclosureAgent:
 
     @staticmethod
     def _select_business_sentence(sentences: List[str], question: str, strategy: bool,
-                                  exclude: Optional[str] = None) -> str:
-        focus = [token for token in re.findall(r"[0-9A-Za-z가-힣]+", question)
-                 if len(token) > 1 and token not in {"기준으로", "분기보고서", "사업보고서", "정리해줘", "설명해줘"}]
+                                  exclude: Optional[str] = None,
+                                  companies: Optional[List[Dict[str, Any]]] = None) -> str:
+        focus = HybridRetriever._business_focus_tokens(question, companies)
         strategy_terms = ("전략", "목표", "추진", "투자", "확대", "강화", "성장", "전환", "R&D", "AI", "2030")
         content_terms = ("사업", "구성", "주력", "제품", "서비스", "생산", "판매", "영위", "매출")
         ranked = []
@@ -812,6 +830,8 @@ class DisclosureAgent:
                 continue
             score = 4 * strategy_hits if strategy else 4 * sum(term in sentence for term in content_terms)
             score += 2 * sum(token.lower() in sentence.lower() for token in focus)
+            if strategy and any(token in question for token in ("중장기", "2030")) and "2030" in sentence:
+                score += 40
             if not strategy and any(token in question for token in ("대표 게임", "대표 제품", "주력 제품")):
                 score += 12 * sum(term in sentence for term in ("주력", "대표", "제품으로", "게임으로"))
             if not strategy and "게임" in question and "주력" in sentence and "게임" in sentence:

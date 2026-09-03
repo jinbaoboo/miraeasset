@@ -16,12 +16,17 @@ COMPANY_ALIASES = {
 }
 
 COMPANY_NAME_ALIASES = {
-    "삼성전자": ("삼전", "삼성전자주식회사", "samsung", "samsung electronics"),
+    "삼성전자": ("삼전", "삼성전자주식회사", "samsung electronics"),
     "SK하이닉스": ("하이닉스", "sk hynix", "skhynix"),
-    "현대자동차": ("현차", "현대차", "hyundai", "hyundai motor", "hyundai motor company"),
+    "현대자동차": ("현차", "현대차", "hyundai motor", "hyundai motor company"),
     "기아": ("kia", "kia corporation"),
     "카카오": ("kakao",),
     "POSCO홀딩스": ("포스코홀딩스", "posco holdings"),
+    "LG이노텍": ("lg innotek",),
+    "삼성바이오로직스": ("samsung biologics",),
+    "HD현대일렉트릭": ("hd hyundai electric",),
+    "CJ제일제당": ("cj cheiljedang",),
+    "LG유플러스": ("lg u+", "lgu+"),
 }
 
 CALCULATION_PATTERNS = {
@@ -69,6 +74,7 @@ class QueryAnalyzer:
         companies = self._companies(question)
         years = {int(value) for value in re.findall(r"(20\d{2})\s*년?", question)}
         years.update(2000 + int(value) for value in re.findall(r"(?<!\d)(2[3-6])\s*년", question))
+        years.update(2000 + int(value) for value in re.findall(r"(?<!\d)['’](2[3-6])(?:\s*년)?", question))
         years = sorted(years)
         months = [int(value) for value in re.findall(r"(?<!\d)(1[0-2]|[1-9])\s*월", question)]
         quarter_match = re.search(r"([1-4])\s*(?:사분기|/\s*4\s*분기|분기|[Qq])|[Qq]\s*([1-4])", question)

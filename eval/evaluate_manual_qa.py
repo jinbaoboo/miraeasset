@@ -8,9 +8,12 @@ import re
 import statistics
 import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Dict, List
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 from src.agent.disclosure_agent import DisclosureAgent
 
@@ -88,14 +91,44 @@ def _effective_plan(response: Dict[str, Any]) -> Dict[str, Any]:
     return plan.get("base_plan") or plan
 
 
-def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
+def _http_answer(base_url: str, question_id: str, question: str) -> Dict[str, Any]:
+    params = urlencode({
+        "question_id": question_id,
+        "question": question,
+        "use_llm": "false",
+        "debug": "true",
+    })
+    with urlopen(f"{base_url.rstrip('/')}/answer?{params}", timeout=120) as response:
+        if response.status != 200:
+            raise RuntimeError(f"HTTP {response.status} for {question_id}")
+        return json.loads(response.read().decode("utf-8"))
+
+
+def evaluate(db: Path | None, questions: Path, output: Path, base_url: str | None = None,
+             workers: int = 1) -> Dict[str, Any]:
     cases = [json.loads(line) for line in questions.read_text(encoding="utf-8").splitlines() if line.strip()]
-    agent = DisclosureAgent(db); results = []
+    agent = None if base_url else DisclosureAgent(db); results = []
+    http_results: Dict[str, tuple[Dict[str, Any], float]] = {}
+    if base_url and workers > 1:
+        def fetch(case: Dict[str, Any]) -> tuple[str, Dict[str, Any], float]:
+            started = time.perf_counter()
+            response = _http_answer(base_url, case["question_id"], case["question"])
+            return case["question_id"], response, round((time.perf_counter() - started) * 1000, 2)
+
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = [pool.submit(fetch, case) for case in cases]
+            for future in as_completed(futures):
+                question_id, response, latency_ms = future.result()
+                http_results[question_id] = (response, latency_ms)
     try:
         for case in cases:
-            started = time.perf_counter()
-            response = agent.answer(case["question_id"], case["question"], use_llm=False)
-            latency_ms = round((time.perf_counter() - started) * 1000, 2)
+            if case["question_id"] in http_results:
+                response, latency_ms = http_results[case["question_id"]]
+            else:
+                started = time.perf_counter()
+                response = (_http_answer(base_url, case["question_id"], case["question"])
+                            if base_url else agent.answer(case["question_id"], case["question"], use_llm=False))
+                latency_ms = round((time.perf_counter() - started) * 1000, 2)
             answer = response.get("answer") or ""
             context_text = _context_audit_text(response)
             raw_plan = (response.get("think_trace") or {}).get("query_plan") or {}
@@ -179,7 +212,8 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
                 "gold_note": case.get("gold_note"),
             })
     finally:
-        agent.close()
+        if agent:
+            agent.close()
     by_category: Dict[str, Counter] = {}
     for row in results:
         by_category.setdefault(row["category"], Counter())["pass" if row["passed"] else "fail"] += 1
@@ -190,6 +224,7 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
         "by_category": {key: dict(value) for key, value in by_category.items()},
         "latency_ms": {"median": round(statistics.median(latencies), 2) if latencies else None,
                        "max": max(latencies) if latencies else None},
+        "transport": "http" if base_url else "direct",
         "results": results,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -199,11 +234,17 @@ def evaluate(db: Path, questions: Path, output: Path) -> Dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--db", type=Path, required=True)
+    parser.add_argument("--db", type=Path)
+    parser.add_argument("--base-url", help="Evaluate through a running API, for example http://127.0.0.1:8000")
+    parser.add_argument("--workers", type=int, default=1, help="Concurrent HTTP requests (HTTP mode only)")
     parser.add_argument("--questions", type=Path, default=Path("eval/manual_qa_questions.jsonl"))
     parser.add_argument("--output", type=Path, default=Path("eval/manual_qa_results.json"))
     args = parser.parse_args()
-    result = evaluate(args.db, args.questions, args.output)
+    if not args.base_url and not args.db:
+        parser.error("one of --db or --base-url is required")
+    if args.workers < 1:
+        parser.error("--workers must be at least 1")
+    result = evaluate(args.db, args.questions, args.output, base_url=args.base_url, workers=args.workers)
     print(json.dumps({key: result[key] for key in ("total", "passed", "failed", "by_category", "latency_ms")},
                      ensure_ascii=False, indent=2))
     return 1 if result["failed"] else 0

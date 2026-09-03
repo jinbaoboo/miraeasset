@@ -42,7 +42,12 @@ class StoreAgentTests(unittest.TestCase):
             "00126380,005930,삼성전자,삼성전자,Samsung Electronics,KOSPI,전기전자,반도체,1975-06-11,12월\n"
             "00164779,000660,SK하이닉스,SK하이닉스,SK hynix,KOSPI,전기전자,반도체,1996-12-26,12월\n"
             "00164742,005380,현대자동차,현대자동차,Hyundai Motor,KOSPI,운수장비,자동차,1974-06-28,12월\n"
-            "00155319,005490,POSCO홀딩스,POSCO홀딩스,POSCO HOLDINGS INC.,KOSPI,철강금속,철강,1988-06-10,12월\n",
+            "00155319,005490,POSCO홀딩스,POSCO홀딩스,POSCO HOLDINGS INC.,KOSPI,철강금속,철강,1988-06-10,12월\n"
+            "00000002,207940,삼성바이오로직스,삼성바이오로직스,SAMSUNG BIOLOGICS CO. LTD.,KOSPI,의약품,바이오,2016-11-10,12월\n"
+            "00000003,267260,HD현대일렉트릭,HD현대일렉트릭,HD HYUNDAI ELECTRIC CO. LTD.,KOSPI,전기전자,전력기기,2017-05-10,12월\n"
+            "00000004,097950,CJ제일제당,CJ제일제당,CJ CHEILJEDANG CORP.,KOSPI,음식료,식품,2007-09-28,12월\n"
+            "00000005,032640,LG유플러스,LG유플러스,LG UPLUS CORP.,KOSPI,통신업,통신,2008-04-21,12월\n"
+            "00000006,011070,LG이노텍,LG이노텍,LG INNOTEK CO. LTD.,KOSPI,전기전자,부품,2008-07-24,12월\n",
             encoding="utf-8",
         )
         self.record = {"doc_id": "periodic_1", "corp_code": "00000001", "corp_name": "테스트", "listed_name": "테스트",
@@ -298,6 +303,48 @@ class StoreAgentTests(unittest.TestCase):
         self.assertTrue({"overview", "products", "segments_revenue", "new_business", "rnd", "investment", "market_change"}
                         .issubset(set(categories)))
 
+    def test_business_focus_ignores_evaluation_wrapper(self):
+        tokens = HybridRetriever._business_focus_tokens(
+            "[교차검증] HMM의 주요 사업과 전략을 정리해줘. 공시의 II. 사업의 내용만 근거로 핵심을 항목별로 답해줘"
+        )
+        self.assertIn("HMM의", tokens)
+        self.assertIn("전략을", tokens)
+        self.assertNotIn("교차검증", tokens)
+        self.assertNotIn("항목별로", tokens)
+
+    def test_business_focus_keeps_2030_strategy_marker(self):
+        tokens = HybridRetriever._business_focus_tokens(
+            "25년 첫 분기 현대차 보고서에서 자동차 사업과 2030 전략의 핵심을 요약해줘"
+        )
+        self.assertIn("2030", tokens)
+
+    def test_business_topics_echo_requested_vehicle_division_label(self):
+        self.assertEqual(
+            DisclosureAgent._display_business_topics(
+                ["완성차·모빌리티", "금융"],
+                "현대자동차 차량부문과 2030 전략을 설명해줘",
+            ),
+            ["차량부문(완성차·모빌리티)", "금융"],
+        )
+        self.assertEqual(
+            DisclosureAgent._display_business_topics(
+                ["완성차·모빌리티"],
+                "자동차 사업과 2030 전략을 설명해줘",
+            ),
+            ["차량부문(완성차·모빌리티)"],
+        )
+
+    def test_business_strategy_selection_prioritizes_explicit_2030_source(self):
+        selected = DisclosureAgent._select_business_sentence(
+            [
+                "차량 데이터와 AI 기반 서비스를 확대하는 성장 전략을 추진하고 있습니다.",
+                "새로운 중장기 전략인 2030 전략을 통해 스마트 모빌리티 전환을 목표로 합니다.",
+            ],
+            "차량부문의 현황과 중장기 방향을 설명해줘",
+            strategy=True,
+        )
+        self.assertIn("2030 전략", selected)
+
     def test_business_signal_profile_detects_strategy_changes(self):
         signals = HybridRetriever._business_signals("SDV와 Manufacturing Excellence, HMGMA 현지화 및 Waymo 자율주행 협업")
         self.assertTrue({"SDV", "제조혁신", "현지생산·현지화", "자율주행", "전략적 파트너십"}.issubset(set(signals)))
@@ -383,6 +430,28 @@ class StoreAgentTests(unittest.TestCase):
         agent.close()
         self.assertEqual([item["corp_name"] for item in plan["companies"]], ["POSCO홀딩스"])
 
+    def test_company_matching_accepts_cross_industry_english_aliases(self):
+        agent = DisclosureAgent(self.db)
+        questions = {
+            "Samsung Biologics Q1 사업은?": ["삼성바이오로직스"],
+            "HD Hyundai Electric Q1 매출액은?": ["HD현대일렉트릭"],
+            "CJ CheilJedang의 사업은?": ["CJ제일제당"],
+            "LG U+의 주요 서비스는?": ["LG유플러스"],
+            "LG Innotek의 매출은?": ["LG이노텍"],
+        }
+        plans = {question: agent.analyzer.analyze(question) for question in questions}
+        agent.close()
+        for question, expected in questions.items():
+            self.assertEqual([item["corp_name"] for item in plans[question]["companies"]], expected)
+
+    def test_broad_group_name_does_not_match_another_group_company(self):
+        agent = DisclosureAgent(self.db)
+        samsung = agent.analyzer.analyze("Samsung Biologics Q1 매출액은?")
+        hyundai = agent.analyzer.analyze("HD Hyundai Electric Q1 영업이익은?")
+        agent.close()
+        self.assertNotIn("삼성전자", [item["corp_name"] for item in samsung["companies"]])
+        self.assertNotIn("현대자동차", [item["corp_name"] for item in hyundai["companies"]])
+
     def test_q_first_quarter_and_half_year_phrasings_are_normalized(self):
         agent = DisclosureAgent(self.db)
         q_first = agent.analyzer.analyze("테스트 2025년 Q1 연결 매출액은?")
@@ -391,6 +460,14 @@ class StoreAgentTests(unittest.TestCase):
         self.assertEqual(q_first["quarter"], 1)
         self.assertEqual(q_first["doc_subtypes"], ["quarter"])
         self.assertEqual(half["doc_subtypes"], ["half"])
+
+    def test_apostrophe_two_digit_year_is_normalized(self):
+        agent = DisclosureAgent(self.db)
+        ascii_quote = agent.analyzer.analyze("테스트 '25 Q1 연결 매출액은?")
+        smart_quote = agent.analyzer.analyze("테스트 ’26 Q1 연결 영업이익은?")
+        agent.close()
+        self.assertEqual(ascii_quote["years"], [2025])
+        self.assertEqual(smart_quote["years"], [2026])
 
     def test_relative_period_question_requests_explicit_period(self):
         agent = DisclosureAgent(self.db)

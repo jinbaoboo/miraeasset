@@ -17,9 +17,10 @@
     }
   },
   "latency_ms": {
-    "median": 3.65,
-    "max": 11753.24
+    "median": 4.13,
+    "max": 18240.47
   },
+  "transport": "direct",
   "results": [
     {
       "question_id": "edge-normalize-001",
@@ -51,7 +52,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5592.36,
+      "latency_ms": 4321.08,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -101,7 +102,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2562.1,
+      "latency_ms": 2775.48,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -151,7 +152,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1556.14,
+      "latency_ms": 1017.69,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -201,7 +202,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2537.82,
+      "latency_ms": 2540.34,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -251,7 +252,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2225.85,
+      "latency_ms": 3099.87,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -301,7 +302,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1744.72,
+      "latency_ms": 3329.36,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -351,7 +352,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2175.42,
+      "latency_ms": 3159.52,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -401,7 +402,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.26,
+      "latency_ms": 3.5,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -442,7 +443,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.86,
+      "latency_ms": 2.82,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -483,7 +484,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.21,
+      "latency_ms": 3.07,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -524,7 +525,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.9,
+      "latency_ms": 3.02,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -565,7 +566,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.65,
+      "latency_ms": 3.77,
       "validation_action": "clarify",
       "query_type": "generic",
       "numeric_details": [],
@@ -606,7 +607,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.89,
+      "latency_ms": 2.98,
       "validation_action": "clarify",
       "query_type": "generic",
       "numeric_details": [],
@@ -647,7 +648,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11004.93,
+      "latency_ms": 11644.77,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -703,7 +704,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 8339.92,
+      "latency_ms": 10051.38,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -759,7 +760,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.05,
+      "latency_ms": 0.04,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -841,7 +842,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1.62,
+      "latency_ms": 2.35,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -882,7 +883,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1505.4,
+      "latency_ms": 2732.6,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -932,7 +933,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1493.82,
+      "latency_ms": 3445.04,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -982,7 +983,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1501.1,
+      "latency_ms": 2721.24,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1032,7 +1033,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1836.57,
+      "latency_ms": 3430.25,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1082,7 +1083,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.04,
+      "latency_ms": 4.13,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1123,7 +1124,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.28,
+      "latency_ms": 3.43,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1164,7 +1165,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.71,
+      "latency_ms": 3.5,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1205,7 +1206,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11753.24,
+      "latency_ms": 18240.47,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1267,7 +1268,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1.78,
+      "latency_ms": 2.23,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1308,7 +1309,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1.47,
+      "latency_ms": 1.73,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1349,7 +1350,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.03,
+      "latency_ms": 0.04,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],

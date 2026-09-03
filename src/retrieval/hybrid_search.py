@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from src.domain.metric_ontology import FINANCIAL_CELL_METRICS, METRICS, metric_definition
+from .query_analyzer import COMPANY_ALIASES, COMPANY_NAME_ALIASES
 from .reranker import EvidenceReranker
 
 BUSINESS_EVIDENCE_CATEGORIES = {
@@ -761,13 +762,13 @@ class HybridRetriever:
                  ORDER BY d.base_month DESC,c.chunk_id""", candidate_doc_ids
         ).fetchall()
         question = plan.get("question") or ""
-        focus_tokens = [token for token in re.findall(r"[0-9A-Za-z가-힣]+", question)
-                        if len(token) >= 2 and token not in {"기준으로", "분기보고서", "사업보고서", "정리해줘", "설명해줘"}]
+        focus_tokens = self._business_focus_tokens(question, plan.get("companies") or [])
         ranked = []
         for raw in rows:
             item = dict(raw)
             path = item.get("section_path") or ""
             text = item.get("text") or ""
+            topics = self._business_topics(text, item.get("corp_name"))
             score = 0
             if re.search(r">\s*1\.\s*\([^)]*\)?사업의 개요|>\s*1\.\s*사업의 개요", path):
                 score += 100
@@ -784,6 +785,16 @@ class HybridRetriever:
             score += min(20, 3 * sum(token.lower() in (path + " " + text).lower() for token in focus_tokens))
             if any(token in question for token in ("차량", "자동차")) and "차량부문" in text:
                 score += 50
+            if any(token in question for token in ("포트폴리오", "주요 사업", "사업부문")):
+                score += min(60, 12 * len(topics))
+            strategy_intent = any(token in question for token in ("전략", "방향", "대응", "목표", "추진"))
+            if strategy_intent:
+                strategy_hits = sum(token in text for token in (
+                    "2030", "중장기", "전략", "추진", "확대", "강화", "프리미어 얼라이언스", "시장 다각화",
+                ))
+                score += min(50, 8 * strategy_hits)
+                if any(token in question for token in ("중장기", "2030")) and "2030" in text:
+                    score += 100
             if len(text) >= 120:
                 score += 5
             item.update({
@@ -791,7 +802,7 @@ class HybridRetriever:
                 "record_id": item["chunk_id"],
                 "citation": self.citation_for("text", item["chunk_id"]),
                 "evidence_categories": self._business_categories(path + " " + text),
-                "topics": self._business_topics(text, item.get("corp_name")),
+                "topics": topics,
             })
             ranked.append((score, item))
         ranked.sort(key=lambda pair: (-pair[0], pair[1]["chunk_id"]))
@@ -806,6 +817,39 @@ class HybridRetriever:
             if len(selected) >= limit:
                 break
         return selected
+
+    @staticmethod
+    def _business_focus_tokens(question: str, companies: Optional[List[Dict[str, Any]]] = None) -> List[str]:
+        """Keep subject terms while dropping evaluation/instruction wrappers."""
+        ignored_stems = (
+            "교차검증", "공시", "분기보고서", "사업보고서", "사업의", "내용", "근거",
+            "핵심", "항목별", "답해", "정리", "설명", "요약", "기준", "외부",
+            "지식", "표지", "문구", "제외", "추측", "정답", "표기", "흔들림",
+            "수치", "단위", "접수번호", "빠짐없이", "제시", "확인",
+        )
+        tokens = re.findall(r"[0-9A-Za-z가-힣]+", question)
+        company_terms = set()
+        for company in companies or []:
+            names = [company.get(key) for key in ("corp_name", "listed_name", "corp_eng_name", "stock_code")]
+            names.extend(COMPANY_ALIASES.get(company.get("corp_code") or "", ()))
+            for value in tuple(names):
+                names.extend(COMPANY_NAME_ALIASES.get(value or "", ()))
+            for name in names:
+                compact = re.sub(r"[^0-9A-Za-z가-힣]", "", str(name or "")).casefold()
+                if compact:
+                    company_terms.add(compact)
+
+        def company_token(token: str) -> bool:
+            compact = token.casefold()
+            compact = re.sub(r"(?:에서|에게|보다|으로|은|는|이|가|의|을|를|와|과|로)$", "", compact)
+            return bool(compact) and any(compact in term or term in compact for term in company_terms)
+
+        return [token for token in tokens if len(token) >= 2 and not token.casefold() == "ii"
+                and (token == "2030" or not re.fullmatch(
+                    r"(?:20)?\d{2}년?|\d분기|\d{6}|q[1-4]", token, re.IGNORECASE
+                ))
+                and not company_token(token)
+                and not any(token.startswith(stem) for stem in ignored_stems)]
 
     def find_business_document_evidence(self, plan: Dict[str, Any], per_type: int = 8) -> Dict[str, Any]:
         """Build comparable business profiles for annual vs quarterly filings."""

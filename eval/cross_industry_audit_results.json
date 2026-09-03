@@ -20,9 +20,10 @@
     }
   },
   "latency_ms": {
-    "median": 1651.86,
-    "max": 5590.63
+    "median": 3081.24,
+    "max": 10302.05
   },
+  "transport": "direct",
   "results": [
     {
       "question_id": "audit-close-001",
@@ -54,7 +55,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5590.63,
+      "latency_ms": 10302.05,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -104,7 +105,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2558.53,
+      "latency_ms": 4478.59,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -154,7 +155,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2162.94,
+      "latency_ms": 4597.47,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -204,7 +205,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1934.33,
+      "latency_ms": 3077.27,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -254,7 +255,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2118.76,
+      "latency_ms": 3120.68,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -304,7 +305,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1712.95,
+      "latency_ms": 2399.46,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -354,7 +355,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2313.75,
+      "latency_ms": 4254.45,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -404,7 +405,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1866.8,
+      "latency_ms": 3293.38,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -454,7 +455,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1771.26,
+      "latency_ms": 3284.18,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -504,7 +505,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1766.73,
+      "latency_ms": 4010.46,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -554,7 +555,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1665.54,
+      "latency_ms": 3333.75,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -604,7 +605,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1783.36,
+      "latency_ms": 3617.75,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -654,7 +655,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1977.91,
+      "latency_ms": 3499.95,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -704,7 +705,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2166.22,
+      "latency_ms": 3145.07,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -754,7 +755,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1716.84,
+      "latency_ms": 4523.58,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -804,7 +805,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1737.25,
+      "latency_ms": 3769.89,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -854,7 +855,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1528.54,
+      "latency_ms": 2825.99,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -904,7 +905,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1321.54,
+      "latency_ms": 4211.0,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -954,7 +955,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1675.4,
+      "latency_ms": 4152.19,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1004,7 +1005,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1296.59,
+      "latency_ms": 3133.95,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1054,7 +1055,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 16.77,
+      "latency_ms": 28.33,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1097,16 +1098,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 15.83,
+      "latency_ms": 21.05,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002264"
       ],
-      "answer_chars": 433,
+      "answer_chars": 417,
       "answer_lines": 5,
-      "answer": "삼성바이오로직스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오의약품, 바이오시밀러·신약\n- 주요 제품·서비스: 2025년 1분기 연결 매출은 1조 2,983억 원이며, 이 중 CDMO 부문은 제품 등 매출 8,196억 원, 서비스 매출 781억 원이며, 바이오의약품 개발 및 상업화 부문은 제품 등 매출 3,983억 원, 서비스 매출 23억 원입니다.\n- 전략·현황: CMO뿐 아니라 CDO 사업에서도 성과를 확대하고 있으며, 자체 세포주 및 고농도 제형 플랫폼 S-Tensify™, 항암 특화 세포주 플랫폼 S-AfuCHO™, 고품질 단백질 생산 플랫폼 S-OptiCharge™, 고농도 제형 기술 S-HiCon™ 등을 개발 및 공개하여 기술경쟁력을 강화하고 있습니다.\n근거 접수번호: 20250515002264.",
+      "answer": "삼성바이오로직스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오의약품, 바이오시밀러·신약\n- 주요 제품·서비스: 당사는 항체의약품 중심의 CDMO 서비스에서 나아가 mRNA, ADC, 세포/유전자 치료제 등 차세대 바이오의약품으로 사업을 확장하고 있으며, 송도 내 mRNA 생산설비 및 신규 ADC 공장 구축을 완료했습니다.\n- 전략·현황: CMO뿐 아니라 CDO 사업에서도 성과를 확대하고 있으며, 자체 세포주 및 고농도 제형 플랫폼 S-Tensify™, 항암 특화 세포주 플랫폼 S-AfuCHO™, 고품질 단백질 생산 플랫폼 S-OptiCharge™, 고농도 제형 기술 S-HiCon™ 등을 개발 및 공개하여 기술경쟁력을 강화하고 있습니다.\n근거 접수번호: 20250515002264.",
       "notes": null,
       "gold_note": null
     },
@@ -1140,7 +1141,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 19.67,
+      "latency_ms": 32.05,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1183,16 +1184,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 25.92,
+      "latency_ms": 36.61,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001154"
       ],
-      "answer_chars": 503,
+      "answer_chars": 514,
       "answer_lines": 5,
-      "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라\n- 주요 제품·서비스: ㈜LG유플러스의 주요종속회사인 ㈜미디어로그는 2000년 3월 14일 설립되어 인터넷통신서비스, 멀티미디어콘텐츠 제작 및 인터넷포탈서비스 등을 영위하고 있으며, 2014년 6월 30일에 별정통신사업을 등록하고 2014년 7월 9일부터 알뜰폰(MVNO)사업을 영위하고 있습니다.\n- 전략·현황: 또한 ㈜LG유플러스볼트업은 2025년 3월 전기자동차 충전서비스 플랫폼인 '볼트업2.0'을 자체 역량으로 새롭게 출시하였으며, '볼트업 2.0' 플랫폼을 통해 고객과의 디지털 접점에서 사용 편의성을 확대하고, 데이터 기반으로 고객에 대한 심층적인 이해를 바탕으로 플랫폼을 만들어 디지털 혁신기업으로의 전환을 가속화하여 전기자동차 충전 시장에서 경쟁력을 더욱 강화시켜 나갈 예정입니다.\n근거 접수번호: 20250515001154.",
+      "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라, 커머스, 위성방송\n- 주요 제품·서비스: ㈜LG유플러스의 주요종속회사인 ㈜미디어로그는 2000년 3월 14일 설립되어 인터넷통신서비스, 멀티미디어콘텐츠 제작 및 인터넷포탈서비스 등을 영위하고 있으며, 2014년 6월 30일에 별정통신사업을 등록하고 2014년 7월 9일부터 알뜰폰(MVNO)사업을 영위하고 있습니다.\n- 전략·현황: 또한 ㈜LG유플러스볼트업은 2025년 3월 전기자동차 충전서비스 플랫폼인 '볼트업2.0'을 자체 역량으로 새롭게 출시하였으며, '볼트업 2.0' 플랫폼을 통해 고객과의 디지털 접점에서 사용 편의성을 확대하고, 데이터 기반으로 고객에 대한 심층적인 이해를 바탕으로 플랫폼을 만들어 디지털 혁신기업으로의 전환을 가속화하여 전기자동차 충전 시장에서 경쟁력을 더욱 강화시켜 나갈 예정입니다.\n근거 접수번호: 20250515001154.",
       "notes": null,
       "gold_note": null
     },
@@ -1226,16 +1227,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.12,
+      "latency_ms": 22.47,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002283"
       ],
-      "answer_chars": 314,
+      "answer_chars": 333,
       "answer_lines": 5,
-      "answer": "크래프톤의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사의 2025년 1분기 누적 매출액은 8,742억원이며, 플랫폼 별로는 모바일 5,324억원(60.9%), PC 3,235억원(37.0%), 콘솔 131억원(1.5%), 기타 52억원(0.6%) 으로 구성되어 있습니다.\n- 전략·현황: 당사는 'Scale-up the Creative' 전략을 바탕으로 조직을 개편하고, 제작 및 퍼블리싱 역량을 강화하며 IP 확보에 집중해왔습니다.\n근거 접수번호: 20250515002283.",
+      "answer": "크래프톤의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사의 2025년 1분기 누적 매출액은 8,742억원이며, 플랫폼 별로는 모바일 5,324억원(60.9%), PC 3,235억원(37.0%), 콘솔 131억원(1.5%), 기타 52억원(0.6%) 으로 구성되어 있습니다.\n- 전략·현황: 한편, 모바일 시장은 기존 앱 스토어 중심의 수익 모델에서 대체 스토어 및 D2C(Direct-to-Consumer) 모델로의 전환이 이루어지며 성장세가 확대될 것으로 예상됩니다.\n근거 접수번호: 20250515002283.",
       "notes": null,
       "gold_note": null
     },
@@ -1269,16 +1270,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 28.98,
+      "latency_ms": 46.64,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
-      "answer_chars": 471,
-      "answer_lines": 5,
-      "answer": "POSCO홀딩스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 철강, 인프라, 에너지소재\n- 주요 제품·서비스: 또한 포스코플로우는 '22년 포스코 물류업무 영업양수를 통해 CTS(Central Terminal System) 사업 및 철강원료, 제품, 곡물, 천연가스 운송 등 글로벌 복합물류서비스 회사로 거듭나고 있으며, 포스코디엑스는 IT, OT(현장운영기술) 분야에서 확보한 노하우와 기술력에 AI, 디지털트윈, 로보틱스 등 디지털 기술을 융합하여 산업 전반의 디지털 전환(DX)을 추진하고 있습니다.\n- 전략·현황: 포스코홀딩스는 2022년 3월 독점규제 및 공정거래에 관한 법률에 따른 지주회사로 전환하여 그룹 전반의 성장 전략을 수립하고 미래 사업 테마를 발굴하며 M&A 등 신사업을 추진하는 미래사업 포트폴리오 개발자 역할을 수행하고 있습니다.\n근거 접수번호: 20250515002741.",
+      "answer_chars": 331,
+      "answer_lines": 4,
+      "answer": "POSCO홀딩스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 철강, 인프라, 에너지소재\n- 주요 제품·서비스: 또한 포스코플로우는 '22년 포스코 물류업무 영업양수를 통해 CTS(Central Terminal System) 사업 및 철강원료, 제품, 곡물, 천연가스 운송 등 글로벌 복합물류서비스 회사로 거듭나고 있으며, 포스코디엑스는 IT, OT(현장운영기술) 분야에서 확보한 노하우와 기술력에 AI, 디지털트윈, 로보틱스 등 디지털 기술을 융합하여 산업 전반의 디지털 전환(DX)을 추진하고 있습니다.\n근거 접수번호: 20250515002741.",
       "notes": null,
       "gold_note": null
     },
@@ -1312,7 +1313,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.19,
+      "latency_ms": 20.41,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1355,16 +1356,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.5,
+      "latency_ms": 16.74,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001248"
       ],
-      "answer_chars": 285,
+      "answer_chars": 293,
       "answer_lines": 5,
-      "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: '에너지사업 중심의 성장', '해외 선진시장 진출 확대', '핵심상품 지배력 강화'로 요약되는 전략의 수립과 실행을 통해 지속적인 성장을 만들어가고 있습니다.\n근거 접수번호: 20250515001248.",
+      "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설, 인프라\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: 핵심기술의 개발을 거쳐 신성장 고부가사업을 창출하고자 국가 연구개발사업에 주도적으로 참여하는 등의 R&D 활동으로 중기 경영전략을 달성하기 위해 노력하고 있습니다.\n근거 접수번호: 20250515001248.",
       "notes": null,
       "gold_note": null
     },
@@ -1398,16 +1399,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 13.97,
+      "latency_ms": 27.64,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002745"
       ],
-      "answer_chars": 393,
+      "answer_chars": 361,
       "answer_lines": 5,
-      "answer": "셀트리온의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오시밀러·신약\n- 주요 제품·서비스: 기존 케미컬 합성의약품(Small-molecule) 사업 부문에서 확장하여 신규 모달리티(New Modality)의 제품기획 및 발굴, CRO, CMO를 통한 공정개발 및 생산 그리고 임상, 허가, 판매 기능 전반을 내재화함으로써 글로벌 국가로의 사업을 진행하고 있습니다.\n- 전략·현황: 이외에도 지속적인 수요 확대에 적극적으로 대응하기 위해 대량 생산을 위한 설비 투자 및 해외 CMO 거점 확보, 해외 공장 건설 등을 검토 및 추진하고 있으며, 세계 시장으로의 제품 공급 안정성을 제고해 나갈 계획입니다.\n근거 접수번호: 20250515002745.",
+      "answer": "셀트리온의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오시밀러·신약, 바이오의약품\n- 주요 제품·서비스: 기존 케미컬 합성의약품(Small-molecule) 사업 부문에서 확장하여 신규 모달리티(New Modality)의 제품기획 및 발굴, CRO, CMO를 통한 공정개발 및 생산 그리고 임상, 허가, 판매 기능 전반을 내재화함으로써 글로벌 국가로의 사업을 진행하고 있습니다.\n- 전략·현황: 당사는 R&D 역량 강화를 위해 지속적으로 높은 수준의 연구개발비를 투자하여 바이오시밀러 파이프라인 확대, 항체의약품 신약 개발을 진행하고 있습니다.\n근거 접수번호: 20250515002745.",
       "notes": null,
       "gold_note": null
     },
@@ -1441,16 +1442,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 15.19,
+      "latency_ms": 25.21,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
-      "answer_chars": 386,
+      "answer_chars": 393,
       "answer_lines": 5,
-      "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 당사는 육상풍력 터빈 제조업, 엔지니어링 및 사업개발 경험을 바탕으로 2030년 초 본격 개화가 예상되는 해상풍력으로 사업을 확대하기 위해 육해상 풍력 산업 분야에서 글로벌 선도 업체들과 전략적 협력을 체결하는 것을 포함하여 체계적으로 사업을 준비하고 있습니다.\n근거 접수번호: 20250515002651.",
+      "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기, 해운·물류\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 당사는 육상풍력 터빈 제조업, 엔지니어링 및 사업개발 경험을 바탕으로 2030년 초 본격 개화가 예상되는 해상풍력으로 사업을 확대하기 위해 육해상 풍력 산업 분야에서 글로벌 선도 업체들과 전략적 협력을 체결하는 것을 포함하여 체계적으로 사업을 준비하고 있습니다.\n근거 접수번호: 20250515002651.",
       "notes": null,
       "gold_note": null
     },
@@ -1484,7 +1485,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1832.75,
+      "latency_ms": 2423.41,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1534,7 +1535,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1851.64,
+      "latency_ms": 2976.68,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1584,7 +1585,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1638.17,
+      "latency_ms": 3085.21,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1634,7 +1635,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1323.86,
+      "latency_ms": 3517.67,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1684,7 +1685,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4706.34,
+      "latency_ms": 7647.64,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1734,7 +1735,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.45,
+      "latency_ms": 4.17,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1775,7 +1776,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.14,
+      "latency_ms": 4.42,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1816,7 +1817,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.04,
+      "latency_ms": 0.05,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],
@@ -1898,7 +1899,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.21,
+      "latency_ms": 4.45,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],

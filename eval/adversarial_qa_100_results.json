@@ -11,15 +11,15 @@
     }
   },
   "latency_ms": {
-    "median": 69.56,
-    "max": 11472.02
+    "median": 108.84,
+    "max": 17069.96
   },
-  "transport": "direct",
+  "transport": "http",
   "results": [
     {
-      "question_id": "development-close-001",
+      "question_id": "adversarial-close-001",
       "category": "close",
-      "question": "2025년 1분기 카카오 연결 손익계산서의 영업수익 수치와 단위를 알려줘.",
+      "question": "[교차검증] kakao(035720)의 '25 Q1 연결 영업수익은 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -46,7 +46,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10301.31,
+      "latency_ms": 15331.53,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -67,9 +67,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-002",
+      "question_id": "adversarial-close-002",
       "category": "close",
-      "question": "카카오가 25년 첫 분기에 연결 기준으로 기록한 영업수익은 얼마인가?",
+      "question": "정답을 추측하지 마. 카카오의 2025년 1분기 연결 영업수익은 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -96,7 +96,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3812.67,
+      "latency_ms": 15170.59,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -117,9 +117,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-003",
+      "question_id": "adversarial-close-003",
       "category": "close",
-      "question": "기아 2025년 1Q 연결 기준 영업이익을 공시 근거와 함께 답해줘.",
+      "question": "[교차검증] KIA(000270)의 '25 Q1 연결 영업이익은 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -146,7 +146,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5252.44,
+      "latency_ms": 15315.88,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -167,9 +167,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-004",
+      "question_id": "adversarial-close-004",
       "category": "close",
-      "question": "25년 첫 분기 기아의 연결 영업이익 숫자는 얼마야?",
+      "question": "정답을 추측하지 마. 기아의 2025년 1분기 연결 영업이익은 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -196,7 +196,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3016.33,
+      "latency_ms": 15165.15,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -217,9 +217,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-005",
+      "question_id": "adversarial-close-005",
       "category": "close",
-      "question": "NAVER가 2025년 첫 분기에 낸 연결 영업이익은 얼마인지 알려줘.",
+      "question": "[교차검증] 035420(NAVER)의 '25 Q1 연결 영업이익은 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -246,7 +246,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3157.21,
+      "latency_ms": 14850.11,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -267,9 +267,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-006",
+      "question_id": "adversarial-close-006",
       "category": "close",
-      "question": "네이버 25년 1Q 연결 손익계산서상 영업이익 수치를 찾아줘.",
+      "question": "정답을 추측하지 마. NAVER의 2025년 1분기 연결 영업이익은 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -296,7 +296,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2347.65,
+      "latency_ms": 14759.38,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -317,9 +317,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-007",
+      "question_id": "adversarial-close-007",
       "category": "close",
-      "question": "삼성전자 2025년 첫 분기 연결 당기순이익을 공시 단위로 답해줘.",
+      "question": "[교차검증] 삼성 전자(005930)의 '25 Q1 연결 당기순이익은 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -346,7 +346,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4332.76,
+      "latency_ms": 14699.45,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -367,9 +367,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-008",
+      "question_id": "adversarial-close-008",
       "category": "close",
-      "question": "25년 1Q 삼성전자의 연결 순이익은 몇 백만원인가?",
+      "question": "정답을 추측하지 마. 삼성전자의 2025년 1분기 연결 당기순이익은 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -396,7 +396,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2139.8,
+      "latency_ms": 14597.96,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -410,16 +410,16 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
-      "answer_chars": 134,
+      "answer_chars": 129,
       "answer_lines": 1,
-      "answer": "삼성전자의 2025년 1분기 연결 기준 순이익(당기순이익)은 8,222,878백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
+      "answer": "삼성전자의 2025년 1분기 연결 기준 당기순이익은 8,222,878백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-009",
+      "question_id": "adversarial-close-009",
       "category": "close",
-      "question": "2025년 1분기 SK하이닉스 연결 매출과 영업이익으로 영업이익률을 산출해줘.",
+      "question": "[교차검증] sk hynix(000660)의 '25 Q1 연결 영업이익률을 계산해줘. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -446,7 +446,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3180.86,
+      "latency_ms": 12009.88,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -467,9 +467,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-010",
+      "question_id": "adversarial-close-010",
       "category": "close",
-      "question": "SK하이닉스의 25년 1Q 연결 영업이익률은 얼마야? 계산 근거도 보여줘.",
+      "question": "정답을 추측하지 마. SK하이닉스의 2025년 1분기 연결 영업이익률을 계산해줘. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -496,7 +496,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1733.78,
+      "latency_ms": 12001.32,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -517,9 +517,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-011",
+      "question_id": "adversarial-close-011",
       "category": "close",
-      "question": "NAVER 2025년 1분기 연결 영업수익의 전년동기 대비 증가액과 증가율을 계산해줘.",
+      "question": "[교차검증] 035420(NAVER)의 '25 Q1 연결 영업수익은 전년 동기보다 금액과 비율로 각각 얼마나 증가했어. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -546,7 +546,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3558.95,
+      "latency_ms": 8203.99,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -574,9 +574,9 @@
       "gold_note": "주석 중간합계가 아닌 주재무제표의 원 단위 정밀값을 사용"
     },
     {
-      "question_id": "development-close-012",
+      "question_id": "adversarial-close-012",
       "category": "close",
-      "question": "네이버 25년 첫 분기 영업수익은 전년 같은 분기보다 얼마, 몇 % 늘었나? 연결 기준으로 답해줘.",
+      "question": "정답을 추측하지 마. NAVER의 2025년 1분기 연결 영업수익은 전년 동기보다 금액과 비율로 각각 얼마나 증가했어. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -603,7 +603,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3336.75,
+      "latency_ms": 4499.97,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -631,9 +631,9 @@
       "gold_note": "주석 중간합계가 아닌 주재무제표의 원 단위 정밀값을 사용"
     },
     {
-      "question_id": "development-close-013",
+      "question_id": "adversarial-close-013",
       "category": "close",
-      "question": "현대자동차와 기아의 2025년 1Q 연결 매출액 격차를 계산해줘.",
+      "question": "[교차검증] 현차(005380)와 KIA(000270)의 '25 Q1 연결 매출액 차이는 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -660,7 +660,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3609.12,
+      "latency_ms": 13830.55,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -694,9 +694,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-014",
+      "question_id": "adversarial-close-014",
       "category": "close",
-      "question": "25년 첫 분기 연결 매출 기준으로 현대차가 기아보다 얼마 더 큰가?",
+      "question": "정답을 추측하지 마. 현대자동차와 기아의 2025년 1분기 연결 매출액 차이는 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -723,7 +723,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3307.92,
+      "latency_ms": 12799.26,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -757,9 +757,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-015",
+      "question_id": "adversarial-close-015",
       "category": "close",
-      "question": "2025년 삼성전자 반도체 위탁생산 계약금액이 최근 매출액에서 차지하는 비율은?",
+      "question": "[교차검증] 삼성 전자(005930)의 2025년 반도체 위탁생산 공급계약 금액은 최근매출액의 몇 퍼센트야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -786,7 +786,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2923.62,
+      "latency_ms": 12500.91,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -807,9 +807,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-016",
+      "question_id": "adversarial-close-016",
       "category": "close",
-      "question": "2025년 삼성전자 위탁생산 공급계약 공시의 계약금액/최근매출액 비중을 알려줘.",
+      "question": "정답을 추측하지 마. 삼성전자의 2025년 반도체 위탁생산 공급계약 금액은 최근매출액의 몇 퍼센트야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -836,7 +836,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2415.46,
+      "latency_ms": 12469.7,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -857,9 +857,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-017",
+      "question_id": "adversarial-close-017",
       "category": "close",
-      "question": "현대차 2026년 1분기 공시에서 연간 투자계획 총액, 누적 집행액, 집행률을 답해줘.",
+      "question": "[교차검증] 현차(005380) '26 Q1 보고서의 전체 투자계획과 1분기 집행실적, 집행률을 알려줘. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -886,69 +886,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 26.22,
-      "validation_action": "allow",
-      "query_type": "investment_plan",
-      "numeric_details": [
-        {
-          "target": "179976",
-          "tolerance": "0",
-          "matched": "179976",
-          "passed": true
-        },
-        {
-          "target": "22952",
-          "tolerance": "0",
-          "matched": "22952",
-          "passed": true
-        },
-        {
-          "target": "12.8",
-          "tolerance": "0.1",
-          "matched": "12.8",
-          "passed": true
-        }
-      ],
-      "cited_doc_ids": [
-        "periodic_20260515002418"
-      ],
-      "answer_chars": 559,
-      "answer_lines": 9,
-      "answer": "현대자동차의 2026년 1분기 누적 분기보고서 (2026.03) 기준 주요 투자 계획은 다음과 같습니다. (단위 : 억원)\n\n- 전체: 연간 계획 179,976, 1분기 실적 22,952(집행률 12.8%), 2025년 실적 146,172\n- 차량부문 > R&D 투자: 연간 계획 74,474, 1분기 실적 10,608(집행률 14.2%), 2025년 실적 61,405\n- 차량부문 > CAPEX: 연간 계획 89,889, 1분기 실적 12,255(집행률 13.6%), 2025년 실적 68,281\n- 차량부문 > 전략투자: 연간 계획 14,127, 1분기 실적 52(집행률 0.4%), 2025년 실적 15,156\n- 기타부문 > 증설/보완투자: 연간 계획 1,486, 1분기 실적 37(집행률 2.5%), 2025년 실적 1,330\n\n이 숫자는 투자 '계획'과 분기 '실적'이며, 집행 완료 금액으로 해석하지 않았습니다. 근거: 분기보고서 (2026.03), 접수번호 20260515002418, II. 사업의 내용 > 3. (제조서비스업)원재료 및 생산설비 > 라. 설비의 신설ㆍ매입 계획 등.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-close-018",
-      "category": "close",
-      "question": "2026 1Q 현대자동차 투자계획은 얼마이고 1분기까지 얼마를 집행해 몇 %가 됐나?",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 11.95,
+      "latency_ms": 44.03,
       "validation_action": "allow",
       "query_type": "investment_plan",
       "numeric_details": [
@@ -981,9 +919,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-019",
+      "question_id": "adversarial-close-018",
       "category": "close",
-      "question": "삼성전자 2025년 반도체 위탁생산 계약에서 정정 후 공개된 상대방은 어디야?",
+      "question": "정답을 추측하지 마. 현대자동차 2026년 1분기 보고서의 전체 투자계획과 1분기 집행실적, 집행률을 알려줘. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1010,24 +948,42 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 9.44,
+      "latency_ms": 20.88,
       "validation_action": "allow",
-      "query_type": "correction_history",
-      "numeric_details": [],
-      "cited_doc_ids": [
-        "exchange_20250728800035",
-        "exchange_20250731800028"
+      "query_type": "investment_plan",
+      "numeric_details": [
+        {
+          "target": "179976",
+          "tolerance": "0",
+          "matched": "179976",
+          "passed": true
+        },
+        {
+          "target": "22952",
+          "tolerance": "0",
+          "matched": "22952",
+          "passed": true
+        },
+        {
+          "target": "12.8",
+          "tolerance": "0.1",
+          "matched": "12.8",
+          "passed": true
+        }
       ],
-      "answer_chars": 383,
-      "answer_lines": 6,
-      "answer": "삼성전자의 정정공시를 원본·정정본 체인 기준으로 확인했습니다.\n- [기재정정]단일판매ㆍ공급계약체결 (연결 신뢰도 high)\n  원 공시: 단일판매ㆍ공급계약체결, 접수번호 20250728800035\n  · 3. 계약상대: 정정 전 글로벌 대형기업 → 정정 후·현재 유효 테슬라(Tesla, Inc.)\n  · 9. 기타 투자판단과 관련한 중요사항: 정정 전 - 계약상대방의 영업비밀 보호 요청에 따라 체결계약명, 계약상대, 주요 계약조건은 유보기한일의 다음 영업일에 공개될 예정임 → 정정 후·현재 유효 - 계약상대방의 영업비밀 보호 요청에 따라 체결계약명, 주요 계약조건은 유보기한일의 다음 영업일에 공개될 예정임\n근거 접수번호: 20250728800035, 20250731800028.",
+      "cited_doc_ids": [
+        "periodic_20260515002418"
+      ],
+      "answer_chars": 556,
+      "answer_lines": 9,
+      "answer": "현대자동차의 2026년 1분기 분기보고서 (2026.03) 기준 주요 투자 계획은 다음과 같습니다. (단위 : 억원)\n\n- 전체: 연간 계획 179,976, 1분기 실적 22,952(집행률 12.8%), 2025년 실적 146,172\n- 차량부문 > R&D 투자: 연간 계획 74,474, 1분기 실적 10,608(집행률 14.2%), 2025년 실적 61,405\n- 차량부문 > CAPEX: 연간 계획 89,889, 1분기 실적 12,255(집행률 13.6%), 2025년 실적 68,281\n- 차량부문 > 전략투자: 연간 계획 14,127, 1분기 실적 52(집행률 0.4%), 2025년 실적 15,156\n- 기타부문 > 증설/보완투자: 연간 계획 1,486, 1분기 실적 37(집행률 2.5%), 2025년 실적 1,330\n\n이 숫자는 투자 '계획'과 분기 '실적'이며, 집행 완료 금액으로 해석하지 않았습니다. 근거: 분기보고서 (2026.03), 접수번호 20260515002418, II. 사업의 내용 > 3. (제조서비스업)원재료 및 생산설비 > 라. 설비의 신설ㆍ매입 계획 등.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-020",
+      "question_id": "adversarial-close-019",
       "category": "close",
-      "question": "25년 삼성전자 위탁생산 공급계약의 최신 계약상대방 명칭을 알려줘.",
+      "question": "[교차검증] 삼성 전자(005930) 2025년 반도체 위탁생산 공급계약의 현재 유효한 계약상대는 누구야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1054,7 +1010,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 6.89,
+      "latency_ms": 16.69,
       "validation_action": "allow",
       "query_type": "correction_history",
       "numeric_details": [],
@@ -1069,9 +1025,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-021",
+      "question_id": "adversarial-close-020",
       "category": "close",
-      "question": "LG이노텍이 2025년 첫 분기에 기록한 연결 매출액은 얼마야?",
+      "question": "정답을 추측하지 마. 삼성전자 2025년 반도체 위탁생산 공급계약의 현재 유효한 계약상대는 누구야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1098,7 +1054,51 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2761.52,
+      "latency_ms": 12.67,
+      "validation_action": "allow",
+      "query_type": "correction_history",
+      "numeric_details": [],
+      "cited_doc_ids": [
+        "exchange_20250728800035",
+        "exchange_20250731800028"
+      ],
+      "answer_chars": 285,
+      "answer_lines": 6,
+      "answer": "삼성전자의 정정공시를 원본·정정본 체인 기준으로 확인했습니다.\n- [기재정정]단일판매ㆍ공급계약체결 (연결 신뢰도 high)\n  원 공시: 단일판매ㆍ공급계약체결, 접수번호 20250728800035\n  · 3. 계약상대: 현재 유효 값 테슬라(Tesla, Inc.)\n  · 9. 기타 투자판단과 관련한 중요사항: 현재 유효 값 - 계약상대방의 영업비밀 보호 요청에 따라 체결계약명, 주요 계약조건은 유보기한일의 다음 영업일에 공개될 예정임\n근거 접수번호: 20250728800035, 20250731800028.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-close-021",
+      "category": "close",
+      "question": "[교차검증] LG Innotek의 '25 Q1 연결 매출액은 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 17069.96,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1119,9 +1119,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-022",
+      "question_id": "adversarial-close-022",
       "category": "close",
-      "question": "25년 1Q LG이노텍 연결 손익계산서의 매출 수치를 답해줘.",
+      "question": "정답을 추측하지 마. LG이노텍의 2025년 1분기 연결 매출액은 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1148,7 +1148,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3368.57,
+      "latency_ms": 14392.56,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1162,16 +1162,16 @@
       "cited_doc_ids": [
         "periodic_20250515000050"
       ],
-      "answer_chars": 132,
+      "answer_chars": 128,
       "answer_lines": 1,
-      "answer": "LG이노텍의 2025년 1분기 연결 기준 매출(매출액)은 4,982,840백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515000050, 2-2. 연결 손익계산서의 해당 행·열.",
+      "answer": "LG이노텍의 2025년 1분기 연결 기준 매출액은 4,982,840백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515000050, 2-2. 연결 손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-023",
+      "question_id": "adversarial-close-023",
       "category": "close",
-      "question": "LG이노텍의 25년 첫 분기 연결 영업이익을 알려줘.",
+      "question": "[교차검증] LG Innotek의 '25 Q1 연결 영업이익은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1198,7 +1198,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2050.79,
+      "latency_ms": 11104.42,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1219,9 +1219,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-024",
+      "question_id": "adversarial-close-024",
       "category": "close",
-      "question": "2025 1Q LG이노텍 연결 기준 영업이익은 몇 백만원인가?",
+      "question": "정답을 추측하지 마. LG이노텍의 2025년 1분기 연결 영업이익은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1248,7 +1248,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 7751.0,
+      "latency_ms": 10983.23,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1269,9 +1269,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-025",
+      "question_id": "adversarial-close-025",
       "category": "close",
-      "question": "삼성바이오로직스 2025년 첫 분기 연결 매출액을 원 단위로 답해줘.",
+      "question": "[교차검증] Samsung Biologics '25 Q1 연결 매출액을 공시 단위로 알려줘. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1298,7 +1298,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3339.69,
+      "latency_ms": 14393.4,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1319,9 +1319,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-026",
+      "question_id": "adversarial-close-026",
       "category": "close",
-      "question": "25년 1Q 삼성바이오로직스의 연결 매출은 얼마인가?",
+      "question": "정답을 추측하지 마. 삼성바이오로직스 2025년 1분기 연결 매출액을 공시 단위로 알려줘. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1348,7 +1348,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1421.2,
+      "latency_ms": 14284.04,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1362,16 +1362,16 @@
       "cited_doc_ids": [
         "periodic_20250515002264"
       ],
-      "answer_chars": 141,
+      "answer_chars": 137,
       "answer_lines": 1,
-      "answer": "삼성바이오로직스의 2025년 1분기 연결 기준 매출(매출액)은 1,298,272,949,854원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002264, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "answer": "삼성바이오로직스의 2025년 1분기 연결 기준 매출액은 1,298,272,949,854원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002264, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-027",
+      "question_id": "adversarial-close-027",
       "category": "close",
-      "question": "삼성바이오로직스가 2025년 1분기에 낸 연결 영업이익은 얼마야?",
+      "question": "[교차검증] Samsung Biologics '25 Q1 연결 영업이익은 얼마야. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1398,7 +1398,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2449.39,
+      "latency_ms": 14295.09,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1419,9 +1419,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-028",
+      "question_id": "adversarial-close-028",
       "category": "close",
-      "question": "25년 첫 분기 삼성바이오로직스 연결 영업이익 수치를 공시에서 찾아줘.",
+      "question": "정답을 추측하지 마. 삼성바이오로직스 2025년 1분기 연결 영업이익은 얼마야. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1448,7 +1448,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2144.63,
+      "latency_ms": 14181.68,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1469,9 +1469,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-029",
+      "question_id": "adversarial-close-029",
       "category": "close",
-      "question": "HMM 2025년 첫 분기 연결 매출액을 백만원 단위로 알려줘.",
+      "question": "[교차검증] HMM의 '25 Q1 연결 매출액은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1498,7 +1498,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 6857.3,
+      "latency_ms": 12007.03,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1519,9 +1519,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-030",
+      "question_id": "adversarial-close-030",
       "category": "close",
-      "question": "25년 1Q HMM 연결 손익계산서상 매출은 얼마인가?",
+      "question": "정답을 추측하지 마. HMM의 2025년 1분기 연결 매출액은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1548,7 +1548,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2160.32,
+      "latency_ms": 11929.78,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1562,16 +1562,16 @@
       "cited_doc_ids": [
         "periodic_20250514000594"
       ],
-      "answer_chars": 132,
+      "answer_chars": 128,
       "answer_lines": 1,
-      "answer": "HMM의 2025년 1분기 연결 기준 매출(매출액)은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-031",
+      "question_id": "adversarial-close-031",
       "category": "close",
-      "question": "HMM이 2025년 1분기에 기록한 연결 영업이익은 얼마야?",
+      "question": "[교차검증] HMM의 '25 Q1 연결 영업이익은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1598,7 +1598,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3401.0,
+      "latency_ms": 11895.52,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1619,9 +1619,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-032",
+      "question_id": "adversarial-close-032",
       "category": "close",
-      "question": "25년 첫 분기 HMM 연결 영업이익 수치를 답해줘.",
+      "question": "정답을 추측하지 마. HMM의 2025년 1분기 연결 영업이익은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1648,7 +1648,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2181.75,
+      "latency_ms": 11821.84,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1669,9 +1669,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-033",
+      "question_id": "adversarial-close-033",
       "category": "close",
-      "question": "HD현대일렉트릭의 2025년 첫 분기 연결 매출액은 얼마인지 알려줘.",
+      "question": "[교차검증] HD Hyundai Electric '25 Q1 연결 매출액은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1698,7 +1698,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2528.43,
+      "latency_ms": 12841.25,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1719,9 +1719,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-034",
+      "question_id": "adversarial-close-034",
       "category": "close",
-      "question": "25년 1Q HD현대일렉트릭 연결 매출을 원 단위로 답해줘.",
+      "question": "정답을 추측하지 마. HD현대일렉트릭 2025년 1분기 연결 매출액은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1748,7 +1748,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1177.36,
+      "latency_ms": 12839.01,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1762,16 +1762,16 @@
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
-      "answer_chars": 141,
+      "answer_chars": 137,
       "answer_lines": 1,
-      "answer": "HD현대일렉트릭의 2025년 1분기 연결 기준 매출(매출액)은 1,014,667,829,225원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002651, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "answer": "HD현대일렉트릭의 2025년 1분기 연결 기준 매출액은 1,014,667,829,225원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002651, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-035",
+      "question_id": "adversarial-close-035",
       "category": "close",
-      "question": "HD현대일렉트릭 2025년 1분기 연결 영업이익 수치는?",
+      "question": "[교차검증] HD Hyundai Electric '25 Q1 연결 영업이익은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1798,7 +1798,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2761.68,
+      "latency_ms": 12771.03,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1819,9 +1819,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-036",
+      "question_id": "adversarial-close-036",
       "category": "close",
-      "question": "25년 첫 분기 HD현대일렉트릭의 연결 영업이익을 공시 근거로 답해줘.",
+      "question": "정답을 추측하지 마. HD현대일렉트릭 2025년 1분기 연결 영업이익은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1848,7 +1848,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1815.73,
+      "latency_ms": 12762.58,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1869,9 +1869,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-037",
+      "question_id": "adversarial-close-037",
       "category": "close",
-      "question": "POSCO홀딩스가 2025년 1Q 기록한 연결 매출액은 얼마야?",
+      "question": "[교차검증] 포스코홀딩스 '25 Q1 연결 매출액은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1898,7 +1898,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2444.94,
+      "latency_ms": 12578.58,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1919,9 +1919,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-038",
+      "question_id": "adversarial-close-038",
       "category": "close",
-      "question": "2025년 첫 분기 포스코홀딩스 연결 매출을 원 단위로 알려줘.",
+      "question": "정답을 추측하지 마. POSCO홀딩스 2025년 1분기 연결 매출액은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1948,7 +1948,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2883.27,
+      "latency_ms": 12512.12,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1962,16 +1962,16 @@
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
-      "answer_chars": 142,
+      "answer_chars": 138,
       "answer_lines": 1,
-      "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 매출(매출액)은 17,436,775,980,004원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 매출액은 17,436,775,980,004원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-039",
+      "question_id": "adversarial-close-039",
       "category": "close",
-      "question": "포스코홀딩스의 25년 1분기 연결 영업이익을 알려줘.",
+      "question": "[교차검증] 포스코홀딩스 '25 Q1 연결 영업이익은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -1998,7 +1998,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1343.05,
+      "latency_ms": 12576.05,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2019,9 +2019,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-040",
+      "question_id": "adversarial-close-040",
       "category": "close",
-      "question": "POSCO홀딩스 2025년 첫 분기 연결 손익계산서상 영업이익은 얼마인가?",
+      "question": "정답을 추측하지 마. POSCO홀딩스 2025년 1분기 연결 영업이익은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2048,7 +2048,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2532.61,
+      "latency_ms": 12510.59,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2069,9 +2069,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-close-041",
+      "question_id": "adversarial-close-041",
       "category": "close",
-      "question": "LG유플러스가 2025년 1Q 낸 연결 영업이익은 얼마야?",
+      "question": "[교차검증] HMM의 '25 Q3 누적 연결 매출액은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2098,30 +2098,30 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1718.87,
+      "latency_ms": 12450.07,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
         {
-          "target": "255427",
+          "target": "8183821",
           "tolerance": "0",
-          "matched": "255427",
+          "matched": "8183821",
           "passed": true
         }
       ],
       "cited_doc_ids": [
-        "periodic_20250515001154"
+        "periodic_20251113000451"
       ],
-      "answer_chars": 128,
+      "answer_chars": 131,
       "answer_lines": 1,
-      "answer": "LG유플러스의 2025년 1분기 연결 기준 영업이익은 255,427백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001154, 2-2. 연결 손익계산서의 해당 행·열.",
+      "answer": "HMM의 2025년 3분기 누적 연결 기준 매출액은 8,183,821백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000451, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-042",
+      "question_id": "adversarial-close-042",
       "category": "close",
-      "question": "25년 첫 분기 LG유플러스 연결 영업이익을 백만원 단위로 답해줘.",
+      "question": "정답을 추측하지 마. HMM의 2025년 3분기 누적 연결 매출액은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2148,30 +2148,30 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11472.02,
+      "latency_ms": 12447.31,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
         {
-          "target": "255427",
+          "target": "8183821",
           "tolerance": "0",
-          "matched": "255427",
+          "matched": "8183821",
           "passed": true
         }
       ],
       "cited_doc_ids": [
-        "periodic_20250515001154"
+        "periodic_20251113000451"
       ],
-      "answer_chars": 128,
+      "answer_chars": 131,
       "answer_lines": 1,
-      "answer": "LG유플러스의 2025년 1분기 연결 기준 영업이익은 255,427백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001154, 2-2. 연결 손익계산서의 해당 행·열.",
+      "answer": "HMM의 2025년 3분기 누적 연결 기준 매출액은 8,183,821백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000451, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-043",
+      "question_id": "adversarial-close-043",
       "category": "close",
-      "question": "LG유플러스의 2025년 첫 분기 연결 당기순이익 수치는?",
+      "question": "[교차검증] HMM의 '25 Q3 3개월 연결 매출액은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2198,230 +2198,30 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 6638.68,
+      "latency_ms": 12386.16,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
         {
-          "target": "162472",
+          "target": "2706392",
           "tolerance": "0",
-          "matched": "162472",
+          "matched": "2706392",
           "passed": true
         }
       ],
       "cited_doc_ids": [
-        "periodic_20250515001154"
-      ],
-      "answer_chars": 129,
-      "answer_lines": 1,
-      "answer": "LG유플러스의 2025년 1분기 연결 기준 당기순이익은 162,472백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001154, 2-2. 연결 손익계산서의 해당 행·열.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-close-044",
-      "category": "close",
-      "question": "25년 1Q LG유플러스 연결 순이익이 몇 백만원인지 알려줘.",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 1886.07,
-      "validation_action": "allow",
-      "query_type": "financial_metric",
-      "numeric_details": [
-        {
-          "target": "162472",
-          "tolerance": "0",
-          "matched": "162472",
-          "passed": true
-        }
-      ],
-      "cited_doc_ids": [
-        "periodic_20250515001154"
-      ],
-      "answer_chars": 134,
-      "answer_lines": 1,
-      "answer": "LG유플러스의 2025년 1분기 연결 기준 순이익(당기순이익)은 162,472백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001154, 2-2. 연결 손익계산서의 해당 행·열.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-close-045",
-      "category": "close",
-      "question": "CJ제일제당 2025년 첫 분기 연결 매출액을 공시 단위로 답해줘.",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 4051.18,
-      "validation_action": "allow",
-      "query_type": "financial_metric",
-      "numeric_details": [
-        {
-          "target": "7208471055",
-          "tolerance": "0",
-          "matched": "7208471055",
-          "passed": true
-        }
-      ],
-      "cited_doc_ids": [
-        "periodic_20250515001455"
-      ],
-      "answer_chars": 133,
-      "answer_lines": 1,
-      "answer": "CJ제일제당의 2025년 1분기 연결 기준 매출액은 7,208,471,055천원입니다. 공시 단위: (단위 : 천원). 근거: 분기보고서 (2025.03), 접수번호 20250515001455, 2-2. 연결 포괄손익계산서의 해당 행·열.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-close-046",
-      "category": "close",
-      "question": "25년 1Q CJ제일제당의 연결 매출은 얼마인가?",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 1623.12,
-      "validation_action": "allow",
-      "query_type": "financial_metric",
-      "numeric_details": [
-        {
-          "target": "7208471055",
-          "tolerance": "0",
-          "matched": "7208471055",
-          "passed": true
-        }
-      ],
-      "cited_doc_ids": [
-        "periodic_20250515001455"
-      ],
-      "answer_chars": 137,
-      "answer_lines": 1,
-      "answer": "CJ제일제당의 2025년 1분기 연결 기준 매출(매출액)은 7,208,471,055천원입니다. 공시 단위: (단위 : 천원). 근거: 분기보고서 (2025.03), 접수번호 20250515001455, 2-2. 연결 포괄손익계산서의 해당 행·열.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-close-047",
-      "category": "close",
-      "question": "CJ제일제당이 2025년 1분기에 낸 연결 영업이익은 얼마야?",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 2558.06,
-      "validation_action": "allow",
-      "query_type": "financial_metric",
-      "numeric_details": [
-        {
-          "target": "333167940",
-          "tolerance": "0",
-          "matched": "333167940",
-          "passed": true
-        }
-      ],
-      "cited_doc_ids": [
-        "periodic_20250515001455"
+        "periodic_20251113000451"
       ],
       "answer_chars": 132,
       "answer_lines": 1,
-      "answer": "CJ제일제당의 2025년 1분기 연결 기준 영업이익은 333,167,940천원입니다. 공시 단위: (단위 : 천원). 근거: 분기보고서 (2025.03), 접수번호 20250515001455, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "answer": "HMM의 2025년 3분기 3개월 연결 기준 매출액은 2,706,392백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000451, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-048",
+      "question_id": "adversarial-close-044",
       "category": "close",
-      "question": "25년 첫 분기 CJ제일제당 연결 영업이익 수치를 알려줘.",
+      "question": "정답을 추측하지 마. HMM의 2025년 3분기 3개월 연결 매출액은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2448,30 +2248,30 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2019.72,
+      "latency_ms": 12382.12,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
         {
-          "target": "333167940",
+          "target": "2706392",
           "tolerance": "0",
-          "matched": "333167940",
+          "matched": "2706392",
           "passed": true
         }
       ],
       "cited_doc_ids": [
-        "periodic_20250515001455"
+        "periodic_20251113000451"
       ],
       "answer_chars": 132,
       "answer_lines": 1,
-      "answer": "CJ제일제당의 2025년 1분기 연결 기준 영업이익은 333,167,940천원입니다. 공시 단위: (단위 : 천원). 근거: 분기보고서 (2025.03), 접수번호 20250515001455, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "answer": "HMM의 2025년 3분기 3개월 연결 기준 매출액은 2,706,392백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000451, 2-2. 연결 포괄손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-049",
+      "question_id": "adversarial-close-045",
       "category": "close",
-      "question": "셀트리온의 2025년 첫 분기 연결 영업이익을 원 단위로 알려줘.",
+      "question": "[교차검증] LG Innotek의 '25 Q3 누적 연결 영업이익은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2498,30 +2298,30 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2325.63,
+      "latency_ms": 13904.21,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
         {
-          "target": "149420804340",
+          "target": "340257",
           "tolerance": "0",
-          "matched": "149420804340",
+          "matched": "340257",
           "passed": true
         }
       ],
       "cited_doc_ids": [
-        "periodic_20250515002745"
+        "periodic_20251113000635"
       ],
       "answer_chars": 130,
       "answer_lines": 1,
-      "answer": "셀트리온의 2025년 1분기 연결 기준 영업이익은 149,420,804,340원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002745, 2-2. 연결 손익계산서의 해당 행·열.",
+      "answer": "LG이노텍의 2025년 3분기 누적 연결 기준 영업이익은 340,257백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000635, 2-2. 연결 손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-close-050",
+      "question_id": "adversarial-close-046",
       "category": "close",
-      "question": "25년 1Q 셀트리온 연결 손익계산서상 영업이익은 얼마인가?",
+      "question": "정답을 추측하지 마. LG이노텍의 2025년 3분기 누적 연결 영업이익은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2548,30 +2348,230 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2001.36,
+      "latency_ms": 13833.57,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
         {
-          "target": "149420804340",
+          "target": "340257",
           "tolerance": "0",
-          "matched": "149420804340",
+          "matched": "340257",
           "passed": true
         }
       ],
       "cited_doc_ids": [
-        "periodic_20250515002745"
+        "periodic_20251113000635"
       ],
       "answer_chars": 130,
       "answer_lines": 1,
-      "answer": "셀트리온의 2025년 1분기 연결 기준 영업이익은 149,420,804,340원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002745, 2-2. 연결 손익계산서의 해당 행·열.",
+      "answer": "LG이노텍의 2025년 3분기 누적 연결 기준 영업이익은 340,257백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000635, 2-2. 연결 손익계산서의 해당 행·열.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-001",
+      "question_id": "adversarial-close-047",
+      "category": "close",
+      "question": "[교차검증] LG Innotek의 '25 Q3 3개월 연결 영업이익은. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 13899.93,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "numeric_details": [
+        {
+          "target": "203749",
+          "tolerance": "0",
+          "matched": "203749",
+          "passed": true
+        }
+      ],
+      "cited_doc_ids": [
+        "periodic_20251113000635"
+      ],
+      "answer_chars": 131,
+      "answer_lines": 1,
+      "answer": "LG이노텍의 2025년 3분기 3개월 연결 기준 영업이익은 203,749백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000635, 2-2. 연결 손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-close-048",
+      "category": "close",
+      "question": "정답을 추측하지 마. LG이노텍의 2025년 3분기 3개월 연결 영업이익은. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 13830.61,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "numeric_details": [
+        {
+          "target": "203749",
+          "tolerance": "0",
+          "matched": "203749",
+          "passed": true
+        }
+      ],
+      "cited_doc_ids": [
+        "periodic_20251113000635"
+      ],
+      "answer_chars": 131,
+      "answer_lines": 1,
+      "answer": "LG이노텍의 2025년 3분기 3개월 연결 기준 영업이익은 203,749백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000635, 2-2. 연결 손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-close-049",
+      "category": "close",
+      "question": "[교차검증] 포스코홀딩스의 '25 Q1 연결 매출액을 주석이 아닌 기본 재무제표 기준으로 알려줘. 표기 흔들림에 속지 말고 공시 수치·단위·근거 접수번호를 빠짐없이 답해줘.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 14551.45,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "numeric_details": [
+        {
+          "target": "17436775980004",
+          "tolerance": "0",
+          "matched": "17436775980004",
+          "passed": true
+        }
+      ],
+      "cited_doc_ids": [
+        "periodic_20250515002741"
+      ],
+      "answer_chars": 138,
+      "answer_lines": 1,
+      "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 매출액은 17,436,775,980,004원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-close-050",
+      "category": "close",
+      "question": "정답을 추측하지 마. POSCO홀딩스의 2025년 1분기 연결 매출액을 주석이 아닌 기본 재무제표 기준으로 알려줘. 해당 기간 공시와 원문 기준을 확인하고 수치·단위·접수번호를 10줄 안에 제시해.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 10035.62,
+      "validation_action": "allow",
+      "query_type": "financial_metric",
+      "numeric_details": [
+        {
+          "target": "17436775980004",
+          "tolerance": "0",
+          "matched": "17436775980004",
+          "passed": true
+        }
+      ],
+      "cited_doc_ids": [
+        "periodic_20250515002741"
+      ],
+      "answer_chars": 138,
+      "answer_lines": 1,
+      "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 매출액은 17,436,775,980,004원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-open-001",
       "category": "open",
-      "question": "KT의 2025년 1Q 공시를 토대로 사업 포트폴리오와 대표 서비스를 분야별로 설명해줘.",
+      "question": "[교차검증] kt(030200)의 '25 Q1 분기보고서를 기준으로 주요 사업과 서비스를 항목별로 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2598,7 +2598,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 37.65,
+      "latency_ms": 109.66,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2612,9 +2612,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-002",
+      "question_id": "adversarial-open-002",
       "category": "open",
-      "question": "2025년 첫 분기 KT가 영위한 주요 사업과 서비스를 구조적으로 요약해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. KT의 2025년 1분기 분기보고서를 기준으로 주요 사업과 서비스를 항목별로 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2641,7 +2641,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 29.02,
+      "latency_ms": 105.38,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2655,9 +2655,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-003",
+      "question_id": "adversarial-open-003",
       "category": "open",
-      "question": "엔씨소프트의 25년 1분기 공시에서 온라인·모바일 제품군과 대표 게임을 정리해줘.",
+      "question": "[교차검증] NC(036570)의 '25 Q1 분기보고서에서 주요 제품과 서비스, 대표 게임을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2684,7 +2684,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.8,
+      "latency_ms": 60.92,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2698,9 +2698,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-004",
+      "question_id": "adversarial-open-004",
       "category": "open",
-      "question": "2025년 첫 분기 엔씨소프트의 핵심 서비스와 게임 사업 구성을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 엔씨소프트의 2025년 1분기 분기보고서에서 주요 제품과 서비스, 대표 게임을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2727,7 +2727,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 9.62,
+      "latency_ms": 68.07,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2741,9 +2741,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-005",
+      "question_id": "adversarial-open-005",
       "category": "open",
-      "question": "현대자동차 2025년 1Q 차량부문의 현황과 중장기 방향을 공시 기준으로 설명해줘.",
+      "question": "[교차검증] 현차(005380)의 '25 Q1 분기보고서를 기준으로 차량부문의 사업 현황과 전략을 요약해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2770,23 +2770,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 20.44,
+      "latency_ms": 64.33,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001159"
       ],
-      "answer_chars": 433,
-      "answer_lines": 5,
-      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 차량부문(완성차·모빌리티), 금융\n- 주요 제품·서비스: 당사는 제 58기 1분기 누계 약 100만대의 판매 실적을 바탕으로 연결기준 차량부문에서 약 35조원의 매출을 기록했습니다.\n- 전략·현황: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n근거 접수번호: 20250515001159.",
+      "answer_chars": 354,
+      "answer_lines": 4,
+      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 차량부문(완성차·모빌리티), 금융\n- 주요 제품·서비스: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n근거 접수번호: 20250515001159.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-006",
+      "question_id": "adversarial-open-006",
       "category": "open",
-      "question": "25년 첫 분기 현대차 보고서에서 자동차 사업과 2030 전략의 핵심을 요약해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 현대자동차의 2025년 1분기 분기보고서를 기준으로 차량부문의 사업 현황과 전략을 요약해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2813,23 +2813,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 19.23,
+      "latency_ms": 63.69,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001159"
       ],
-      "answer_chars": 433,
-      "answer_lines": 5,
-      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 차량부문(완성차·모빌리티), 금융\n- 주요 제품·서비스: 당사는 제 58기 1분기 누계 약 100만대의 판매 실적을 바탕으로 연결기준 차량부문에서 약 35조원의 매출을 기록했습니다.\n- 전략·현황: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n근거 접수번호: 20250515001159.",
+      "answer_chars": 354,
+      "answer_lines": 4,
+      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 차량부문(완성차·모빌리티), 금융\n- 주요 제품·서비스: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n근거 접수번호: 20250515001159.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-007",
+      "question_id": "adversarial-open-007",
       "category": "open",
-      "question": "삼성전자 2025년 1분기 각 사업부문이 취급하는 대표 제품을 구분해 설명해줘.",
+      "question": "[교차검증] 삼성 전자(005930)의 '25 Q1 분기보고서에서 주요 사업부문과 대표 제품을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2856,7 +2856,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 18.3,
+      "latency_ms": 58.72,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2870,9 +2870,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-008",
+      "question_id": "adversarial-open-008",
       "category": "open",
-      "question": "25년 1Q 삼성전자의 DX·DS·SDC·Harman 사업 구성을 공시 근거로 요약해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 삼성전자의 2025년 1분기 분기보고서에서 주요 사업부문과 대표 제품을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2899,23 +2899,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 13.36,
+      "latency_ms": 60.45,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
-      "answer_chars": 345,
-      "answer_lines": 4,
-      "answer": "삼성전자의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, DX, DS, SDC·OLED, Harman·전장, 전장부품\n- 주요 제품·서비스: 사업별로 보면, Set 사업은 DX(Device eXperience) 부문이 TV를 비롯하여 모니터, 냉장고, 세탁기, 에어컨, 스마트폰, 네트워크시스템, PC 등을 생산ㆍ판매하며, 부품 사업은 DS(Device Solutions) 부문에서 DRAM, NAND Flash, 모바일AP 등의 제품을 생산ㆍ판매하고, SDC가 스마트폰용 OLED 패널 등을 생산ㆍ판매하고 있습니다.\n근거 접수번호: 20250515001922.",
+      "answer_chars": 556,
+      "answer_lines": 5,
+      "answer": "삼성전자의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, DX, DS, SDC·OLED, Harman·전장, 전장부품, 음악·영상 콘텐츠\n- 주요 제품·서비스: 사업별로 보면, Set 사업은 DX(Device eXperience) 부문이 TV를 비롯하여 모니터, 냉장고, 세탁기, 에어컨, 스마트폰, 네트워크시스템, PC 등을 생산ㆍ판매하며, 부품 사업은 DS(Device Solutions) 부문에서 DRAM, NAND Flash, 모바일AP 등의 제품을 생산ㆍ판매하고, SDC가 스마트폰용 OLED 패널 등을 생산ㆍ판매하고 있습니다.\n- 전략·현황: 이에, Harman은 자동차의 SDV로 변화에 대응할 수 있는 SW 기술역량을 강화하고, In-Cabin Experience의 핵심 전장부품과 고성장이 예상되는 AR HUD, 디스플레이, 운전자 모니터링 등 신제품을 육성하는 한편 전자의 SW/서비스 역량을 차량에 접목하여 보다 편리하고 차별화된 사용자 경험을 제공하는데 주력할 계획입니다.\n근거 접수번호: 20250515001922.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-009",
+      "question_id": "adversarial-open-009",
       "category": "open",
-      "question": "SK하이닉스의 2025년 첫 분기 주력 반도체 제품과 함께 운영하는 사업을 정리해줘.",
+      "question": "[교차검증] sk hynix(000660)의 '25 Q1 분기보고서를 기준으로 주력 제품과 사업을 설명해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2942,23 +2942,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.23,
+      "latency_ms": 59.85,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002103"
       ],
-      "answer_chars": 325,
+      "answer_chars": 336,
       "answer_lines": 5,
-      "answer": "SK하이닉스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, 파운드리\n- 주요 제품·서비스: 당사 및 당사의 종속기업의 주력 제품은 DRAM 및 NAND를 중심으로 하는 메모리 반도체이며, Foundry 사업도 병행하고 있습니다.\n- 전략·현황: 웨이퍼는 집적회로(Integrated Circuit, IC)를 제작하기 위해 반도체 물질의 단결정을 성장시킨 기둥 모양의 규소(Ingot)를 얇게 절단하여 원판 모양으로 만든 것으로서 반도체 소자를 만드는 데 사용되는 핵심 재료입니다.\n근거 접수번호: 20250515002103.",
+      "answer": "SK하이닉스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, 파운드리\n- 주요 제품·서비스: 당사 및 당사의 종속기업의 주력 제품은 DRAM 및 NAND를 중심으로 하는 메모리 반도체이며, Foundry 사업도 병행하고 있습니다.\n- 전략·현황: DRAM 출하량은 계절적 비수기임에도 불구하고 HBM3E와 DDR5 등 고부가가치 제품 판매 확대로 10% 미만의 소폭 감소에 그쳤으며, ASP는 일반 DRAM 제품의 가격 하락에도 고부가가치 제품 판매 확대 효과로 전분기와 동일한 수준을 유지하였습니다.\n근거 접수번호: 20250515002103.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-010",
+      "question_id": "adversarial-open-010",
       "category": "open",
-      "question": "25년 1Q SK하이닉스 사업보고 내용에서 메모리 제품군과 기타 사업을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. SK하이닉스의 2025년 1분기 분기보고서를 기준으로 주력 제품과 사업을 설명해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -2985,23 +2985,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.52,
+      "latency_ms": 63.67,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002103"
       ],
-      "answer_chars": 359,
+      "answer_chars": 340,
       "answer_lines": 5,
-      "answer": "SK하이닉스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, 파운드리\n- 주요 제품·서비스: 당사 및 당사의 종속기업의 주력 제품은 DRAM 및 NAND를 중심으로 하는 메모리 반도체이며, Foundry 사업도 병행하고 있습니다.\n- 전략·현황: 당사는 범용 제품(DDR4/5)과 저전압/고속 제품(LPDDR4/5)은 물론, Specialty 제품(Industrial Temp, Automotive Grade&HBM) 등 다양한 Portfolio와 Longevity 정책 제시 등 시장에서의 입지를 공고히 하며 사업을 확대해 나가고 있습니다.\n근거 접수번호: 20250515002103.",
+      "answer": "SK하이닉스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 메모리 반도체, 파운드리\n- 주요 제품·서비스: 당사 및 당사의 종속기업의 주력 제품은 DRAM 및 NAND를 중심으로 하는 메모리 반도체이며, Foundry 사업도 병행하고 있습니다.\n- 전략·현황: 서버 메모리(Server Memory)는 AI로 인한 클라우드 컴퓨팅 수요 확대가 다방면에서 진행되고 있으며, LLM으로 인한 고성능 AI 서버뿐만 아니라, 데이터 관리를 위한 General Purpose(GP) 서버의 수요 증가로 향후 높은 성장이 전망됩니다.\n근거 접수번호: 20250515002103.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-011",
+      "question_id": "adversarial-open-011",
       "category": "open",
-      "question": "카카오의 2025년 첫 분기 사업을 플랫폼과 콘텐츠 두 축으로 나눠 세부 항목을 정리해줘.",
+      "question": "[교차검증] kakao(035720)의 '25 Q1 분기보고서를 기준으로 플랫폼과 콘텐츠 사업을 구분해 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3028,7 +3028,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 19.24,
+      "latency_ms": 63.74,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3042,9 +3042,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-012",
+      "question_id": "adversarial-open-012",
       "category": "open",
-      "question": "25년 1Q 카카오 공시에서 플랫폼·콘텐츠 부문의 수익 사업을 비교해 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 카카오의 2025년 1분기 분기보고서를 기준으로 플랫폼과 콘텐츠 사업을 구분해 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3071,23 +3071,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.13,
+      "latency_ms": 81.38,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250514001239"
       ],
-      "answer_chars": 630,
+      "answer_chars": 625,
       "answer_lines": 5,
-      "answer": "카카오의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 커머스, 콘텐츠, 게임, 아티스트 매니지먼트, 플랫폼, 톡비즈, 카카오페이, 뮤직, 스토리, 음악·영상 콘텐츠\n- 주요 제품·서비스: 이어서 콘텐츠 부문은 1) 카카오게임즈가 PC/콘솔 플랫폼 확장과 모바일 게임의 장르다변화를 통한 글로벌 시장 진출, 자체 개발 게임을 위해 지속적으로 노력하고 있는 게임콘텐츠 , 2) 카카오엔터테인먼트와 에스엠엔터테인먼트가 진행하는 글로벌 K-pop 아티스트를 양성하고 음악 기반의 다양한 콘텐츠를 제작 및 음악플랫폼 멜론(Melon)을 영위하는 뮤직 콘텐츠 , 3) 카카오픽코마와 카카오엔터테인먼트에서 경쟁력 있는 스토리IP를 발굴하고 국내외 콘텐츠 시장에서 이용자 저변을 키워가고 있는 스토리콘텐츠, 그리고 4) 카카오엔터테인먼트의 아티스트IP를 활용한 매니지먼트 사업 및 영상콘텐츠 제작 사업을 펼치고 있는 미디어콘텐츠로 구성되어 있습니다.\n- 전략·현황: 이어, 콘텐츠 부문의 게임콘텐츠는 다양한 라인업에 대한 안정적인 서비스를 이어가는 한편 PC/콘솔 플랫폼과 글로벌 시장으로 서비스 영역을 확장하며 영업수익의 성장을 위해 노력하고 있습니다.\n근거 접수번호: 20250514001239.",
+      "answer": "카카오의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 커머스, 콘텐츠, 게임, 아티스트 매니지먼트, 플랫폼, 톡비즈, 카카오페이, 뮤직, 스토리, 음악·영상 콘텐츠\n- 주요 제품·서비스: 이어서 콘텐츠 부문은 1) 카카오게임즈가 PC/콘솔 플랫폼 확장과 모바일 게임의 장르다변화를 통한 글로벌 시장 진출, 자체 개발 게임을 위해 지속적으로 노력하고 있는 게임콘텐츠 , 2) 카카오엔터테인먼트와 에스엠엔터테인먼트가 진행하는 글로벌 K-pop 아티스트를 양성하고 음악 기반의 다양한 콘텐츠를 제작 및 음악플랫폼 멜론(Melon)을 영위하는 뮤직 콘텐츠 , 3) 카카오픽코마와 카카오엔터테인먼트에서 경쟁력 있는 스토리IP를 발굴하고 국내외 콘텐츠 시장에서 이용자 저변을 키워가고 있는 스토리콘텐츠, 그리고 4) 카카오엔터테인먼트의 아티스트IP를 활용한 매니지먼트 사업 및 영상콘텐츠 제작 사업을 펼치고 있는 미디어콘텐츠로 구성되어 있습니다.\n- 전략·현황: 톡비즈(커머스)는 글로벌 하이앤드 브랜드를 럭스탭에 입접시키며 프리미엄 라인업을 강화해왔고, 이에 따른 객단가 증가 및 자기구매 거래액 확대로 안정적인 성장을 이어나가고 있습니다.\n근거 접수번호: 20250514001239.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-013",
+      "question_id": "adversarial-open-013",
       "category": "open",
-      "question": "JYP Ent.가 2025년 1분기에 어떤 활동으로 수익을 창출했는지 사업별로 설명해줘.",
+      "question": "[교차검증] jyp(035900)의 '25 Q1 분기보고서를 기준으로 수익을 창출하는 주요 사업을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3114,7 +3114,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.97,
+      "latency_ms": 53.8,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3128,9 +3128,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-014",
+      "question_id": "adversarial-open-014",
       "category": "open",
-      "question": "25년 첫 분기 JYP의 음반·매니지먼트·IP 중심 사업모델을 공시 기준으로 요약해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. JYP Ent.의 2025년 1분기 분기보고서를 기준으로 수익을 창출하는 주요 사업을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3157,7 +3157,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.36,
+      "latency_ms": 57.17,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3171,9 +3171,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-015",
+      "question_id": "adversarial-open-015",
       "category": "open",
-      "question": "NAVER의 2025년 첫 분기 서비스 포트폴리오를 다섯 가지 축으로 분류해 설명해줘.",
+      "question": "[교차검증] 035420(NAVER)의 '25 Q1 분기보고서를 기준으로 주요 서비스 사업을 다섯 개 영역으로 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3200,50 +3200,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.85,
-      "validation_action": "allow",
-      "query_type": "business_overview",
-      "numeric_details": [],
-      "cited_doc_ids": [
-        "periodic_20250515001302"
-      ],
-      "answer_chars": 544,
-      "answer_lines": 5,
-      "answer": "NAVER의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 서치플랫폼, 커머스, 핀테크, 콘텐츠, 엔터프라이즈\n- 주요 제품·서비스: 아울러 금융 씬파일러(Thin Filer)들을 위한 핀테크, 웹툰, 스노우 등의 콘텐츠 서비스, 기업용 솔루션을 제공하는 엔터프라이즈 등 다각화된 사업 포트폴리오를 기반으로 안정적인 성장을 이어가고 있습니다.\n- 전략·현황: (△팀네이버 기술 기반 ESG 영향력 확대 △구성원 성장 및 인권존중 △파트너 상생 및 지역사회 기여 △지배구조 투명성 유지 및 선진화 △2040 Carbon Negative 달성 및 친환경 활동 확대 △정보보호 강화 및 안전한 인터넷 생태계 조성 △윤리경영 및 리스크 관리 강화) 이를 추진하기 위해 ESG 위원회 산하에 전담조직을 구축하여, 전사 유관부서에서 추진하는 개별 개선과제를 관리하고, 외부 이해관계자 요구사항에 기반한 가이던스를 제시하며, 과제 추진 현황을 기반으로 ESG위원회에 연 4회 안건을 상정하고 있습니다.\n근거 접수번호: 20250515001302.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-open-016",
-      "category": "open",
-      "question": "25년 1Q 네이버의 주요 사업 영역 5개와 각 영역의 성격을 요약해줘.",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 14.72,
+      "latency_ms": 108.01,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3257,9 +3214,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-017",
+      "question_id": "adversarial-open-016",
       "category": "open",
-      "question": "현대자동차 2023·2025 사업보고서를 대조해 유지된 사업과 새로 강조된 전략을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. NAVER의 2025년 1분기 분기보고서를 기준으로 주요 서비스 사업을 다섯 개 영역으로 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3286,7 +3243,50 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 128.65,
+      "latency_ms": 102.9,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "numeric_details": [],
+      "cited_doc_ids": [
+        "periodic_20250515001302"
+      ],
+      "answer_chars": 543,
+      "answer_lines": 5,
+      "answer": "NAVER의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 서치플랫폼, 커머스, 핀테크, 콘텐츠, 엔터프라이즈\n- 주요 제품·서비스: 아울러 금융 씬파일러(Thin Filer)들을 위한 핀테크, 웹툰, 스노우 등의 콘텐츠 서비스, 기업용 솔루션을 제공하는 엔터프라이즈 등 다각화된 사업 포트폴리오를 기반으로 안정적인 성장을 이어가고 있습니다.\n- 전략·현황: (1) 환경 (가) '2040 Carbon Negative' 전략 및 세부 방향 추진 1) 운영 상의 환경영향 저감 가) 24년 자가 사옥 및 데이터센터 재생에너지 연 14GWh 이상 사용 나) 1784외 자가 사옥 태양광 발전설비 증설, PPA 재생에너지 계약 2) 제품 및 서비스 솔루션 개발 확대 가) 각종 고지를 대체하는 네이버 전자문서 서비스 제공 나) 환경기념일 관련 스페셜로고 기획 3) 외부 파트너십 확대를 통한 저탄소 경제로의 전환 가) 기후변화 정보 접근성 개선 및 탄소중립포인트 네이버페이 연동 나) 성남시…\n근거 접수번호: 20250515001302.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-open-017",
+      "category": "open",
+      "question": "[교차검증] 현차(005380)의 2023년과 2025년 사업보고서를 비교해 사업 전략의 변화와 유지된 축을 근거와 함께 설명해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 233.33,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [
@@ -3320,9 +3320,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-018",
+      "question_id": "adversarial-open-018",
       "category": "open",
-      "question": "2023년에서 2025년 사이 현대차 사업 전략이 어떻게 달라졌는지 매출 비중 근거와 함께 분석해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 현대자동차의 2023년과 2025년 사업보고서를 비교해 사업 전략의 변화와 유지된 축을 근거와 함께 설명해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3349,7 +3349,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 864.67,
+      "latency_ms": 191.29,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [
@@ -3383,9 +3383,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-019",
+      "question_id": "adversarial-open-019",
       "category": "open",
-      "question": "NAVER의 2025 분기보고서와 사업보고서에서 공통 사업 축과 강조점 차이를 비교해줘.",
+      "question": "[교차검증] 035420(NAVER)의 2025년 분기보고서와 사업보고서를 비교해 핵심 사업의 공통점과 달라진 강조점을 설명해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3412,7 +3412,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 30.7,
+      "latency_ms": 72.67,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [],
@@ -3427,9 +3427,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-020",
+      "question_id": "adversarial-open-020",
       "category": "open",
-      "question": "2025년 네이버 분기보고서와 사업보고서를 대조해 핵심 서비스는 무엇이 같고 표현은 어떻게 달라졌는지 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. NAVER의 2025년 분기보고서와 사업보고서를 비교해 핵심 사업의 공통점과 달라진 강조점을 설명해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3456,7 +3456,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 23.31,
+      "latency_ms": 50.12,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [],
@@ -3471,9 +3471,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-021",
+      "question_id": "adversarial-open-021",
       "category": "open",
-      "question": "HMM의 2025년 첫 분기 해운·물류 사업 구성과 추진 전략을 정리해줘.",
+      "question": "[교차검증] HMM의 '25 Q1 분기보고서를 기준으로 주요 사업과 전략을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3500,7 +3500,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.02,
+      "latency_ms": 51.4,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3514,9 +3514,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-022",
+      "question_id": "adversarial-open-022",
       "category": "open",
-      "question": "25년 1Q HMM 공시를 근거로 컨테이너·벌크 사업과 시장 대응 방향을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. HMM의 2025년 1분기 분기보고서를 기준으로 주요 사업과 전략을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3543,7 +3543,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 13.41,
+      "latency_ms": 40.54,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3557,9 +3557,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-023",
+      "question_id": "adversarial-open-023",
       "category": "open",
-      "question": "삼성바이오로직스의 2025년 1분기 핵심 사업과 제공 제품·서비스를 요약해줘.",
+      "question": "[교차검증] Samsung Biologics의 '25 Q1 주요 사업과 제품을 요약해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3586,50 +3586,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.29,
-      "validation_action": "allow",
-      "query_type": "business_overview",
-      "numeric_details": [],
-      "cited_doc_ids": [
-        "periodic_20250515002264"
-      ],
-      "answer_chars": 433,
-      "answer_lines": 5,
-      "answer": "삼성바이오로직스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오의약품, 바이오시밀러·신약\n- 주요 제품·서비스: 2025년 1분기 연결 매출은 1조 2,983억 원이며, 이 중 CDMO 부문은 제품 등 매출 8,196억 원, 서비스 매출 781억 원이며, 바이오의약품 개발 및 상업화 부문은 제품 등 매출 3,983억 원, 서비스 매출 23억 원입니다.\n- 전략·현황: CMO뿐 아니라 CDO 사업에서도 성과를 확대하고 있으며, 자체 세포주 및 고농도 제형 플랫폼 S-Tensify™, 항암 특화 세포주 플랫폼 S-AfuCHO™, 고품질 단백질 생산 플랫폼 S-OptiCharge™, 고농도 제형 기술 S-HiCon™ 등을 개발 및 공개하여 기술경쟁력을 강화하고 있습니다.\n근거 접수번호: 20250515002264.",
-      "notes": null,
-      "gold_note": null
-    },
-    {
-      "question_id": "development-open-024",
-      "category": "open",
-      "question": "25년 첫 분기 삼성바이오로직스가 수행한 CDMO 사업을 공시 근거로 설명해줘.",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 12.57,
+      "latency_ms": 44.17,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3643,9 +3600,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-025",
+      "question_id": "adversarial-open-024",
       "category": "open",
-      "question": "CJ제일제당의 2025년 첫 분기 사업 구성을 식품·바이오·물류 축으로 정리해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 삼성바이오로직스의 2025년 1분기 주요 사업과 제품을 요약해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3672,7 +3629,50 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 18.64,
+      "latency_ms": 44.55,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "numeric_details": [],
+      "cited_doc_ids": [
+        "periodic_20250515002264"
+      ],
+      "answer_chars": 433,
+      "answer_lines": 5,
+      "answer": "삼성바이오로직스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오의약품, 바이오시밀러·신약\n- 주요 제품·서비스: 2025년 1분기 연결 매출은 1조 2,983억 원이며, 이 중 CDMO 부문은 제품 등 매출 8,196억 원, 서비스 매출 781억 원이며, 바이오의약품 개발 및 상업화 부문은 제품 등 매출 3,983억 원, 서비스 매출 23억 원입니다.\n- 전략·현황: CMO뿐 아니라 CDO 사업에서도 성과를 확대하고 있으며, 자체 세포주 및 고농도 제형 플랫폼 S-Tensify™, 항암 특화 세포주 플랫폼 S-AfuCHO™, 고품질 단백질 생산 플랫폼 S-OptiCharge™, 고농도 제형 기술 S-HiCon™ 등을 개발 및 공개하여 기술경쟁력을 강화하고 있습니다.\n근거 접수번호: 20250515002264.",
+      "notes": null,
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-open-025",
+      "category": "open",
+      "question": "[교차검증] CJ CheilJedang의 '25 Q1 사업 포트폴리오를 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 37.87,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3686,9 +3686,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-026",
+      "question_id": "adversarial-open-026",
       "category": "open",
-      "question": "25년 1Q CJ제일제당의 주요 사업부문과 포트폴리오를 공시 기준으로 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. CJ제일제당의 2025년 1분기 사업 포트폴리오를 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3715,23 +3715,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.43,
+      "latency_ms": 45.82,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001455"
       ],
-      "answer_chars": 374,
-      "answer_lines": 5,
-      "answer": "CJ제일제당의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 식품, BIO·F&C, 종합물류, 건설\n- 주요 제품·서비스: 식품, BIO 및 F&C 사업은 국내 26개 생산 사업장과 중국, 인도네시아, 베트남 등 해외 81개 생산 사업장에서 관련 제품을 제조하여 판매하고 있습니다.\n- 전략·현황: 해외사업은 미국, 인도, 베트남 등 전세계에 걸쳐 38개국 114개 법인 운영을 통하여 CL(계약물류), 포워딩 등 종합물류서비스를 제공하고 있으며, 전략화주 및 성장산업군 대상으로 Value chain 확대하고 운영효율성을 극대화하여 사업 영역의 高효율ㆍ질적 확대를 추진하고 있습니다.\n근거 접수번호: 20250515001455.",
+      "answer_chars": 232,
+      "answer_lines": 4,
+      "answer": "CJ제일제당의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 식품, BIO·F&C, 종합물류, 건설\n- 주요 제품·서비스: (3) Feed & Care 사업 Feed & Care(F&C) 사업은 고수익 중심 사료혁신제품 개발 및 생산성 기반의 축산 사업확장을 중점적으로 전개하며 동남아 지역 위주의 글로벌 전략을 실행하고 있습니다.\n근거 접수번호: 20250515001455.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-027",
+      "question_id": "adversarial-open-027",
       "category": "open",
-      "question": "LG유플러스의 2025년 1분기 사업을 모바일·스마트홈·기업인프라로 나눠 설명해줘.",
+      "question": "[교차검증] LG U+의 '25 Q1 주요 사업을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3758,23 +3758,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 24.12,
+      "latency_ms": 69.2,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001154"
       ],
-      "answer_chars": 498,
+      "answer_chars": 514,
       "answer_lines": 5,
-      "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라\n- 주요 제품·서비스: 케이블TV, 초고속인터넷, 인터넷전화(VoIP), 광고, MVNO 등을 제공하는 종합유선방송사업자로서 전국 23개 권역에서 방송법 제9조 제2항 및 제17조에 의거하여 방통위로부터 방송사업자 허가/재허가 및 전기통신사업법 제6조에 의거한 기간통신사업자 허가를 득하였으며, 오리지널 및 대표콘텐츠 투자로 지역 채널 인지도를 높이고 있고, 생활 필수가전 및 프리미엄 가전 등을 통한 렌탈 할부판매 사업을 영위하고 있습니다.\n- 전략·현황: 환경물질의 배출 또는 환경보호와 관련된 사항 ㈜LG유플러스는 2050년 탄소중립 목표를 달성하기 위해 네트워크, IDC, 건물의 특성에 맞는 에너지 절감계획을 수립 및 실행하고, 재생에너지 전환을 지속적으로 확대해나가고 있습니다.\n근거 접수번호: 20250515001154.",
+      "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라, 커머스, 위성방송\n- 주요 제품·서비스: ㈜LG유플러스의 주요종속회사인 ㈜미디어로그는 2000년 3월 14일 설립되어 인터넷통신서비스, 멀티미디어콘텐츠 제작 및 인터넷포탈서비스 등을 영위하고 있으며, 2014년 6월 30일에 별정통신사업을 등록하고 2014년 7월 9일부터 알뜰폰(MVNO)사업을 영위하고 있습니다.\n- 전략·현황: 또한 ㈜LG유플러스볼트업은 2025년 3월 전기자동차 충전서비스 플랫폼인 '볼트업2.0'을 자체 역량으로 새롭게 출시하였으며, '볼트업 2.0' 플랫폼을 통해 고객과의 디지털 접점에서 사용 편의성을 확대하고, 데이터 기반으로 고객에 대한 심층적인 이해를 바탕으로 플랫폼을 만들어 디지털 혁신기업으로의 전환을 가속화하여 전기자동차 충전 시장에서 경쟁력을 더욱 강화시켜 나갈 예정입니다.\n근거 접수번호: 20250515001154.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-028",
+      "question_id": "adversarial-open-028",
       "category": "open",
-      "question": "25년 첫 분기 LG유플러스가 제공한 주요 통신·플랫폼 서비스를 정리해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. LG유플러스의 2025년 1분기 주요 사업을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3801,23 +3801,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 21.22,
+      "latency_ms": 61.57,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001154"
       ],
-      "answer_chars": 503,
+      "answer_chars": 508,
       "answer_lines": 5,
-      "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라\n- 주요 제품·서비스: ㈜LG유플러스의 주요종속회사인 ㈜미디어로그는 2000년 3월 14일 설립되어 인터넷통신서비스, 멀티미디어콘텐츠 제작 및 인터넷포탈서비스 등을 영위하고 있으며, 2014년 6월 30일에 별정통신사업을 등록하고 2014년 7월 9일부터 알뜰폰(MVNO)사업을 영위하고 있습니다.\n- 전략·현황: 또한 ㈜LG유플러스볼트업은 2025년 3월 전기자동차 충전서비스 플랫폼인 '볼트업2.0'을 자체 역량으로 새롭게 출시하였으며, '볼트업 2.0' 플랫폼을 통해 고객과의 디지털 접점에서 사용 편의성을 확대하고, 데이터 기반으로 고객에 대한 심층적인 이해를 바탕으로 플랫폼을 만들어 디지털 혁신기업으로의 전환을 가속화하여 전기자동차 충전 시장에서 경쟁력을 더욱 강화시켜 나갈 예정입니다.\n근거 접수번호: 20250515001154.",
+      "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라, 커머스\n- 주요 제품·서비스: ㈜LG유플러스의 주요종속회사인 ㈜미디어로그는 2000년 3월 14일 설립되어 인터넷통신서비스, 멀티미디어콘텐츠 제작 및 인터넷포탈서비스 등을 영위하고 있으며, 2014년 6월 30일에 별정통신사업을 등록하고 2014년 7월 9일부터 알뜰폰(MVNO)사업을 영위하고 있습니다.\n- 전략·현황: 또한 ㈜LG유플러스볼트업은 2025년 3월 전기자동차 충전서비스 플랫폼인 '볼트업2.0'을 자체 역량으로 새롭게 출시하였으며, '볼트업 2.0' 플랫폼을 통해 고객과의 디지털 접점에서 사용 편의성을 확대하고, 데이터 기반으로 고객에 대한 심층적인 이해를 바탕으로 플랫폼을 만들어 디지털 혁신기업으로의 전환을 가속화하여 전기자동차 충전 시장에서 경쟁력을 더욱 강화시켜 나갈 예정입니다.\n근거 접수번호: 20250515001154.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-029",
+      "question_id": "adversarial-open-029",
       "category": "open",
-      "question": "크래프톤의 2025년 첫 분기 게임 사업과 성장 전략을 공시 내용으로 요약해줘.",
+      "question": "[교차검증] 크래프톤의 '25 Q1 주요 게임과 사업 전략을 요약해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3844,7 +3844,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.92,
+      "latency_ms": 43.82,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3858,9 +3858,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-030",
+      "question_id": "adversarial-open-030",
       "category": "open",
-      "question": "25년 1Q 크래프톤의 주요 게임 플랫폼과 사업 확장 방향을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 크래프톤의 2025년 1분기 주요 게임과 사업 전략을 요약해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3887,23 +3887,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.28,
+      "latency_ms": 41.44,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002283"
       ],
-      "answer_chars": 333,
+      "answer_chars": 314,
       "answer_lines": 5,
-      "answer": "크래프톤의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사의 2025년 1분기 누적 매출액은 8,742억원이며, 플랫폼 별로는 모바일 5,324억원(60.9%), PC 3,235억원(37.0%), 콘솔 131억원(1.5%), 기타 52억원(0.6%) 으로 구성되어 있습니다.\n- 전략·현황: 한편, 모바일 시장은 기존 앱 스토어 중심의 수익 모델에서 대체 스토어 및 D2C(Direct-to-Consumer) 모델로의 전환이 이루어지며 성장세가 확대될 것으로 예상됩니다.\n근거 접수번호: 20250515002283.",
+      "answer": "크래프톤의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사의 2025년 1분기 누적 매출액은 8,742억원이며, 플랫폼 별로는 모바일 5,324억원(60.9%), PC 3,235억원(37.0%), 콘솔 131억원(1.5%), 기타 52억원(0.6%) 으로 구성되어 있습니다.\n- 전략·현황: 당사는 'Scale-up the Creative' 전략을 바탕으로 조직을 개편하고, 제작 및 퍼블리싱 역량을 강화하며 IP 확보에 집중해왔습니다.\n근거 접수번호: 20250515002283.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-031",
+      "question_id": "adversarial-open-031",
       "category": "open",
-      "question": "POSCO홀딩스의 2025년 1분기 사업 포트폴리오와 각 부문의 전략을 정리해줘.",
+      "question": "[교차검증] 포스코홀딩스의 '25 Q1 주요 사업부문과 전략을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3930,7 +3930,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 24.85,
+      "latency_ms": 63.02,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -3944,9 +3944,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-032",
+      "question_id": "adversarial-open-032",
       "category": "open",
-      "question": "25년 첫 분기 포스코홀딩스의 철강·인프라·에너지소재 사업을 구분해 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. POSCO홀딩스의 2025년 1분기 주요 사업부문과 전략을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -3973,23 +3973,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 26.15,
+      "latency_ms": 78.54,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
-      "answer_chars": 471,
-      "answer_lines": 5,
-      "answer": "POSCO홀딩스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 철강, 인프라, 에너지소재\n- 주요 제품·서비스: 또한 포스코플로우는 '22년 포스코 물류업무 영업양수를 통해 CTS(Central Terminal System) 사업 및 철강원료, 제품, 곡물, 천연가스 운송 등 글로벌 복합물류서비스 회사로 거듭나고 있으며, 포스코디엑스는 IT, OT(현장운영기술) 분야에서 확보한 노하우와 기술력에 AI, 디지털트윈, 로보틱스 등 디지털 기술을 융합하여 산업 전반의 디지털 전환(DX)을 추진하고 있습니다.\n- 전략·현황: 포스코홀딩스는 2022년 3월 독점규제 및 공정거래에 관한 법률에 따른 지주회사로 전환하여 그룹 전반의 성장 전략을 수립하고 미래 사업 테마를 발굴하며 M&A 등 신사업을 추진하는 미래사업 포트폴리오 개발자 역할을 수행하고 있습니다.\n근거 접수번호: 20250515002741.",
+      "answer_chars": 331,
+      "answer_lines": 4,
+      "answer": "POSCO홀딩스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 철강, 인프라, 에너지소재\n- 주요 제품·서비스: 또한 포스코플로우는 '22년 포스코 물류업무 영업양수를 통해 CTS(Central Terminal System) 사업 및 철강원료, 제품, 곡물, 천연가스 운송 등 글로벌 복합물류서비스 회사로 거듭나고 있으며, 포스코디엑스는 IT, OT(현장운영기술) 분야에서 확보한 노하우와 기술력에 AI, 디지털트윈, 로보틱스 등 디지털 기술을 융합하여 산업 전반의 디지털 전환(DX)을 추진하고 있습니다.\n근거 접수번호: 20250515002741.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-033",
+      "question_id": "adversarial-open-033",
       "category": "open",
-      "question": "LG이노텍의 2025년 첫 분기 사업부문별 주요 제품을 정리해줘.",
+      "question": "[교차검증] LG Innotek의 '25 Q1 주요 사업과 제품을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4016,7 +4016,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.27,
+      "latency_ms": 50.8,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -4030,9 +4030,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-034",
+      "question_id": "adversarial-open-034",
       "category": "open",
-      "question": "25년 1Q LG이노텍 공시에서 광학·기판소재·전장부품 사업을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. LG이노텍의 2025년 1분기 주요 사업과 제품을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4059,23 +4059,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10.5,
+      "latency_ms": 41.0,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515000050"
       ],
-      "answer_chars": 332,
-      "answer_lines": 5,
-      "answer": "LG이노텍의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 광학솔루션, 기판소재, 전장부품\n- 주요 제품·서비스: (1) 광학솔루션 사업 광학솔루션 사업부문은 북미 고객향 신모델의 선제적 공급, 고사양 카메라모듈 채용 확대에 힘입어 전년동기 대비 증가한 매출 4.1조원을 달성하며 글로벌 일등 지위를 확고히 하였습니다.\n- 전략·현황: 테이프기판은 국내 및 중화권 전략 거래선 M/S 확대로 시장 일등 지위를 강화하고, 포토마스크는 시장 주도권 확보를 위해 OLED 등 프리미엄 모델 확대에 집중하고 있습니다.\n근거 접수번호: 20250515000050.",
+      "answer_chars": 197,
+      "answer_lines": 4,
+      "answer": "LG이노텍의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 광학솔루션, 기판소재, 전장부품\n- 주요 제품·서비스: 통신용 반도체기판은 차별화 기술 기반의 제품 경쟁력으로 일등 지위를 공고히 하였고, 신규 사업 FC-BGA는 양산 안정화와 물동 확대를 추진하고 있습니다.\n근거 접수번호: 20250515000050.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-035",
+      "question_id": "adversarial-open-035",
       "category": "open",
-      "question": "현대건설의 2025년 1분기 주요 건설 사업 영역을 공시 기준으로 요약해줘.",
+      "question": "[교차검증] 현대건설의 '25 Q1 주요 사업 영역을 요약해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4102,23 +4102,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 13.89,
+      "latency_ms": 41.4,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001248"
       ],
-      "answer_chars": 285,
+      "answer_chars": 293,
       "answer_lines": 5,
-      "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: '에너지사업 중심의 성장', '해외 선진시장 진출 확대', '핵심상품 지배력 강화'로 요약되는 전략의 수립과 실행을 통해 지속적인 성장을 만들어가고 있습니다.\n근거 접수번호: 20250515001248.",
+      "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설, 인프라\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: 핵심기술의 개발을 거쳐 신성장 고부가사업을 창출하고자 국가 연구개발사업에 주도적으로 참여하는 등의 R&D 활동으로 중기 경영전략을 달성하기 위해 노력하고 있습니다.\n근거 접수번호: 20250515001248.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-036",
+      "question_id": "adversarial-open-036",
       "category": "open",
-      "question": "25년 첫 분기 현대건설이 영위한 토목·건축·주택·에너지 관련 사업을 정리해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 현대건설의 2025년 1분기 주요 사업 영역을 요약해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4145,23 +4145,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.75,
+      "latency_ms": 54.12,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001248"
       ],
-      "answer_chars": 280,
+      "answer_chars": 290,
       "answer_lines": 5,
-      "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: 현대건설은 『에너지 회사로의 전환』 을 핵심 전략으로 삼고, 원전 및 신재생 에너지 사업을 중심으로 글로벌 시장에서의 입지를 확대해 나가고 있습니다.\n근거 접수번호: 20250515001248.",
+      "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설, 인프라\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: '에너지사업 중심의 성장', '해외 선진시장 진출 확대', '핵심상품 지배력 강화'로 요약되는 전략의 수립과 실행을 통해 지속적인 성장을 만들어가고 있습니다.\n근거 접수번호: 20250515001248.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-037",
+      "question_id": "adversarial-open-037",
       "category": "open",
-      "question": "셀트리온의 2025년 첫 분기 바이오 사업과 연구개발 방향을 설명해줘.",
+      "question": "[교차검증] 셀트리온의 '25 Q1 주요 사업과 연구개발 방향을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4188,7 +4188,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.49,
+      "latency_ms": 87.59,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -4202,9 +4202,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-038",
+      "question_id": "adversarial-open-038",
       "category": "open",
-      "question": "25년 1Q 셀트리온의 주력 의약품 사업과 R&D 초점을 공시 근거로 요약해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 셀트리온의 2025년 1분기 주요 사업과 연구개발 방향을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4231,23 +4231,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 91.14,
+      "latency_ms": 87.19,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002745"
       ],
-      "answer_chars": 351,
+      "answer_chars": 361,
       "answer_lines": 5,
-      "answer": "셀트리온의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오시밀러·신약, 바이오의약품\n- 주요 제품·서비스: 기존 케미컬 합성의약품(Small-molecule) 사업 부문에서 확장하여 신규 모달리티(New Modality)의 제품기획 및 발굴, CRO, CMO를 통한 공정개발 및 생산 그리고 임상, 허가, 판매 기능 전반을 내재화함으로써 글로벌 국가로의 사업을 진행하고 있습니다.\n- 전략·현황: 이외에도 당사는 글로벌 선진 바이오텍 기업들과 전략적인 제휴 및 투자를 통해 차세대 항체의약품 신약 파이프라인을 강화하고 있습니다.\n근거 접수번호: 20250515002745.",
+      "answer": "셀트리온의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오시밀러·신약, 바이오의약품\n- 주요 제품·서비스: 기존 케미컬 합성의약품(Small-molecule) 사업 부문에서 확장하여 신규 모달리티(New Modality)의 제품기획 및 발굴, CRO, CMO를 통한 공정개발 및 생산 그리고 임상, 허가, 판매 기능 전반을 내재화함으로써 글로벌 국가로의 사업을 진행하고 있습니다.\n- 전략·현황: 당사는 R&D 역량 강화를 위해 지속적으로 높은 수준의 연구개발비를 투자하여 바이오시밀러 파이프라인 확대, 항체의약품 신약 개발을 진행하고 있습니다.\n근거 접수번호: 20250515002745.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-039",
+      "question_id": "adversarial-open-039",
       "category": "open",
-      "question": "HD현대일렉트릭의 2025년 첫 분기 전력기기 사업과 주요 제품을 정리해줘.",
+      "question": "[교차검증] HD Hyundai Electric의 '25 Q1 주요 사업과 제품을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4274,23 +4274,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 15.53,
+      "latency_ms": 47.45,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
-      "answer_chars": 386,
+      "answer_chars": 393,
       "answer_lines": 5,
-      "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 당사는 육상풍력 터빈 제조업, 엔지니어링 및 사업개발 경험을 바탕으로 2030년 초 본격 개화가 예상되는 해상풍력으로 사업을 확대하기 위해 육해상 풍력 산업 분야에서 글로벌 선도 업체들과 전략적 협력을 체결하는 것을 포함하여 체계적으로 사업을 준비하고 있습니다.\n근거 접수번호: 20250515002651.",
+      "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기, 해운·물류\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 당사는 육상풍력 터빈 제조업, 엔지니어링 및 사업개발 경험을 바탕으로 2030년 초 본격 개화가 예상되는 해상풍력으로 사업을 확대하기 위해 육해상 풍력 산업 분야에서 글로벌 선도 업체들과 전략적 협력을 체결하는 것을 포함하여 체계적으로 사업을 준비하고 있습니다.\n근거 접수번호: 20250515002651.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-040",
+      "question_id": "adversarial-open-040",
       "category": "open",
-      "question": "25년 1Q HD현대일렉트릭이 판매한 변압기·차단기 등 제품군을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. HD현대일렉트릭의 2025년 1분기 주요 사업과 제품을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4317,23 +4317,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.62,
+      "latency_ms": 39.93,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
-      "answer_chars": 518,
+      "answer_chars": 457,
       "answer_lines": 5,
-      "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 2) 연구개발활동의 개요 및 연구개발비용 당사는 지배기업의 분당 글로벌R&D센터 및 용인 신뢰성센터와 종속기업인 헝가리연구소(HD Hyundai Electric Hungary Kft.), 스위스연구소(HD Hyundai Electric Switzerland Ltd.) 및 중국연구소(HD Hyundai Electric Shanghai Ltd.) 등을 통해 변압기, 고압차단기, 회전기, ICT 기반 전력 기기 등 전기ㆍ전자시스템과 디자인 등의 분야에서 시장 지향적인 최적 기술을 개발하고 있습니다.\n근거 접수번호: 20250515002651.",
+      "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 지역별로는 미국 내 설비 투자 증가에 따른 전력 수요 확대 및 노후 설비 교체에 따른 신규 투자수요, 유럽의 노후 설비 교체 수요 및 신재생 인프라 투자수요와 아시아-태평양, 중남미 등 이머징 마켓의 신규 전력 인프라 증설 수요를 바탕으로 연평균 3~5%의 성장이 예상되며, 4차 산업혁명 및 친환경 트렌드에 따른 ICT 융합 솔루션 및 친환경 기술 적용 제품의 확대가 예상되고 있습니다.\n근거 접수번호: 20250515002651.",
       "notes": null,
       "gold_note": null
     },
     {
-      "question_id": "development-open-041",
+      "question_id": "adversarial-open-041",
       "category": "open",
-      "question": "네이버 2025년 분기공시의 사업의 내용에서 핵심 서비스 포트폴리오를 설명해줘.",
+      "question": "[교차검증] 035420(NAVER) 2025년 분기보고서 사업의 내용에서 주요 사업을 정리해줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4360,51 +4360,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 35.27,
-      "validation_action": "allow",
-      "query_type": "business_overview",
-      "numeric_details": [],
-      "cited_doc_ids": [
-        "periodic_20250515001302",
-        "periodic_20250814002281"
-      ],
-      "answer_chars": 328,
-      "answer_lines": 5,
-      "answer": "NAVER의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 서치플랫폼, 커머스, 핀테크, 콘텐츠, 엔터프라이즈\n- 주요 제품·서비스: 아울러 금융 씬파일러(Thin Filer)들을 위한 핀테크, 웹툰, 스노우 등의 콘텐츠 서비스, 기업용 솔루션을 제공하는 엔터프라이즈 등 다각화된 사업 포트폴리오를 기반으로 안정적인 성장을 이어가고 있습니다.\n- 전략·현황: 또한, 네이버는 지속적인 성장을 목표로 기술, 서비스 등에 대한 선제적 투자를 진행하며, 핵심 사업의 경쟁력을 끊임없이 강화해 나가고 있습니다.\n근거 접수번호: 20250515001302.",
-      "notes": "Open business overview; should prioritize section II and avoid report-cover boilerplate.",
-      "gold_note": null
-    },
-    {
-      "question_id": "development-open-042",
-      "category": "open",
-      "question": "2025년 네이버 분기보고서를 토대로 회사의 주요 사업을 분야별로 요약해줘.",
-      "passed": true,
-      "checks": {
-        "required_evidence": true,
-        "answer_contains": true,
-        "answer_contains_any": true,
-        "answer_excludes": true,
-        "query_type": true,
-        "numeric_tolerance": true,
-        "unit": true,
-        "scope": true,
-        "period": true,
-        "required_citation_docs": true,
-        "answer_citation": true,
-        "answerability": true,
-        "answer_length": true,
-        "guardrail_action": true,
-        "expected_validation_action": true,
-        "plan_companies": true,
-        "plan_years": true,
-        "plan_quarter": true,
-        "plan_metric": true,
-        "plan_doc_subtypes": true,
-        "limitation_codes": true,
-        "composite_subtasks": true,
-        "citation_fields": true
-      },
-      "latency_ms": 19.87,
+      "latency_ms": 56.05,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -4419,9 +4375,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-043",
+      "question_id": "adversarial-open-042",
       "category": "open",
-      "question": "현대차 2025년 분기공시에서 자동차 부문의 사업 내용을 중심으로 정리해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 네이버 2025년 분기보고서 사업의 내용에서 주요 사업을 정리해줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4448,23 +4404,24 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 47.69,
+      "latency_ms": 51.09,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
-        "periodic_20250515001159"
+        "periodic_20250515001302",
+        "periodic_20251114001436"
       ],
-      "answer_chars": 463,
+      "answer_chars": 344,
       "answer_lines": 5,
-      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 완성차·모빌리티, 금융\n- 주요 제품·서비스: 당사는 '2030 전략'을 통해, 지속적으로 '스마트 모빌리티 솔루션 프로바이더' 전환을 목표로 하면서, ① '모빌리티 게임 체인저' (완성차 및 모빌리티 디바이스 사업 경쟁력 제고), ② '에너지 모빌라이저' (에너지 전환을 통한 지속 가능한 에너지 공급)이라는 두 가지 사업 축을 중심으로, ③ '현대 다이내믹 케이퍼빌리티'를 통해 당사만의 유연한 시장 대응 역량 기반으로 시장 불확실성에 대응하며 수익성을 제고해 나갈 것입니다.\n- 전략·현황: 국내 신용카드 산업은 지속적으로 성장해 왔으며, 민간소비에서 신용카드 결제액 비중이 전체 결제의 70%를 상회하는 상황을 고려할 때 신용카드업은 성숙기에 진입한 것으로 판단할 수 있습니다.\n근거 접수번호: 20250515001159.",
-      "notes": "Known partial issue: section priority may be wrong.",
+      "answer": "NAVER의 분기보고서 (2025.09) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 서치플랫폼, 커머스, 핀테크, 콘텐츠, 엔터프라이즈\n- 주요 제품·서비스: 아울러 금융 씬파일러(Thin Filer)들을 위한 핀테크, 웹툰, 스노우 등의 콘텐츠 서비스, 기업용 솔루션을 제공하는 엔터프라이즈 등 다각화된 사업 포트폴리오를 기반으로 안정적인 성장을 이어가고 있습니다.\n- 전략·현황: 또한, 네이버는 지속적인 성장을 목표로 기술, 서비스 등에 대한 선제적 투자를 진행하며, 핵심 사업의 경쟁력을 끊임없이 강화해 나가고 있습니다.\n근거 접수번호: 20251114001436, 20250515001302.",
+      "notes": "Open business overview; should prioritize section II and avoid report-cover boilerplate.",
       "gold_note": null
     },
     {
-      "question_id": "development-open-044",
+      "question_id": "adversarial-open-043",
       "category": "open",
-      "question": "2025년 현대자동차 분기보고서가 설명하는 차량 관련 사업을 요약해줘.",
+      "question": "[교차검증] 현대차 2025년 분기보고서 사업의 내용에서 자동차 부문 관련 내용을 찾아줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4491,7 +4448,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 23.98,
+      "latency_ms": 69.62,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -4505,9 +4462,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-045",
+      "question_id": "adversarial-open-044",
       "category": "open",
-      "question": "KT의 2025년 분기공시에 나타난 대표 서비스들을 사업 영역별로 알려줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 현대차 2025년 분기보고서 사업의 내용에서 자동차 부문 관련 내용을 찾아줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4534,26 +4491,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2952.93,
+      "latency_ms": 63.55,
       "validation_action": "allow",
-      "query_type": "generic",
+      "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
-        "periodic_20250515002428",
-        "periodic_20250814003695",
-        "periodic_20251114002201",
-        "periodic_20260323001553"
+        "periodic_20250515001159"
       ],
-      "answer_chars": 607,
-      "answer_lines": 1,
-      "answer": "가장 관련성이 높은 공시 근거는 다음과 같습니다: 케이티 | 분기보고서 (2025.09) | II. 사업의 내용 > 1. (제조서비스업)사업의 개요 > [1] ICT : 주식회사 ㈜케이티 ㈜케이티는 무선통신, 초고속인터넷, 기업회선 등 개인과 기업고객 대상 유무선 통신서비스, IPTV 등 유료방송 서비스, AI/IT 사업을 포함한 B2B 사업 등을 영위하고 있습니다. ㈜케이티는 AX 역량을 통신, 미디어, IT 사업에 접목하여 성장 동력을 확보해 나가고 있습니다. [2] 위성방송서비스 사업: ㈜케이티스카이라이프 ㈜케이티스카이라이프는 국내 유일의 위성방송사업자로서 무궁화 위성의 광대역성을 통해 전국 동일의 방송서비스를 제공합니다. 국내 최초로 H.264 기반의 다채널 HD를 사업화하여 국내 HD 방송서비스 시장을 선도하고 있습니다. [3] 부동산사업 : ㈜케이티에스테이트 KT 그룹의 부동산 사업은 보유자산 중심의 사업전략으로 안정적 성장을 이어가고 있으며 주기적인 포트폴리오 전략 업데이트를 통해 부동산 시장 변동을 반영한 상품 선정과 (출처: 케이티, 분기보고서 (2025.09), 접수번호 20251114002201). 추가 수치 판단은 이 근거 범위 안에서만 가능합니다.",
-      "notes": "Alias KT -> 케이티 and service/business section retrieval.",
+      "answer_chars": 309,
+      "answer_lines": 5,
+      "answer": "현대자동차의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 완성차·모빌리티, 금융\n- 주요 제품·서비스: 당사는 제 58기 1분기 누계 약 100만대의 판매 실적을 바탕으로 연결기준 차량부문에서 약 35조원의 매출을 기록했습니다.\n- 전략·현황: 또한, 현대로템은 전략적 중점시장, 대상시장 선점 및 수주, 진출국 시장유지 및 확대, 철도관련분야 사업 및 부품 수출 확대, 고부가 가치 차량의 개발, 선진 업체와의 전략적 제휴 강화 등의 판매 전략을 추진하고 있습니다.\n근거 접수번호: 20250515001159.",
+      "notes": "Known partial issue: section priority may be wrong.",
       "gold_note": null
     },
     {
-      "question_id": "development-open-046",
+      "question_id": "adversarial-open-045",
       "category": "open",
-      "question": "2025년 KT 분기보고서 기준 주요 서비스 포트폴리오를 설명해줘.",
+      "question": "[교차검증] kt(030200) 2025년 분기보고서 주요 서비스는 뭐야. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4580,7 +4534,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 47.97,
+      "latency_ms": 107.92,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -4595,9 +4549,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-047",
+      "question_id": "adversarial-open-046",
       "category": "open",
-      "question": "엔씨소프트의 2025년 분기보고서에 기재된 핵심 제품과 서비스를 정리해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. KT 2025년 분기보고서 주요 서비스는 뭐야. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4624,7 +4578,51 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.02,
+      "latency_ms": 114.17,
+      "validation_action": "allow",
+      "query_type": "business_overview",
+      "numeric_details": [],
+      "cited_doc_ids": [
+        "periodic_20250515002428",
+        "periodic_20251114002201"
+      ],
+      "answer_chars": 493,
+      "answer_lines": 5,
+      "answer": "케이티의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 금융, 위성방송, 부동산, 커머스\n- 주요 제품·서비스: 연결회사의 각 부분은 독립된 서비스 및 상품을 제공하는 법률적 실체에 의해 구분되어 있으며, 각 연결회사의 사업의 내용에 대해 (1) 유무선 통신/컨버전스 사업을 제공하는 ICT , (2) 신용카드사업을 제공하는 금융사업 , (3) 위성방송서비스사업 , (4) 케이티의 자산을 활용한 부동산사업 (5) 콘텐츠, 정보기술, 글로벌사업 및 자회사가 영위하는 기타사업 으로 구분하고 있습니다.\n- 전략·현황: ㈜케이티클라우드는 2022년 4월 1일 출범 후 DC와 Cloud 사업에서의 지속적인 고객기반 확대를 통해 Cloud, AI Cloud, DC 등 전 사업분야에서의 시장 리더십을 공고히 다져가며 성장세를 이어가고 있습니다.\n근거 접수번호: 20250515002428, 20251114002201.",
+      "notes": "Alias KT -> 케이티 and service/business section retrieval.",
+      "gold_note": null
+    },
+    {
+      "question_id": "adversarial-open-047",
+      "category": "open",
+      "question": "[교차검증] NC(036570) 2025년 분기보고서 주요 제품과 서비스는 뭐야. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
+      "passed": true,
+      "checks": {
+        "required_evidence": true,
+        "answer_contains": true,
+        "answer_contains_any": true,
+        "answer_excludes": true,
+        "query_type": true,
+        "numeric_tolerance": true,
+        "unit": true,
+        "scope": true,
+        "period": true,
+        "required_citation_docs": true,
+        "answer_citation": true,
+        "answerability": true,
+        "answer_length": true,
+        "guardrail_action": true,
+        "expected_validation_action": true,
+        "plan_companies": true,
+        "plan_years": true,
+        "plan_quarter": true,
+        "plan_metric": true,
+        "plan_doc_subtypes": true,
+        "limitation_codes": true,
+        "composite_subtasks": true,
+        "citation_fields": true
+      },
+      "latency_ms": 40.86,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -4638,9 +4636,9 @@
       "gold_note": null
     },
     {
-      "question_id": "development-open-048",
+      "question_id": "adversarial-open-048",
       "category": "open",
-      "question": "2025년 엔씨소프트 정기공시를 기준으로 주요 게임·서비스 사업을 설명해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. 엔씨소프트 2025년 분기보고서 주요 제품과 서비스는 뭐야. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4667,23 +4665,24 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 25.3,
+      "latency_ms": 33.16,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
-        "periodic_20250515002885"
+        "periodic_20250515002885",
+        "periodic_20251114003037"
       ],
-      "answer_chars": 334,
+      "answer_chars": 267,
       "answer_lines": 5,
-      "answer": "NC의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사 주력 모바일게임으로는 리니지M, 리니지2M, 리니지W, 블레이드 & 소울 2, 호연, 저니 오브 모나크 등이 있으며, 온라인게임으로는 리니지, 리니지2, 아이온, 블레이드 & 소울, 길드워2, 쓰론 앤 리버티 등이 있습니다.\n- 전략·현황: 당사는 '글로벌 게임사로의 더 확고한 도약'이라는 목표를 바탕으로 플랫폼 다변화, 포트폴리오 확장 등의 전략을 추진하고 있으며 R&D의 중요성을 경영 전반에 적용하고 있습니다.\n근거 접수번호: 20250515002885.",
+      "answer": "NC의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 모바일/온라인 게임의 개발 및 서비스 제공을 포함한 디지털 엔터테인먼트 관련 인터넷 사업을 영위하고 있습니다.\n- 전략·현황: 당사는 '글로벌 게임사로의 더 확고한 도약'이라는 목표를 바탕으로 플랫폼 다변화, 포트폴리오 확장 등의 전략을 추진하고 있으며 R&D의 중요성을 경영 전반에 적용하고 있습니다.\n근거 접수번호: 20250515002885.",
       "notes": "Alias 엔씨소프트 -> NC and product/service evidence.",
       "gold_note": null
     },
     {
-      "question_id": "development-open-049",
+      "question_id": "adversarial-open-049",
       "category": "open",
-      "question": "JYP의 2025년 분기공시에서 확인되는 주요 사업 활동을 요약해줘.",
+      "question": "[교차검증] JYP 2025년 분기보고서 주요 사업 내용을 알려줘. 공시의 'II. 사업의 내용'만 근거로 핵심을 항목별로 답해줘.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4710,24 +4709,23 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 22.57,
+      "latency_ms": 33.73,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
-        "periodic_20250514000990",
-        "periodic_20260318001519"
+        "periodic_20250514000990"
       ],
-      "answer_chars": 505,
+      "answer_chars": 510,
       "answer_lines": 5,
-      "answer": "JYP Ent의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 음악·영상 콘텐츠, 아티스트 매니지먼트, 음반·음원\n- 주요 제품·서비스: 이러한 지속가능한 시스템을 기반으로 음반, 음원, 영상 컨텐츠 등을 기획, 제작하여 유통하는 음악 및 영상 컨텐츠 사업, 그리고 공연, 출연 등 소속 아티스트의 용역활동을 통해 수익을 창출하는 매니지먼트 관련 사업을 글로벌 전역에서 영위하고 있습니다.\n- 전략·현황: 레이블 조직으로의 점진적 개편을 통해 2016년을 기점으로 이전 데뷔하였던 DAY6, TWICE 등 주요 아티스트의 구조적 성장과 더불어 2018년 Stray Kids, 2019년 ITZY, 2020년 NiziU, 2021년 Xdinary Heroes, 2022년 NMIXX, 2024년 VCHA, NEXZ 등 신규 아티스트 라인업을 확대하였고, 2025년 1월에는 신규 보이그룹 KickFlip이 데뷔하였습니다.\n근거 접수번호: 20250514000990.",
+      "answer": "JYP Ent의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 음악·영상 콘텐츠, 아티스트 매니지먼트, 음반·음원, 콘텐츠\n- 주요 제품·서비스: 이러한 지속가능한 시스템을 기반으로 음반, 음원, 영상 컨텐츠 등을 기획, 제작하여 유통하는 음악 및 영상 컨텐츠 사업, 그리고 공연, 출연 등 소속 아티스트의 용역활동을 통해 수익을 창출하는 매니지먼트 관련 사업을 글로벌 전역에서 영위하고 있습니다.\n- 전략·현황: 레이블 조직으로의 점진적 개편을 통해 2016년을 기점으로 이전 데뷔하였던 DAY6, TWICE 등 주요 아티스트의 구조적 성장과 더불어 2018년 Stray Kids, 2019년 ITZY, 2020년 NiziU, 2021년 Xdinary Heroes, 2022년 NMIXX, 2024년 VCHA, NEXZ 등 신규 아티스트 라인업을 확대하였고, 2025년 1월에는 신규 보이그룹 KickFlip이 데뷔하였습니다.\n근거 접수번호: 20250514000990.",
       "notes": "Alias JYP -> JYP Ent and business overview.",
       "gold_note": null
     },
     {
-      "question_id": "development-open-050",
+      "question_id": "adversarial-open-050",
       "category": "open",
-      "question": "2025년 JYP 분기보고서를 바탕으로 회사의 수익 사업을 정리해줘.",
+      "question": "외부 지식과 표지 문구는 제외해. JYP 2025년 분기보고서 주요 사업 내용을 알려줘. 제품·서비스·전략을 구분하고 근거 접수번호를 포함해 8줄 이내로 정리해.",
       "passed": true,
       "checks": {
         "required_evidence": true,
@@ -4754,7 +4752,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.94,
+      "latency_ms": 34.8,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],

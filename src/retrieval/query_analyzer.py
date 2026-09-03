@@ -70,6 +70,8 @@ class QueryAnalyzer:
         self.conn = conn
 
     def analyze(self, question: str) -> Dict[str, Any]:
+        original_question = question
+        question = self._positive_intent_text(question)
         compact_question = re.sub(r"\s+", "", question).lower()
         companies = self._companies(question)
         years = {int(value) for value in re.findall(r"(20\d{2})\s*년?", question)}
@@ -138,6 +140,9 @@ class QueryAnalyzer:
             "calculation": calculation,
             "requires_current_effective": not any(x in question for x in ("정정 전", "변경 전", "최초")),
         }
+        if question != original_question:
+            plan["original_question"] = original_question
+            plan["excluded_context_removed"] = True
         plan["period_aggregation"] = self._period_aggregation(question)
         plan["dimensions"] = self._dimensions(question, metric)
         if query_type == "business_change":
@@ -154,6 +159,29 @@ class QueryAnalyzer:
         plan["missing_slots"] = self._missing_slots(plan)
         plan["warnings"] = self._warnings(question, plan)
         return plan
+
+    @staticmethod
+    def _positive_intent_text(question: str) -> str:
+        """Remove explicitly negative metadata before entity and period extraction.
+
+        Users often clarify a request with phrases such as "A와 2022년은 제외".
+        Treating those values as positive filters creates a false multi-company or
+        multi-period query.  Only labelled exclusion containers are removed; free
+        prose remains untouched so ordinary business questions keep their context.
+        """
+        value = re.sub(
+            r"\[(?:제외\s*조건|제외\s*대상|검색\s*제외|비교\s*금지|참조\s*금지)\s*:[^\]]*\]\s*",
+            "", question, flags=re.IGNORECASE,
+        )
+        value = re.sub(
+            r"\((?=[^)]*(?:비교\s*금지|참조\s*금지|제외\s*대상))[^)]*\)\.?",
+            "", value, flags=re.IGNORECASE,
+        )
+        value = re.sub(
+            r"(?:앞의\s*)?제외\s*대상은[^.!?]*(?:포함하지\s*마|제외해)[.!?]?",
+            "", value, flags=re.IGNORECASE,
+        )
+        return " ".join(value.split()).strip()
 
     @staticmethod
     def _metric(compact_question: str) -> Optional[str]:

@@ -4,7 +4,9 @@ from decimal import Decimal
 from pathlib import Path
 
 from eval.evaluate_agent import expand_cases, load_cases
-from eval.evaluate_manual_qa import _answerability_check, _effective_plan, _numeric_expectations
+from eval.evaluate_manual_qa import (
+    _answerability_check, _apply_metamorphic_consistency, _effective_plan, _numeric_expectations,
+)
 
 
 class GoldenEvaluationTests(unittest.TestCase):
@@ -53,6 +55,19 @@ class GoldenEvaluationTests(unittest.TestCase):
         self.assertGreaterEqual(by_category["clarification"], 8)
         self.assertGreaterEqual(by_category["multi_intent"], 3)
         self.assertGreaterEqual(by_category["safety_limit"], 5)
+
+    def test_metamorphic_consistency_marks_both_pair_members(self):
+        cases = [
+            {"question_id": "a", "metamorphic_pair_id": "pair-1", "consistency_fields": ["query_type"]},
+            {"question_id": "b", "metamorphic_pair_id": "pair-1", "consistency_fields": ["query_type"]},
+        ]
+        results = [
+            {"question_id": "a", "query_type": "financial_metric", "checks": {"base": True}, "passed": True},
+            {"question_id": "b", "query_type": "financial_metric", "checks": {"base": True}, "passed": True},
+        ]
+        report = _apply_metamorphic_consistency(results, cases)
+        self.assertEqual(report["passed_pairs"], 1)
+        self.assertTrue(all(row["checks"]["metamorphic_consistency"] for row in results))
 
 
 if __name__ == "__main__":

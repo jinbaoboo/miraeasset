@@ -20,10 +20,16 @@
     }
   },
   "latency_ms": {
-    "median": 3081.24,
-    "max": 10302.05
+    "median": 1775.94,
+    "max": 10257.09
   },
   "transport": "direct",
+  "metamorphic": {
+    "total_pairs": 0,
+    "passed_pairs": 0,
+    "failed_pairs": 0,
+    "pairs": []
+  },
   "results": [
     {
       "question_id": "audit-close-001",
@@ -47,7 +53,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -55,7 +63,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10302.05,
+      "latency_ms": 10257.09,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -69,6 +77,15 @@
       "cited_doc_ids": [
         "periodic_20250515000050"
       ],
+      "plan_companies": [
+        "LG이노텍"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "LG이노텍의 2025년 1분기 연결 기준 매출액은 4,982,840백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515000050, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -97,7 +114,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -105,7 +124,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4478.59,
+      "latency_ms": 2349.76,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -119,6 +138,15 @@
       "cited_doc_ids": [
         "periodic_20250515000050"
       ],
+      "plan_companies": [
+        "LG이노텍"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 127,
       "answer_lines": 1,
       "answer": "LG이노텍의 2025년 1분기 연결 기준 영업이익은 125,117백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515000050, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -147,7 +175,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -155,7 +185,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4597.47,
+      "latency_ms": 2021.59,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -169,6 +199,15 @@
       "cited_doc_ids": [
         "periodic_20250515002264"
       ],
+      "plan_companies": [
+        "삼성바이오로직스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 137,
       "answer_lines": 1,
       "answer": "삼성바이오로직스의 2025년 1분기 연결 기준 매출액은 1,298,272,949,854원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002264, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -197,7 +236,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -205,7 +246,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3077.27,
+      "latency_ms": 2086.35,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -219,6 +260,15 @@
       "cited_doc_ids": [
         "periodic_20250515002264"
       ],
+      "plan_companies": [
+        "삼성바이오로직스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 136,
       "answer_lines": 1,
       "answer": "삼성바이오로직스의 2025년 1분기 연결 기준 영업이익은 486,688,724,699원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002264, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -247,7 +297,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -255,7 +307,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3120.68,
+      "latency_ms": 2193.09,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -269,6 +321,15 @@
       "cited_doc_ids": [
         "periodic_20250514000594"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -297,7 +358,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -305,7 +368,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2399.46,
+      "latency_ms": 1927.08,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -319,6 +382,15 @@
       "cited_doc_ids": [
         "periodic_20250514000594"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 127,
       "answer_lines": 1,
       "answer": "HMM의 2025년 1분기 연결 기준 영업이익은 613,899백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -347,7 +419,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -355,7 +429,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4254.45,
+      "latency_ms": 2310.16,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -369,6 +443,15 @@
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
+      "plan_companies": [
+        "HD현대일렉트릭"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 137,
       "answer_lines": 1,
       "answer": "HD현대일렉트릭의 2025년 1분기 연결 기준 매출액은 1,014,667,829,225원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002651, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -397,7 +480,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -405,7 +490,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3293.38,
+      "latency_ms": 1720.56,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -419,6 +504,15 @@
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
+      "plan_companies": [
+        "HD현대일렉트릭"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 136,
       "answer_lines": 1,
       "answer": "HD현대일렉트릭의 2025년 1분기 연결 기준 영업이익은 218,178,415,835원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002651, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -447,7 +541,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -455,7 +551,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3284.18,
+      "latency_ms": 1884.91,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -469,6 +565,15 @@
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
+      "plan_companies": [
+        "POSCO홀딩스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 138,
       "answer_lines": 1,
       "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 매출액은 17,436,775,980,004원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -497,7 +602,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -505,7 +612,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4010.46,
+      "latency_ms": 1665.6,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -519,6 +626,15 @@
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
+      "plan_companies": [
+        "POSCO홀딩스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 136,
       "answer_lines": 1,
       "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 영업이익은 568,441,042,504원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -547,7 +663,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -555,7 +673,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3333.75,
+      "latency_ms": 2031.95,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -569,6 +687,15 @@
       "cited_doc_ids": [
         "periodic_20250515001154"
       ],
+      "plan_companies": [
+        "LG유플러스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "LG유플러스의 2025년 1분기 연결 기준 영업이익은 255,427백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001154, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -597,7 +724,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -605,7 +734,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3617.75,
+      "latency_ms": 2187.77,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -619,6 +748,15 @@
       "cited_doc_ids": [
         "periodic_20250515001154"
       ],
+      "plan_companies": [
+        "LG유플러스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "net_income",
+      "plan_scope": "consolidated",
       "answer_chars": 129,
       "answer_lines": 1,
       "answer": "LG유플러스의 2025년 1분기 연결 기준 당기순이익은 162,472백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001154, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -647,7 +785,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -655,7 +795,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3499.95,
+      "latency_ms": 2726.81,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -669,6 +809,15 @@
       "cited_doc_ids": [
         "periodic_20250515001455"
       ],
+      "plan_companies": [
+        "CJ제일제당"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 133,
       "answer_lines": 1,
       "answer": "CJ제일제당의 2025년 1분기 연결 기준 매출액은 7,208,471,055천원입니다. 공시 단위: (단위 : 천원). 근거: 분기보고서 (2025.03), 접수번호 20250515001455, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -697,7 +846,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -705,7 +856,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3145.07,
+      "latency_ms": 2066.24,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -719,6 +870,15 @@
       "cited_doc_ids": [
         "periodic_20250515001455"
       ],
+      "plan_companies": [
+        "CJ제일제당"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 132,
       "answer_lines": 1,
       "answer": "CJ제일제당의 2025년 1분기 연결 기준 영업이익은 333,167,940천원입니다. 공시 단위: (단위 : 천원). 근거: 분기보고서 (2025.03), 접수번호 20250515001455, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -747,7 +907,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -755,7 +917,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4523.58,
+      "latency_ms": 1956.56,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -769,6 +931,15 @@
       "cited_doc_ids": [
         "periodic_20250515002745"
       ],
+      "plan_companies": [
+        "셀트리온"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 130,
       "answer_lines": 1,
       "answer": "셀트리온의 2025년 1분기 연결 기준 영업이익은 149,420,804,340원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002745, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -797,7 +968,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -805,7 +978,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3769.89,
+      "latency_ms": 1849.5,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -819,6 +992,15 @@
       "cited_doc_ids": [
         "periodic_20250515002745"
       ],
+      "plan_companies": [
+        "셀트리온"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "net_income",
+      "plan_scope": "consolidated",
       "answer_chars": 131,
       "answer_lines": 1,
       "answer": "셀트리온의 2025년 1분기 연결 기준 당기순이익은 108,333,345,392원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002745, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -847,7 +1029,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -855,7 +1039,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2825.99,
+      "latency_ms": 2010.78,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -869,6 +1053,15 @@
       "cited_doc_ids": [
         "periodic_20250515002283"
       ],
+      "plan_companies": [
+        "크래프톤"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 137,
       "answer_lines": 1,
       "answer": "크래프톤의 2025년 1분기 연결 기준 영업수익(매출액)은 874,184,373,846원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002283, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -897,7 +1090,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -905,7 +1100,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4211.0,
+      "latency_ms": 1759.23,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -919,6 +1114,15 @@
       "cited_doc_ids": [
         "periodic_20250515002283"
       ],
+      "plan_companies": [
+        "크래프톤"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 132,
       "answer_lines": 1,
       "answer": "크래프톤의 2025년 1분기 연결 기준 영업이익은 457,276,029,726원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002283, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -947,7 +1151,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -955,7 +1161,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4152.19,
+      "latency_ms": 1792.65,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -969,6 +1175,15 @@
       "cited_doc_ids": [
         "periodic_20250515001248"
       ],
+      "plan_companies": [
+        "현대건설"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 129,
       "answer_lines": 1,
       "answer": "현대건설의 2025년 1분기 연결 기준 매출액은 7,455,579백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001248, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -997,7 +1212,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1005,7 +1222,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3133.95,
+      "latency_ms": 2016.61,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1019,6 +1236,15 @@
       "cited_doc_ids": [
         "periodic_20250515001248"
       ],
+      "plan_companies": [
+        "현대건설"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "현대건설의 2025년 1분기 연결 기준 영업이익은 213,697백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001248, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -1047,7 +1273,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1055,13 +1283,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 28.33,
+      "latency_ms": 18.49,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250514000594"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 369,
       "answer_lines": 5,
       "answer": "HMM의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 해운·물류\n- 주요 제품·서비스: 당사는 컨테이너, 벌크(유조선/건화물선), 기타(터미널 등)의 사업부문을 영위하고 있으며, 부문별 2025년 1분기 연결기준 매출액 및 그 비중은 다음과 같습니다.\n- 전략·현황: 더불어, 올 2월부터 시작된 '프리미어 얼라이언스(HMM, ONE, Yangming)'로의 개편을 통해 대화주 서비스 경쟁력을 강화하고, 신규 독자 노선(인도-북구주[INX] 서비스 및 북구주-미서안[TA1] 서비스) 개시로 시장 다각화를 추진하여 신규 시장에서 당사 점유율 확대를 지속해 나갈 예정입니다.\n근거 접수번호: 20250514000594.",
@@ -1090,7 +1327,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1098,13 +1337,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 21.05,
+      "latency_ms": 18.18,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002264"
       ],
+      "plan_companies": [
+        "삼성바이오로직스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 417,
       "answer_lines": 5,
       "answer": "삼성바이오로직스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오의약품, 바이오시밀러·신약\n- 주요 제품·서비스: 당사는 항체의약품 중심의 CDMO 서비스에서 나아가 mRNA, ADC, 세포/유전자 치료제 등 차세대 바이오의약품으로 사업을 확장하고 있으며, 송도 내 mRNA 생산설비 및 신규 ADC 공장 구축을 완료했습니다.\n- 전략·현황: CMO뿐 아니라 CDO 사업에서도 성과를 확대하고 있으며, 자체 세포주 및 고농도 제형 플랫폼 S-Tensify™, 항암 특화 세포주 플랫폼 S-AfuCHO™, 고품질 단백질 생산 플랫폼 S-OptiCharge™, 고농도 제형 기술 S-HiCon™ 등을 개발 및 공개하여 기술경쟁력을 강화하고 있습니다.\n근거 접수번호: 20250515002264.",
@@ -1133,7 +1381,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1141,13 +1391,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 32.05,
+      "latency_ms": 23.29,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001455"
       ],
+      "plan_companies": [
+        "CJ제일제당"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 374,
       "answer_lines": 5,
       "answer": "CJ제일제당의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 식품, BIO·F&C, 종합물류, 건설\n- 주요 제품·서비스: 식품, BIO 및 F&C 사업은 국내 26개 생산 사업장과 중국, 인도네시아, 베트남 등 해외 81개 생산 사업장에서 관련 제품을 제조하여 판매하고 있습니다.\n- 전략·현황: 해외사업은 미국, 인도, 베트남 등 전세계에 걸쳐 38개국 114개 법인 운영을 통하여 CL(계약물류), 포워딩 등 종합물류서비스를 제공하고 있으며, 전략화주 및 성장산업군 대상으로 Value chain 확대하고 운영효율성을 극대화하여 사업 영역의 高효율ㆍ질적 확대를 추진하고 있습니다.\n근거 접수번호: 20250515001455.",
@@ -1176,7 +1435,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1184,13 +1445,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 36.61,
+      "latency_ms": 28.35,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001154"
       ],
+      "plan_companies": [
+        "LG유플러스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 514,
       "answer_lines": 5,
       "answer": "LG유플러스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 콘텐츠, 유무선 통신·ICT, 모바일·스마트홈·기업인프라, 커머스, 위성방송\n- 주요 제품·서비스: ㈜LG유플러스의 주요종속회사인 ㈜미디어로그는 2000년 3월 14일 설립되어 인터넷통신서비스, 멀티미디어콘텐츠 제작 및 인터넷포탈서비스 등을 영위하고 있으며, 2014년 6월 30일에 별정통신사업을 등록하고 2014년 7월 9일부터 알뜰폰(MVNO)사업을 영위하고 있습니다.\n- 전략·현황: 또한 ㈜LG유플러스볼트업은 2025년 3월 전기자동차 충전서비스 플랫폼인 '볼트업2.0'을 자체 역량으로 새롭게 출시하였으며, '볼트업 2.0' 플랫폼을 통해 고객과의 디지털 접점에서 사용 편의성을 확대하고, 데이터 기반으로 고객에 대한 심층적인 이해를 바탕으로 플랫폼을 만들어 디지털 혁신기업으로의 전환을 가속화하여 전기자동차 충전 시장에서 경쟁력을 더욱 강화시켜 나갈 예정입니다.\n근거 접수번호: 20250515001154.",
@@ -1219,7 +1489,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1227,13 +1499,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 22.47,
+      "latency_ms": 19.16,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002283"
       ],
+      "plan_companies": [
+        "크래프톤"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 333,
       "answer_lines": 5,
       "answer": "크래프톤의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 게임, 콘텐츠\n- 주요 제품·서비스: 당사의 2025년 1분기 누적 매출액은 8,742억원이며, 플랫폼 별로는 모바일 5,324억원(60.9%), PC 3,235억원(37.0%), 콘솔 131억원(1.5%), 기타 52억원(0.6%) 으로 구성되어 있습니다.\n- 전략·현황: 한편, 모바일 시장은 기존 앱 스토어 중심의 수익 모델에서 대체 스토어 및 D2C(Direct-to-Consumer) 모델로의 전환이 이루어지며 성장세가 확대될 것으로 예상됩니다.\n근거 접수번호: 20250515002283.",
@@ -1262,7 +1543,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1270,13 +1553,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 46.64,
+      "latency_ms": 32.9,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
+      "plan_companies": [
+        "POSCO홀딩스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 331,
       "answer_lines": 4,
       "answer": "POSCO홀딩스의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 철강, 인프라, 에너지소재\n- 주요 제품·서비스: 또한 포스코플로우는 '22년 포스코 물류업무 영업양수를 통해 CTS(Central Terminal System) 사업 및 철강원료, 제품, 곡물, 천연가스 운송 등 글로벌 복합물류서비스 회사로 거듭나고 있으며, 포스코디엑스는 IT, OT(현장운영기술) 분야에서 확보한 노하우와 기술력에 AI, 디지털트윈, 로보틱스 등 디지털 기술을 융합하여 산업 전반의 디지털 전환(DX)을 추진하고 있습니다.\n근거 접수번호: 20250515002741.",
@@ -1305,7 +1597,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1313,13 +1607,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 20.41,
+      "latency_ms": 12.97,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515000050"
       ],
+      "plan_companies": [
+        "LG이노텍"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 304,
       "answer_lines": 5,
       "answer": "LG이노텍의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 광학솔루션, 기판소재, 전장부품\n- 주요 제품·서비스: 통신용 반도체기판은 차별화 기술 기반의 제품 경쟁력으로 일등 지위를 공고히 하였고, 신규 사업 FC-BGA는 양산 안정화와 물동 확대를 추진하고 있습니다.\n- 전략·현황: 테이프기판은 국내 및 중화권 전략 거래선 M/S 확대로 시장 일등 지위를 강화하고, 포토마스크는 시장 주도권 확보를 위해 OLED 등 프리미엄 모델 확대에 집중하고 있습니다.\n근거 접수번호: 20250515000050.",
@@ -1348,7 +1651,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1356,13 +1661,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 16.74,
+      "latency_ms": 13.78,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515001248"
       ],
+      "plan_companies": [
+        "현대건설"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 293,
       "answer_lines": 5,
       "answer": "현대건설의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 건설, 인프라\n- 주요 제품·서비스: 토목사업은 타 산업에 비해 생산과 고용 및 부가가치 창출 측면에서 전후방효과가 큰 산업이며 국민생활 및 환경에 영구적인 영향을 미치는 중요한 특성을 가지고 있습니다.\n- 전략·현황: 핵심기술의 개발을 거쳐 신성장 고부가사업을 창출하고자 국가 연구개발사업에 주도적으로 참여하는 등의 R&D 활동으로 중기 경영전략을 달성하기 위해 노력하고 있습니다.\n근거 접수번호: 20250515001248.",
@@ -1391,7 +1705,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1399,13 +1715,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 27.64,
+      "latency_ms": 23.6,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002745"
       ],
+      "plan_companies": [
+        "셀트리온"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 361,
       "answer_lines": 5,
       "answer": "셀트리온의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: CDMO, 바이오시밀러·신약, 바이오의약품\n- 주요 제품·서비스: 기존 케미컬 합성의약품(Small-molecule) 사업 부문에서 확장하여 신규 모달리티(New Modality)의 제품기획 및 발굴, CRO, CMO를 통한 공정개발 및 생산 그리고 임상, 허가, 판매 기능 전반을 내재화함으로써 글로벌 국가로의 사업을 진행하고 있습니다.\n- 전략·현황: 당사는 R&D 역량 강화를 위해 지속적으로 높은 수준의 연구개발비를 투자하여 바이오시밀러 파이프라인 확대, 항체의약품 신약 개발을 진행하고 있습니다.\n근거 접수번호: 20250515002745.",
@@ -1434,7 +1759,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1442,13 +1769,22 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 25.21,
+      "latency_ms": 20.85,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
       "cited_doc_ids": [
         "periodic_20250515002651"
       ],
+      "plan_companies": [
+        "HD현대일렉트릭"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 393,
       "answer_lines": 5,
       "answer": "HD현대일렉트릭의 분기보고서 (2025.03) 'II. 사업의 내용' 기준 요약입니다.\n- 핵심 사업: 전력기기, 해운·물류\n- 주요 제품·서비스: 25년 1분기 연결기준 매출은 1,014,668백만원으로 제품 품목별 비중은 전력기기(변압기, 고압차단기 등) 69%, 회전기기(회전기, 저압전동기 등) 16%, 배전기기등(배전반, 저압차단기, 전력제어, ICT 外) 15%입니다.\n- 전략·현황: 당사는 육상풍력 터빈 제조업, 엔지니어링 및 사업개발 경험을 바탕으로 2030년 초 본격 개화가 예상되는 해상풍력으로 사업을 확대하기 위해 육해상 풍력 산업 분야에서 글로벌 선도 업체들과 전략적 협력을 체결하는 것을 포함하여 체계적으로 사업을 준비하고 있습니다.\n근거 접수번호: 20250515002651.",
@@ -1477,7 +1813,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1485,7 +1823,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2423.41,
+      "latency_ms": 1921.58,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1499,6 +1837,15 @@
       "cited_doc_ids": [
         "periodic_20251113000451"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 3,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 131,
       "answer_lines": 1,
       "answer": "HMM의 2025년 3분기 누적 연결 기준 매출액은 8,183,821백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000451, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -1527,7 +1874,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1535,7 +1884,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2976.68,
+      "latency_ms": 1883.45,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1549,6 +1898,15 @@
       "cited_doc_ids": [
         "periodic_20251113000451"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 3,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 132,
       "answer_lines": 1,
       "answer": "HMM의 2025년 3분기 3개월 연결 기준 매출액은 2,706,392백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000451, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -1577,7 +1935,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1585,7 +1945,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3085.21,
+      "latency_ms": 1567.47,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1599,6 +1959,15 @@
       "cited_doc_ids": [
         "periodic_20251113000635"
       ],
+      "plan_companies": [
+        "LG이노텍"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 3,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 130,
       "answer_lines": 1,
       "answer": "LG이노텍의 2025년 3분기 누적 연결 기준 영업이익은 340,257백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000635, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -1627,7 +1996,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1635,7 +2006,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3517.67,
+      "latency_ms": 1568.32,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1649,6 +2020,15 @@
       "cited_doc_ids": [
         "periodic_20251113000635"
       ],
+      "plan_companies": [
+        "LG이노텍"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 3,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 131,
       "answer_lines": 1,
       "answer": "LG이노텍의 2025년 3분기 3개월 연결 기준 영업이익은 203,749백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.09), 접수번호 20251113000635, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -1677,7 +2057,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1685,7 +2067,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 7647.64,
+      "latency_ms": 3314.29,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1699,6 +2081,15 @@
       "cited_doc_ids": [
         "periodic_20250515002741"
       ],
+      "plan_companies": [
+        "POSCO홀딩스"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 138,
       "answer_lines": 1,
       "answer": "POSCO홀딩스의 2025년 1분기 연결 기준 매출액은 17,436,775,980,004원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515002741, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -1727,7 +2118,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1735,11 +2128,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4.17,
+      "latency_ms": 3.15,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "현대자동차"
+      ],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 51,
       "answer_lines": 1,
       "answer": "조회 기준연도를 입력해 주세요. 분기·반기 질의라면 분기 또는 기준월도 함께 지정해 주세요.",
@@ -1768,7 +2168,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1776,11 +2178,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4.42,
+      "latency_ms": 3.02,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": null,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 53,
       "answer_lines": 1,
       "answer": "제공 코퍼스에서 대상 기업을 확인할 수 없습니다. 정확한 회사명 또는 종목코드를 입력해 주세요.",
@@ -1809,7 +2218,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1817,11 +2228,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.05,
+      "latency_ms": 0.03,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 55,
       "answer_lines": 1,
       "answer": "보안상 시스템 지시·자격증명·환경변수는 공개하거나 변경할 수 없습니다. 공시 내용을 질문해 주세요.",
@@ -1850,7 +2266,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1863,6 +2281,11 @@
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 21,
       "answer_lines": 1,
       "answer": "질문이 비어 있어 답변할 수 없습니다.",
@@ -1891,7 +2314,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1899,11 +2324,20 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4.45,
+      "latency_ms": 3.42,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2035
+      ],
+      "plan_quarter": null,
+      "plan_metric": "revenue",
+      "plan_scope": null,
       "answer_chars": 60,
       "answer_lines": 1,
       "answer": "질문 조건에 맞는 공시 자료를 제공 코퍼스에서 확인할 수 없습니다. 회사명·기간·공시 유형을 확인해 주세요.",

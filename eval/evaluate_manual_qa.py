@@ -91,6 +91,39 @@ def _effective_plan(response: Dict[str, Any]) -> Dict[str, Any]:
     return plan.get("base_plan") or plan
 
 
+def _apply_metamorphic_consistency(results: List[Dict[str, Any]], cases: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Require paired surface forms to resolve to the same structured result."""
+    case_by_id = {case["question_id"]: case for case in cases}
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    for row in results:
+        pair_id = case_by_id[row["question_id"]].get("metamorphic_pair_id")
+        if pair_id:
+            groups.setdefault(pair_id, []).append(row)
+    reports = []
+    for pair_id, rows in sorted(groups.items()):
+        fields = case_by_id[rows[0]["question_id"]].get("consistency_fields", [])
+        field_checks = {
+            field: len({json.dumps(row.get(field), ensure_ascii=False, sort_keys=True) for row in rows}) == 1
+            for field in fields
+        }
+        pair_passed = len(rows) == 2 and all(field_checks.values())
+        reports.append({
+            "pair_id": pair_id,
+            "question_ids": [row["question_id"] for row in rows],
+            "passed": pair_passed,
+            "checks": field_checks,
+        })
+        for row in rows:
+            row["checks"]["metamorphic_consistency"] = pair_passed
+            row["passed"] = all(row["checks"].values())
+    return {
+        "total_pairs": len(reports),
+        "passed_pairs": sum(report["passed"] for report in reports),
+        "failed_pairs": sum(not report["passed"] for report in reports),
+        "pairs": reports,
+    }
+
+
 def _http_answer(base_url: str, question_id: str, question: str) -> Dict[str, Any]:
     params = urlencode({
         "question_id": question_id,
@@ -181,7 +214,11 @@ def evaluate(db: Path | None, questions: Path, output: Path, base_url: str | Non
                 "expected_validation_action": not expected_actions or
                     (response.get("validation") or {}).get("action") in expected_actions,
                 "plan_companies": all(company in plan_companies for company in case.get("expected_companies", [])),
+                "exact_plan_companies": not case.get("expected_exact_companies") or
+                    plan_companies == set(case["expected_exact_companies"]),
                 "plan_years": all(year in (effective_plan.get("years") or []) for year in case.get("expected_years", [])),
+                "exact_plan_years": case.get("expected_exact_years") is None or
+                    sorted(effective_plan.get("years") or []) == sorted(case["expected_exact_years"]),
                 "plan_quarter": case.get("expected_quarter") is None or
                     effective_plan.get("quarter") == case.get("expected_quarter"),
                 "plan_metric": not case.get("expected_metric") or
@@ -207,6 +244,11 @@ def evaluate(db: Path | None, questions: Path, output: Path, base_url: str | Non
                 "query_type": query_type,
                 "numeric_details": numeric_details,
                 "cited_doc_ids": sorted(cited_doc_ids),
+                "plan_companies": sorted(plan_companies),
+                "plan_years": sorted(effective_plan.get("years") or []),
+                "plan_quarter": effective_plan.get("quarter"),
+                "plan_metric": effective_plan.get("metric"),
+                "plan_scope": effective_plan.get("scope"),
                 "answer_chars": len(answer), "answer_lines": len(answer.splitlines()),
                 "answer": answer, "notes": case.get("notes"),
                 "gold_note": case.get("gold_note"),
@@ -214,6 +256,7 @@ def evaluate(db: Path | None, questions: Path, output: Path, base_url: str | Non
     finally:
         if agent:
             agent.close()
+    metamorphic = _apply_metamorphic_consistency(results, cases)
     by_category: Dict[str, Counter] = {}
     for row in results:
         by_category.setdefault(row["category"], Counter())["pass" if row["passed"] else "fail"] += 1
@@ -225,6 +268,7 @@ def evaluate(db: Path | None, questions: Path, output: Path, base_url: str | Non
         "latency_ms": {"median": round(statistics.median(latencies), 2) if latencies else None,
                        "max": max(latencies) if latencies else None},
         "transport": "http" if base_url else "direct",
+        "metamorphic": metamorphic,
         "results": results,
     }
     output.parent.mkdir(parents=True, exist_ok=True)

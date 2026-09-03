@@ -806,9 +806,27 @@ class HybridRetriever:
             })
             ranked.append((score, item))
         ranked.sort(key=lambda pair: (-pair[0], pair[1]["chunk_id"]))
+        return self._single_report_business_evidence(ranked, limit)
+
+    @staticmethod
+    def _single_report_business_evidence(ranked: List[tuple[int, Dict[str, Any]]],
+                                         limit: int) -> List[Dict[str, Any]]:
+        """Keep a concise overview and its citations inside one selected report."""
+        if not ranked:
+            return []
+        newest_item = max(
+            (item for _, item in ranked),
+            key=lambda item: (
+                int(item.get("base_year") or 0), int(item.get("base_month") or 0),
+                str(item.get("rcept_dt") or ""), str(item.get("doc_id") or ""),
+            ),
+        )
+        primary_doc_id = newest_item.get("doc_id")
         selected: List[Dict[str, Any]] = []
         seen_paths = set()
         for _, item in ranked:
+            if item.get("doc_id") != primary_doc_id:
+                continue
             exact_path = item.get("section_path") or ""
             if exact_path in seen_paths:
                 continue

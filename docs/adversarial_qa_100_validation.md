@@ -69,5 +69,5 @@ query plan, validation, citation, retrieved context를 판정한다. 결과 파�
 | 전송 방식 | `http` |
 
 질문별 실제 답변·판정 check·지연시간은 `eval/adversarial_qa_100_results.json`에 보존한다.
-전체 단위·통합 테스트 117/117, strong gold 50/50, 산업 확장 40/40, 운영 경계
+전체 단위·통합 테스트 121/121, strong gold 50/50, 산업 확장 40/40, 운영 경계
 29/29, 기존 자체 개발 QA 100/100도 함께 재실행해 회귀가 없음을 확인했다.

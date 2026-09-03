@@ -5,6 +5,7 @@ from pathlib import Path
 from src.agent.disclosure_agent import DisclosureAgent
 from src.domain.metric_ontology import FINANCIAL_CELL_METRICS, metric_definition
 from src.retrieval.hybrid_search import HybridRetriever
+from src.retrieval.query_analyzer import QueryAnalyzer
 from src.retrieval.reranker import EvidenceReranker
 from src.storage.sqlite_store import DisclosureStore
 from validation.validate_database import validate as validate_database
@@ -303,6 +304,18 @@ class StoreAgentTests(unittest.TestCase):
         self.assertTrue({"overview", "products", "segments_revenue", "new_business", "rnd", "investment", "market_change"}
                         .issubset(set(categories)))
 
+    def test_business_overview_evidence_stays_in_primary_report(self):
+        ranked = [
+            (100, {"doc_id": "q1", "chunk_id": "q1:a", "section_path": "사업의 개요",
+                   "base_year": 2025, "base_month": 3}),
+            (95, {"doc_id": "q3", "chunk_id": "q3:a", "section_path": "사업의 개요",
+                  "base_year": 2025, "base_month": 9}),
+            (90, {"doc_id": "q3", "chunk_id": "q3:b", "section_path": "주요 제품",
+                  "base_year": 2025, "base_month": 9}),
+        ]
+        selected = HybridRetriever._single_report_business_evidence(ranked, 4)
+        self.assertEqual([item["chunk_id"] for item in selected], ["q3:a", "q3:b"])
+
     def test_business_focus_ignores_evaluation_wrapper(self):
         tokens = HybridRetriever._business_focus_tokens(
             "[교차검증] HMM의 주요 사업과 전략을 정리해줘. 공시의 II. 사업의 내용만 근거로 핵심을 항목별로 답해줘"
@@ -468,6 +481,24 @@ class StoreAgentTests(unittest.TestCase):
         agent.close()
         self.assertEqual(ascii_quote["years"], [2025])
         self.assertEqual(smart_quote["years"], [2026])
+
+    def test_labelled_exclusions_are_not_positive_company_or_year_filters(self):
+        agent = DisclosureAgent(self.db)
+        prefixed = agent.analyzer.analyze(
+            "[제외 조건: 현대자동차, 2022년] 삼성전자의 '25 Q1 연결 매출액은? 앞의 제외 대상은 답변에 포함하지 마."
+        )
+        suffixed = agent.analyzer.analyze(
+            "삼성전자의 2025년 1분기 연결 매출액은? (비교 금지=현대자동차; 참조 금지=2022년)."
+        )
+        agent.close()
+        for plan in (prefixed, suffixed):
+            self.assertEqual([item["corp_name"] for item in plan["companies"]], ["삼성전자"])
+            self.assertEqual(plan["years"], [2025])
+            self.assertTrue(plan["excluded_context_removed"])
+
+    def test_free_prose_exclusion_is_preserved(self):
+        question = "외부 지식과 표지 문구는 제외해. 테스트 2023년 주요 사업을 설명해줘."
+        self.assertEqual(QueryAnalyzer._positive_intent_text(question), question)
 
     def test_relative_period_question_requests_explicit_period(self):
         agent = DisclosureAgent(self.db)

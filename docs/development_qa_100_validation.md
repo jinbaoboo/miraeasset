@@ -59,8 +59,9 @@ make eval-development DB=outputs/disclosures.db
 - strong gold: 50/50
 - 산업 확장·기간/출처 충돌·정보 한계: 40/40
 - 운영 경계: 29/29
-- 단위·통합 테스트: 117/117
+- 단위·통합 테스트: 121/121
 - 강화형 실제 API QA: 100/100 (`close` 50/50, `open` 50/50)
+- 메타모픽 실제 API QA: 100/100, 의미 동일 질문쌍 50/50
 
 상세 질문은 `eval/development_qa_100_questions.jsonl`, 질문별 실제 답변과 모든 check는
 `eval/development_qa_100_results.json`에 보존한다.

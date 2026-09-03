@@ -17,10 +17,16 @@
     }
   },
   "latency_ms": {
-    "median": 4.13,
-    "max": 18240.47
+    "median": 4.17,
+    "max": 11487.76
   },
   "transport": "direct",
+  "metamorphic": {
+    "total_pairs": 0,
+    "passed_pairs": 0,
+    "failed_pairs": 0,
+    "pairs": []
+  },
   "results": [
     {
       "question_id": "edge-normalize-001",
@@ -44,7 +50,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -52,7 +60,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4321.08,
+      "latency_ms": 10253.8,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -66,6 +74,15 @@
       "cited_doc_ids": [
         "periodic_20250515001302"
       ],
+      "plan_companies": [
+        "NAVER"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 133,
       "answer_lines": 1,
       "answer": "NAVER의 2025년 1분기 연결 기준 영업이익은 505,301,333,937원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515001302, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -94,7 +111,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -102,7 +121,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2775.48,
+      "latency_ms": 2351.76,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -116,6 +135,15 @@
       "cited_doc_ids": [
         "periodic_20250514000594"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "HMM의 2025년 1분기 연결 기준 매출액은 2,854,682백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -144,7 +172,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -152,7 +182,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1017.69,
+      "latency_ms": 1567.84,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -166,6 +196,15 @@
       "cited_doc_ids": [
         "periodic_20250514000990"
       ],
+      "plan_companies": [
+        "JYP Ent"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 134,
       "answer_lines": 1,
       "answer": "JYP Ent의 2025년 1분기 연결 기준 매출액은 140,759,310,563원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250514000990, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -194,7 +233,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -202,7 +243,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2540.34,
+      "latency_ms": 2538.63,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -216,6 +257,15 @@
       "cited_doc_ids": [
         "periodic_20250515001302"
       ],
+      "plan_companies": [
+        "NAVER"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 133,
       "answer_lines": 1,
       "answer": "NAVER의 2025년 1분기 연결 기준 영업이익은 505,301,333,937원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515001302, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -244,7 +294,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -252,7 +304,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3099.87,
+      "latency_ms": 2193.66,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -266,6 +318,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "삼성전자의 2025년 1분기 연결 기준 매출액은 79,140,503백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -294,7 +355,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -302,7 +365,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3329.36,
+      "latency_ms": 1999.12,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -316,6 +379,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "삼성전자의 2025년 1분기 연결 기준 매출액은 79,140,503백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -344,7 +416,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -352,7 +426,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3159.52,
+      "latency_ms": 2181.63,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -366,6 +440,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "separate",
       "answer_chars": 126,
       "answer_lines": 1,
       "answer": "삼성전자의 2025년 1분기 별도 기준 매출액은 55,534,871백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 나. 요약별도재무정보의 해당 행·열.",
@@ -394,7 +477,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -402,11 +487,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.5,
+      "latency_ms": 3.24,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": "revenue",
+      "plan_scope": null,
       "answer_chars": 51,
       "answer_lines": 1,
       "answer": "조회 기준연도를 입력해 주세요. 분기·반기 질의라면 분기 또는 기준월도 함께 지정해 주세요.",
@@ -435,7 +527,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -443,11 +537,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.82,
+      "latency_ms": 3.22,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 53,
       "answer_lines": 1,
       "answer": "제공 코퍼스에서 대상 기업을 확인할 수 없습니다. 정확한 회사명 또는 종목코드를 입력해 주세요.",
@@ -476,7 +577,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -484,11 +587,20 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.07,
+      "latency_ms": 3.54,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 45,
       "answer_lines": 1,
       "answer": "비교할 기업이 부족합니다. 두 기업의 회사명 또는 종목코드를 모두 입력해 주세요.",
@@ -517,7 +629,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -525,11 +639,19 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.02,
+      "latency_ms": 3.2,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "SK하이닉스",
+        "삼성전자"
+      ],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 51,
       "answer_lines": 1,
       "answer": "조회 기준연도를 입력해 주세요. 분기·반기 질의라면 분기 또는 기준월도 함께 지정해 주세요.",
@@ -558,7 +680,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -566,11 +690,20 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.77,
+      "latency_ms": 4.17,
       "validation_action": "clarify",
       "query_type": "generic",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 48,
       "answer_lines": 1,
       "answer": "알고 싶은 항목을 지정해 주세요. 예: 연결 매출액, 영업이익, 주요 사업, 공급계약.",
@@ -599,7 +732,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -607,11 +742,20 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.98,
+      "latency_ms": 3.35,
       "validation_action": "clarify",
       "query_type": "generic",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 43,
       "answer_lines": 1,
       "answer": "조회할 재무 지표를 지정해 주세요. 예: 연결 매출액, 영업이익, 당기순이익.",
@@ -640,7 +784,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -648,7 +794,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11644.77,
+      "latency_ms": 11487.76,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -668,6 +814,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 347,
       "answer_lines": 5,
       "answer": "[task_001] 삼성전자 2025년 1분기 연결 분기보고서 기준 매출액은?\n삼성전자의 2025년 1분기 연결 기준 매출액은 79,140,503백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.\n\n[task_002] 삼성전자 2025년 1분기 연결 분기보고서 기준 영업이익은?\n삼성전자의 2025년 1분기 연결 기준 영업이익은 6,685,272백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -696,7 +851,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -704,7 +861,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10051.38,
+      "latency_ms": 8850.44,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -724,6 +881,15 @@
       "cited_doc_ids": [
         "periodic_20250515001302"
       ],
+      "plan_companies": [
+        "NAVER"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 367,
       "answer_lines": 5,
       "answer": "[task_001] NAVER 2025년 1분기 연결 분기보고서 기준 영업수익은?\nNAVER의 2025년 1분기 연결 기준 영업수익(매출액)은 2,786,783,351,907원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515001302, 2-2. 연결 포괄손익계산서의 해당 행·열.\n\n[task_002] NAVER 2025년 1분기 연결 분기보고서 기준 영업이익은?\nNAVER의 2025년 1분기 연결 기준 영업이익은 505,301,333,937원입니다. 공시 단위: (단위 : 원). 근거: 분기보고서 (2025.03), 접수번호 20250515001302, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -752,7 +918,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -760,11 +928,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.04,
+      "latency_ms": 0.05,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 21,
       "answer_lines": 1,
       "answer": "질문이 비어 있어 답변할 수 없습니다.",
@@ -793,7 +966,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -801,11 +976,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.03,
+      "latency_ms": 0.04,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 55,
       "answer_lines": 1,
       "answer": "보안상 시스템 지시·자격증명·환경변수는 공개하거나 변경할 수 없습니다. 공시 내용을 질문해 주세요.",
@@ -834,7 +1014,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -842,11 +1024,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.35,
+      "latency_ms": 2.03,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 39,
       "answer_lines": 1,
       "answer": "제공된 공시 코퍼스만으로는 주가·뉴스·투자 추천을 확인할 수 없습니다.",
@@ -875,7 +1062,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -883,7 +1072,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2732.6,
+      "latency_ms": 2058.68,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -897,6 +1086,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "삼성전자의 2025년 1분기 연결 기준 매출액은 79,140,503백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -925,7 +1123,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -933,7 +1133,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3445.04,
+      "latency_ms": 1625.06,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -947,6 +1147,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 128,
       "answer_lines": 1,
       "answer": "삼성전자의 2025년 1분기 연결 기준 영업이익은 6,685,272백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -975,7 +1184,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -983,7 +1194,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2721.24,
+      "latency_ms": 1598.76,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -997,6 +1208,15 @@
       "cited_doc_ids": [
         "periodic_20250514000594"
       ],
+      "plan_companies": [
+        "HMM"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 127,
       "answer_lines": 1,
       "answer": "HMM의 2025년 1분기 연결 기준 영업이익은 613,899백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250514000594, 2-2. 연결 포괄손익계산서의 해당 행·열.",
@@ -1025,7 +1245,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1033,7 +1255,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3430.25,
+      "latency_ms": 2144.65,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1047,6 +1269,15 @@
       "cited_doc_ids": [
         "periodic_20250515001159"
       ],
+      "plan_companies": [
+        "현대자동차"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 129,
       "answer_lines": 1,
       "answer": "현대자동차의 2025년 1분기 연결 기준 매출액은 44,407,761백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001159, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -1075,7 +1306,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1083,11 +1316,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4.13,
+      "latency_ms": 4.0,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 58,
       "answer_lines": 1,
       "answer": "최근·올해·작년 같은 상대 기간은 자동 해석하지 않습니다. 명확한 기준연도와 분기·반기를 입력해 주세요.",
@@ -1116,7 +1356,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1124,11 +1366,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.43,
+      "latency_ms": 3.83,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": "operating_profit",
+      "plan_scope": "consolidated",
       "answer_chars": 58,
       "answer_lines": 1,
       "answer": "최근·올해·작년 같은 상대 기간은 자동 해석하지 않습니다. 명확한 기준연도와 분기·반기를 입력해 주세요.",
@@ -1157,7 +1406,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1165,11 +1416,18 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.5,
+      "latency_ms": 3.32,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": "revenue",
+      "plan_scope": "consolidated",
       "answer_chars": 58,
       "answer_lines": 1,
       "answer": "최근·올해·작년 같은 상대 기간은 자동 해석하지 않습니다. 명확한 기준연도와 분기·반기를 입력해 주세요.",
@@ -1198,7 +1456,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1206,7 +1466,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 18240.47,
+      "latency_ms": 11375.56,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1232,6 +1492,15 @@
       "cited_doc_ids": [
         "periodic_20250515001922"
       ],
+      "plan_companies": [
+        "삼성전자"
+      ],
+      "plan_years": [
+        2025
+      ],
+      "plan_quarter": 1,
+      "plan_metric": "net_income",
+      "plan_scope": "consolidated",
       "answer_chars": 524,
       "answer_lines": 8,
       "answer": "[task_001] 삼성전자 2025년 1분기 연결 분기보고서 기준 매출액은?\n삼성전자의 2025년 1분기 연결 기준 매출액은 79,140,503백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.\n\n[task_002] 삼성전자 2025년 1분기 연결 분기보고서 기준 영업이익은?\n삼성전자의 2025년 1분기 연결 기준 영업이익은 6,685,272백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.\n\n[task_003] 삼성전자 2025년 1분기 연결 분기보고서 기준 당기순이익은?\n삼성전자의 2025년 1분기 연결 기준 당기순이익은 8,222,878백만원입니다. 공시 단위: (단위 : 백만원). 근거: 분기보고서 (2025.03), 접수번호 20250515001922, 2-2. 연결 손익계산서의 해당 행·열.",
@@ -1260,7 +1529,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1268,11 +1539,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.23,
+      "latency_ms": 1.9,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 39,
       "answer_lines": 1,
       "answer": "제공된 공시 코퍼스만으로는 주가·뉴스·투자 추천을 확인할 수 없습니다.",
@@ -1301,7 +1577,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1309,11 +1587,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1.73,
+      "latency_ms": 1.57,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 39,
       "answer_lines": 1,
       "answer": "제공된 공시 코퍼스만으로는 주가·뉴스·투자 추천을 확인할 수 없습니다.",
@@ -1342,7 +1625,9 @@
         "guardrail_action": true,
         "expected_validation_action": true,
         "plan_companies": true,
+        "exact_plan_companies": true,
         "plan_years": true,
+        "exact_plan_years": true,
         "plan_quarter": true,
         "plan_metric": true,
         "plan_doc_subtypes": true,
@@ -1350,11 +1635,16 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.04,
+      "latency_ms": 0.03,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],
       "cited_doc_ids": [],
+      "plan_companies": [],
+      "plan_years": [],
+      "plan_quarter": null,
+      "plan_metric": null,
+      "plan_scope": null,
       "answer_chars": 55,
       "answer_lines": 1,
       "answer": "보안상 시스템 지시·자격증명·환경변수는 공개하거나 변경할 수 없습니다. 공시 내용을 질문해 주세요.",

@@ -32,6 +32,7 @@
 - 29개 운영 경계 회귀셋: 영문 대소문자·회사명 공백·운영 별칭·분기 표현, 상대 기간 역질문 reason code, 복합 질의, 보안·범위 제한
 - 자체 개발 QA 100개: 신규 작성 `close` 50개·`open` 50개, 수치·단위·기간·scope·접수번호·서술 근거 동시 판정
 - 강화형 API QA 100개: 영문 별칭·종목코드·축약 기간·지시문 교란을 포함한 `close` 50개·`open` 50개를 실제 HTTP로 질의하고 답변·접수번호·citation을 판정
+- 메타모픽 API QA 100개: 제외 회사·연도가 섞인 의미 동일 질문 50쌍으로 정확한 대상 해석과 답변·인용 문서 일관성을 실제 HTTP로 판정
 
 다른 LLM 공급자 연동은 코드에 포함하지 않았다. `HCX_*` 환경변수가 없으면 근거 기반 결정론 템플릿으로 동작한다.
 
@@ -80,6 +81,7 @@ API 실행:
     make eval-operational DB=outputs/disclosures.db
     make eval-development DB=outputs/disclosures.db
     make eval-adversarial-http PYTHON=.venv/bin/python BASE_URL=http://127.0.0.1:8000
+    make eval-metamorphic-http PYTHON=.venv/bin/python BASE_URL=http://127.0.0.1:8000
     PYTHONPATH=. .venv/bin/python validation/audit_source_locators.py \
       --db outputs/disclosures.db --data-root "/absolute/path/to/corpus"
     PYTHONPATH=. .venv/bin/python validation/validate_api_runtime.py \
@@ -106,7 +108,7 @@ Docker API 실행(구조화 DB는 read-only mount):
 
 20개 교차 샘플은 annual/half/quarter, 각 정정 유형, PDF fallback, 복잡 표, strict XML 실패, 세 종류의 malformed 속성, 감사보고서 첨부, 여러 산업, 거래소 HTML, 일반·약식 지분공시를 포함한다.
 
-전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 117/117, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, 운영 경계 평가는 29/29, 자체 작성 개발 QA는 `close` 50/50·`open` 50/50으로 총 100/100을 통과했다. 강화형 API QA도 실제 HTTP 전송으로 `close` 50/50·`open` 50/50, 총 100/100을 통과했고 답변의 접수번호 및 구조화 citation을 함께 확인했다. DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`, `eval/operational_edge_questions.jsonl`, `eval/development_qa_100_questions.jsonl`, `eval/adversarial_qa_100_questions.jsonl`이다.
+전체 4,204건을 구조화한 결과 실패 문서는 0건이다. 단위·통합 테스트 121/121, 교차 샘플 검사 173/173, DB 무결성 검사 14/14를 통과했다. 수작업 base 37개에서 의미 보존 표현 변형을 생성한 robustness 평가는 150/150, 숫자 허용오차·단위·scope·기간·필수 근거·답변불가를 독립 검사하는 강한 골드 평가는 50/50 통과했다. 산업 확장·기간/출처 충돌·정보 한계 평가는 40/40, 운영 경계 평가는 29/29, 자체 작성 개발 QA는 `close` 50/50·`open` 50/50으로 총 100/100을 통과했다. 강화형 API QA도 실제 HTTP 전송으로 `close` 50/50·`open` 50/50, 총 100/100을 통과했다. 추가 메타모픽 API QA는 제외 조건을 섞은 `close` 50/50·`open` 50/50과 의미 동일 질문쌍 50/50을 통과해 답변의 접수번호 및 인용 문서 일관성까지 확인했다. DB-원문 감사는 30/30, API 런타임은 12/12를 통과했다. 재현 파일은 `eval/golden_questions.jsonl`, `eval/strong_gold_questions.jsonl`, `eval/cross_industry_audit_questions.jsonl`, `eval/operational_edge_questions.jsonl`, `eval/development_qa_100_questions.jsonl`, `eval/adversarial_qa_100_questions.jsonl`, `eval/metamorphic_qa_100_questions.jsonl`이다.
 
 추가 수동 질문 25개도 `eval/manual_qa_questions.jsonl`로 편입해 25/25 통과했다. 다만 일부
 질문은 정답값이 아니라 회사·근거 존재만 검사하므로, 통과율의 해석과 현재 부분 완료 영역은
@@ -122,6 +124,10 @@ Docker API 실행(구조화 DB는 read-only mount):
 [development_qa_100_validation.md](docs/development_qa_100_validation.md)에 정리했다.
 실제 HTTP로 수행한 강화형 100문항의 구성·실패 원인·개선 과정은
 [adversarial_qa_100_validation.md](docs/adversarial_qa_100_validation.md)에 정리했다.
+제외 조건과 의미 동일 질문쌍의 답변·인용 일관성 검증은
+[metamorphic_qa_100_validation.md](docs/metamorphic_qa_100_validation.md)에 정리했다.
+다음 개발 순서와 단계별 완료 기준은
+[development_roadmap.md](docs/development_roadmap.md)에 정리했다.
 
 ## 중요한 한계
 

@@ -7,7 +7,7 @@ from typing import Any, Dict, Optional
 
 METRIC_ONTOLOGY: Dict[str, Dict[str, Any]] = {
     "revenue": {"label": "매출액", "aliases": ["매출액", "매출", "영업수익"], "source": "financial_cell", "statement_types": ["income_statement", "comprehensive_income_statement"], "sign_policy": "reported"},
-    "operating_profit": {"label": "영업이익", "aliases": ["영업이익", "영업손실"], "source": "financial_cell", "statement_types": ["income_statement", "comprehensive_income_statement"], "sign_policy": "reported"},
+    "operating_profit": {"label": "영업이익", "aliases": ["영업이익", "영업익", "영업손실"], "source": "financial_cell", "statement_types": ["income_statement", "comprehensive_income_statement"], "sign_policy": "reported"},
     "net_income": {"label": "당기순이익", "aliases": ["당기순이익", "순이익", "당기순손실", "분기순이익", "반기순이익"], "source": "financial_cell", "statement_types": ["income_statement", "comprehensive_income_statement"], "sign_policy": "reported"},
     "gross_profit": {"label": "매출총이익", "aliases": ["매출총이익", "매출총손실"], "source": "financial_cell", "statement_types": ["income_statement", "comprehensive_income_statement"], "sign_policy": "reported"},
     "assets": {"label": "자산총계", "aliases": ["자산총계", "총자산"], "source": "financial_cell", "statement_types": ["balance_sheet"], "sign_policy": "reported"},

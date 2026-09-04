@@ -5,6 +5,7 @@ from __future__ import annotations
 import sqlite3
 import json
 import re
+import unicodedata
 from decimal import Decimal
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -26,6 +27,12 @@ SECURITY_TERMS = ("API 키", "API키", "비밀키", "시스템 프롬프트", "�
                   "지시를 무시하고", "환경변수를 출력", "api key", "secret key", "system prompt",
                   "developer message", "ignore previous instructions", "ignore the previous instructions")
 
+SECURITY_COMPACT_TERMS = (
+    "apikey", "비밀키", "시스템프롬프트", "프롬프트를공개", "환경변수를출력",
+    "secretkey", "systemprompt", "developermessage", "ignorepreviousinstructions",
+    "ignorethepreviousinstructions", "ignoreallpreviousinstructions",
+)
+
 
 class DisclosureAgent:
     def __init__(self, db_path: Path, hcx_client: Optional[HyperClovaClient] = None):
@@ -40,7 +47,7 @@ class DisclosureAgent:
         self.guardrail = AnswerGuardrail()
 
     def answer(self, question_id: str, question: str, use_llm: bool = True) -> Dict[str, Any]:
-        if question.strip() and not any(term.lower() in question.lower() for term in SECURITY_TERMS):
+        if question.strip() and not self._contains_security_request(question):
             composite = self.planner.plan(question)
             if composite["is_composite"]:
                 return self._answer_composite(question_id, question, composite, use_llm)
@@ -49,7 +56,7 @@ class DisclosureAgent:
     def _answer_single(self, question_id: str, question: str, use_llm: bool = True) -> Dict[str, Any]:
         if not question.strip():
             return self._response(question_id, question, [], ["empty_question"], "질문이 비어 있어 답변할 수 없습니다.")
-        if any(term.lower() in question.lower() for term in SECURITY_TERMS):
+        if self._contains_security_request(question):
             return self._response(question_id, question, [], ["prompt_injection_or_secret_request_blocked"],
                                   "보안상 시스템 지시·자격증명·환경변수는 공개하거나 변경할 수 없습니다. 공시 내용을 질문해 주세요.")
         if any(term in question for term in OUT_OF_SCOPE):
@@ -227,6 +234,17 @@ class DisclosureAgent:
             trace.append("deterministic_grounded_template")
         trace.append("citations_attached")
         return self._response(question_id, question, contexts, trace, answer, plan)
+
+    @staticmethod
+    def _contains_security_request(question: str) -> bool:
+        normalized = unicodedata.normalize("NFKC", question).casefold()
+        normalized = "".join(char for char in normalized if unicodedata.category(char) != "Cf")
+        if any(term.casefold() in normalized for term in SECURITY_TERMS):
+            return True
+        compact = re.sub(r"[^0-9a-z가-힣]+", "", normalized)
+        if any(term in compact for term in SECURITY_COMPACT_TERMS):
+            return True
+        return bool(re.search(r"이전(?:의)?지시.{0,20}무시|지시.{0,20}무시", compact))
 
     def _answer_composite(self, question_id: str, question: str, composite: Dict[str, Any],
                           use_llm: bool) -> Dict[str, Any]:
@@ -498,19 +516,29 @@ class DisclosureAgent:
                 seen_items.add(key)
                 unique_items.append((display_name, item))
             for item_name, item in unique_items[:10]:
+                original_value = DisclosureAgent._compact_correction_value(item.get("original"))
+                current_value = DisclosureAgent._compact_correction_value(item.get("current"))
                 if view == "original":
-                    lines.append(f"  · {item_name}: 최초/정정 전 {item.get('original') or '확인 불가'}")
+                    lines.append(f"  · {item_name}: 최초/정정 전 {original_value}")
                 elif view == "current":
-                    lines.append(f"  · {item_name}: 현재 유효 값 {item.get('current') or '확인 불가'}")
+                    lines.append(f"  · {item_name}: 현재 유효 값 {current_value}")
                 else:
-                    lines.append(f"  · {item_name}: 정정 전 {item.get('original') or '확인 불가'} → "
-                                 f"정정 후·현재 유효 {item.get('current') or '확인 불가'}")
+                    lines.append(f"  · {item_name}: 정정 전 {original_value} → "
+                                 f"정정 후·현재 유효 {current_value}")
             receipts.extend(version.get("rcept_no") or "" for version in chain.get("versions", []))
         if data.get("unlinked_count"):
             lines.append("일부 정정본은 원 공시 식별자가 없어 독립 체인으로 보존했으며, 임의로 원본과 연결하지 않았습니다.")
         if receipts:
             lines.append(f"근거 접수번호: {', '.join(dict.fromkeys(filter(None, receipts)))}.")
         return "\n".join(lines)
+
+    @staticmethod
+    def _compact_correction_value(value: Optional[str], limit: int = 360) -> str:
+        text = " ".join((value or "확인 불가").split())
+        if len(text) <= limit:
+            return text
+        side = (limit - 5) // 2
+        return f"{text[:side]} ... {text[-side:]}"
 
     @staticmethod
     def _meaningful_correction_item(item: Dict[str, Any]) -> bool:
@@ -601,11 +629,16 @@ class DisclosureAgent:
         qualifier = "접수일 기준" if year else "제공 코퍼스 기준"
         answer = f"{company}의 {year or ''}년 자금조달 결정 공시를 {qualifier}으로 집계했습니다.\n" + "\n".join(lines)
         answer += "\n\n주의: 위 금액은 실제 납입·발행 완료액이 아니라 유상증자/사채 발행 '결정 공시'의 계획 금액입니다."
-        if not coverage.get("payment_completion") or not coverage.get("issuance_result"):
+        completion_missing = (not coverage.get("payment_completion") or
+                              not coverage.get("issuance_result"))
+        funding_status = plan.get("funding_status_requested")
+        if completion_missing and funding_status != "decision":
             answer += " 제공 코퍼스에 납입 완료·발행 결과 공시 유형이 없어 실제 조달 완료 여부와 완료 금액은 확인할 수 없습니다."
+        elif completion_missing:
+            answer += " 이 답변의 범위는 결정 공시이며, 실제 납입·발행 완료 여부는 평가하지 않았습니다."
         if any(event.get("stage") == "correction" for event in events):
             answer += " 정정 이력이 있는 건은 가장 최근 정정본의 결정 금액을 사용했습니다."
-        if plan.get("funding_status_requested") == "completed":
+        if funding_status == "completed":
             answer += " 따라서 질문의 '실시한'을 실제 조달 완료로 단정하지 않고, 확인 가능한 결정 내역만 제시합니다."
         if receipts:
             answer += f" 근거 접수번호: {', '.join(dict.fromkeys(receipts))}."
@@ -1101,7 +1134,7 @@ class DisclosureAgent:
             raw_difference = calculate("difference", [current_value, baseline_value])
             difference_unit = (DisclosureAgent._display_unit(current.get("unit_raw") or "") if same_scale
                                else DisclosureAgent._normalized_unit_label(current))
-            difference_display = f"{DecimalFormatter.comma(raw_difference['result'])}{difference_unit}"
+            difference_display = f"{DecimalFormatter.comma(format(abs(Decimal(raw_difference['result'])), 'f'))}{difference_unit}"
             direction = "증가" if Decimal(difference_result["result"]) > 0 else "감소" if Decimal(difference_result["result"]) < 0 else "변동 없음"
             scope = {"consolidated": "연결 기준 ", "separate": "별도 기준 ", "unknown": "기준 미상 "}.get(
                 current.get("scope"), ""
@@ -1116,7 +1149,7 @@ class DisclosureAgent:
         if operation == "growth_rate":
             difference_unit = (DisclosureAgent._display_unit(current.get("unit_raw") or "") if same_scale
                                else DisclosureAgent._normalized_unit_label(current))
-            difference_display = f"{DecimalFormatter.comma(difference_result['result'])}{difference_unit}"
+            difference_display = f"{DecimalFormatter.comma(format(abs(Decimal(difference_result['result'])), 'f'))}{difference_unit}"
             direction_word = "증가" if Decimal(difference_result["result"]) > 0 else "감소" if Decimal(difference_result["result"]) < 0 else "변동 없음"
             period_label = DisclosureAgent._period_label(plan).strip() or f"{target_year}년"
             rate_display = abs(result["result_float"])
@@ -1164,10 +1197,16 @@ class DisclosureAgent:
         )
         return (
             f"{numerator['corp_name']}의 {period}{scope}{DisclosureAgent._topic(label)} {result['result_float']:.2f}%입니다. "
-            f"입력값은 {numerator.get('row_label')} {numerator.get('original_text')} ({numerator.get('unit_raw') or '단위 미상'}), "
-            f"{denominator.get('row_label')} {denominator.get('original_text')} ({denominator.get('unit_raw') or '단위 미상'})입니다. "
+            f"입력값은 {DisclosureAgent._clean_row_label(numerator.get('row_label'))} {numerator.get('original_text')} ({numerator.get('unit_raw') or '단위 미상'}), "
+            f"{DisclosureAgent._clean_row_label(denominator.get('row_label'))} {denominator.get('original_text')} ({denominator.get('unit_raw') or '단위 미상'})입니다. "
             f"계산식: {result['formula']}. 근거 접수번호: {numerator.get('rcept_no')}, {denominator.get('rcept_no')}."
         )
+
+    @staticmethod
+    def _clean_row_label(label: Optional[str]) -> str:
+        """Remove numeric footnote references that can be mistaken for values."""
+        value = label or "요청 지표"
+        return re.sub(r"\s*\(\s*주?\s*\d+(?:\s*,\s*\d+)*\s*\)\s*", " ", value).strip()
 
     @staticmethod
     def _company_pair_difference_answer(plan: Dict[str, Any], cells: List[Dict[str, Any]]) -> Optional[str]:
@@ -1327,7 +1366,10 @@ class DisclosureAgent:
                   answer: str, plan: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         plan = plan or {}
         artifacts = self.guardrail.evaluate(answer, contexts, plan)
-        if not artifacts["validation"]["passed"] and not self.guardrail.is_limit_answer(answer):
+        decision_answer = (plan.get("query_type") == "financing_history" and
+                           plan.get("funding_status_requested") == "decision")
+        limit_answer = self.guardrail.is_limit_answer(answer) and not decision_answer
+        if not artifacts["validation"]["passed"] and not limit_answer:
             answer = self.guardrail.safe_failure_answer(artifacts["validation"])
             artifacts["validation"]["action"] = "blocked"
             trace = trace + ["answer_guardrail_blocked"]
@@ -1342,7 +1384,7 @@ class DisclosureAgent:
                 artifacts["validation"]["action"] = "blocked"
             elif resolution_action == "clarify":
                 artifacts["validation"]["action"] = "clarify"
-            elif self.guardrail.is_limit_answer(answer):
+            elif limit_answer:
                 artifacts["validation"]["action"] = "limit"
         return {"question_id": question_id, "question": question, "retrieved_context": contexts,
                 "think_trace": {"steps": trace, "query_plan": plan,

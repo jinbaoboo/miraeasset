@@ -16,13 +16,16 @@ COMPANY_ALIASES = {
 }
 
 COMPANY_NAME_ALIASES = {
-    "삼성전자": ("삼전", "삼성전자주식회사", "samsung electronics"),
-    "SK하이닉스": ("하이닉스", "sk hynix", "skhynix"),
-    "현대자동차": ("현차", "현대차", "hyundai motor", "hyundai motor company"),
+    "삼성전자": ("삼전", "삼섬전자", "삼성전자주식회사", "samsung electronics"),
+    "NAVER": ("네이바",),
+    "SK하이닉스": ("하이닉스", "SK하이닉쓰", "sk hynix", "skhynix"),
+    "현대자동차": ("현차", "현대차", "현대자돟차", "hyundai motor", "hyundai motor company"),
     "기아": ("kia", "kia corporation"),
-    "카카오": ("kakao",),
+    "카카오": ("카까오", "kakao"),
+    "HMM": ("에이치엠엠",),
+    "JYP Ent": ("제이와피엔터",),
     "POSCO홀딩스": ("포스코홀딩스", "posco holdings"),
-    "LG이노텍": ("lg innotek",),
+    "LG이노텍": ("엘지이노텍", "엘지이노택", "lg innotek"),
     "삼성바이오로직스": ("samsung biologics",),
     "HD현대일렉트릭": ("hd hyundai electric",),
     "CJ제일제당": ("cj cheiljedang",),
@@ -39,7 +42,7 @@ CALCULATION_PATTERNS = {
 
 DERIVED_CALCULATIONS = {
     "operating_margin": {
-        "aliases": ["영업이익률"],
+        "aliases": ["영업이익률", "영업익률"],
         "operation": "ratio",
         "required_metrics": ["operating_profit", "revenue"],
         "formula": "영업이익 / 매출액 * 100",
@@ -85,11 +88,11 @@ class QueryAnalyzer:
         quarter_token = next((group for group in (quarter_match.groups() if quarter_match else ()) if group), None)
         quarter = (1 if quarter_token == "첫" else int(quarter_token) if quarter_token else None)
         doc_subtypes: List[str] = []
-        if "사업보고서" in question:
+        if re.search(r"사업\s*보고서", question):
             doc_subtypes.append("annual")
-        if "반기보고서" in question or re.search(r"\b반기\b", question) or "상반기" in question:
+        if re.search(r"반기\s*보고서", question) or re.search(r"\b반기\b", question) or "상반기" in question:
             doc_subtypes.append("half")
-        if "분기보고서" in question or quarter:
+        if re.search(r"분기\s*보고서", question) or quarter:
             doc_subtypes.append("quarter")
         scope = "consolidated" if "연결" in question else "separate" if any(x in question for x in ("별도", "개별")) else None
         query_type = self._query_type(question, compact_question)
@@ -106,10 +109,13 @@ class QueryAnalyzer:
         groups: List[str] = []
         if any(x in question for x in ("사업보고서", "반기보고서", "분기보고서", "재무", "매출", "영업이익", "당기순이익", "연구개발", "설비투자", "CAPEX", "이익률", "부채비율", "ROE", "자기자본이익률")):
             groups.append("periodic")
+        if doc_subtypes and "periodic" not in groups:
+            groups.append("periodic")
         if any(x in question for x in ("유상증자", "자기주식", "합병", "분할", "사채", "주요사항", "자금조달",
                                        "CB", "BW", "EB", "전환사채", "신주인수권", "교환사채")):
             groups.append("major")
-        if any(x in question for x in ("공급계약", "계약액", "계약금액", "위탁생산 계약", "주요 계약", "계약 해지", "수주", "시설투자", "투자판단", "거래소", "콜옵션", "주주간계약")):
+        if (any(x in question for x in ("공급계약", "계약액", "계약금액", "위탁생산 계약", "주요 계약", "계약 해지", "수주", "시설투자", "투자판단", "거래소", "콜옵션", "주주간계약"))
+                or any(x in compact_question for x in ("공급계약", "계약상대", "파운드리계약"))):
             groups.append("exchange")
         if any(x in question for x in ("대량보유", "지분", "보유비율", "특별관계자")):
             groups.append("holding")
@@ -250,20 +256,27 @@ class QueryAnalyzer:
     @staticmethod
     def _query_type(question: str, compact_question: str) -> str:
         if ("계약상대" in compact_question and
-                any(token in question for token in ("최신", "현재 유효", "정정 후", "공개", "밝혀", "확인됐"))):
+                any(token in question for token in ("지금", "최신", "현재 유효", "정정 후", "공개", "밝혀", "확인됐"))):
             return "correction_history"
         if ("공급계약" in question and "계약상대" in question and
                 any(token in question for token in ("공개", "밝혀", "확인됐"))):
+            return "correction_history"
+        if ("정정" in question and any(token in question for token in (
+                "정정 내용", "정정 사항", "원공시", "원 공시", "원본", "정정본", "설명",
+                "정정된", "정정 전 후",
+        ))):
             return "correction_history"
         if (("정정" in question or any(token in question for token in ("현재 유효", "최신 값", "최신 유효", "현재 값"))) and
                 any(token in question for token in (
             "정정 전", "정정 후", "변경 전", "변경 후", "현재 유효", "최신 값", "최신 유효", "최초", "정정 내역", "정정공시",
         ))):
             return "correction_history"
-        if "자금조달" in question and any(
-            token.lower() in compact_question
-            for token in ("유상증자", "cb", "bw", "eb", "전환사채", "신주인수권", "교환사채")
-        ):
+        if "자금조달" in question and (any(
+                token.lower() in compact_question
+                for token in ("유상증자", "cb", "bw", "eb", "전환사채", "신주인수권", "교환사채")
+        ) or any(token in question for token in (
+                "내역", "유형", "완료", "납입", "발행", "실시", "결정", "계획", "금액",
+        ))):
             return "financing_history"
         if any(token in question for token in ("주요 계약", "공급계약", "판매계약")) and "해지" in question:
             return "contract_termination"
@@ -282,6 +295,7 @@ class QueryAnalyzer:
             "주요 사업부문", "대표 제품", "주력 제품", "주력 메모리 제품", "제품과 사업", "사업 현황과 전략",
             "플랫폼과 콘텐츠 사업", "사업 포트폴리오", "온라인·모바일 게임", "사업 실적 개요",
             "무엇을 파는지", "병행 사업", "수익모델", "서비스 축", "세부 사업", "주요 게임",
+            "뭐로 돈 버는지", "무슨 사업을 하는지",
         )):
             return "business_overview"
         # Narrative business questions vary much more than numeric lookups.
@@ -345,13 +359,17 @@ class QueryAnalyzer:
 
     @staticmethod
     def _correction_view(question: str) -> str:
-        if any(token in question for token in ("정정 전후", "정정 전·후", "정정 전/후", "변경 전후", "정정 내역")):
+        compact = re.sub(r"\s+", "", question)
+        if any(token in compact for token in (
+                "정정전후", "정정전·후", "정정전/후", "변경전후", "정정내역",
+                "원공시와정정공시", "원본과정정본", "전이랑후",
+        )):
             return "before_after"
-        if any(token in question for token in ("정정 전", "변경 전", "최초")):
-            return "original"
-        if (any(token in question for token in ("현재 유효", "최신 값", "최신 유효", "현재 값")) or
+        if (any(token in compact for token in ("지금", "현재유효", "최신값", "최신유효", "현재값")) or
                 ("계약상대" in question and "최신" in question)):
             return "current"
+        if any(token in question for token in ("정정 전", "변경 전", "최초")):
+            return "original"
         if "계약상대" in question and any(token in question for token in ("공개", "밝혀", "확인됐")):
             return "current"
         return "history"
@@ -368,6 +386,9 @@ class QueryAnalyzer:
                     "derived_metric": name,
                 }
         operation = None
+        # UI/evaluation labels such as "복합계산" describe the request shape.
+        # Their embedded substring "합계" must not imply a sum operation.
+        calculation_text = compact_question.replace("복합계산", "")
         year_comparison = any(token in compact_question for token in (
             "전년동기", "전년대비", "전년같은분기", "yoy",
         ))
@@ -380,7 +401,7 @@ class QueryAnalyzer:
         for candidate, aliases in CALCULATION_PATTERNS.items():
             if operation:
                 break
-            if any(re.sub(r"\s+", "", alias).lower() in compact_question for alias in aliases):
+            if any(re.sub(r"\s+", "", alias).lower() in calculation_text for alias in aliases):
                 operation = candidate
                 break
         if operation is None:

@@ -1065,9 +1065,14 @@ class HybridRetriever:
         if plan.get("doc_groups"):
             where.append("d.doc_group IN (" + ",".join("?" for _ in plan["doc_groups"]) + ")")
             args.extend(plan["doc_groups"])
+        if plan.get("doc_subtypes"):
+            where.append("d.doc_subtype IN (" + ",".join("?" for _ in plan["doc_subtypes"]) + ")")
+            args.extend(plan["doc_subtypes"])
         if plan.get("years"):
-            where.append("substr(d.rcept_dt,1,4) IN (" + ",".join("?" for _ in plan["years"]) + ")")
+            placeholders = ",".join("?" for _ in plan["years"])
+            where.append(f"(substr(d.rcept_dt,1,4) IN ({placeholders}) OR d.base_year IN ({placeholders}))")
             args.extend(str(year) for year in plan["years"])
+            args.extend(plan["years"])
         report_tokens = self._correction_report_tokens(plan.get("question") or "")
         if report_tokens:
             where.append("(" + " OR ".join("d.report_nm LIKE ?" for _ in report_tokens) + ")")
@@ -1189,11 +1194,12 @@ class HybridRetriever:
         groups = {
             "유상증자": ("유상증자",), "전환사채": ("전환사채", "CB"),
             "신주인수권부사채": ("신주인수권부사채", "BW"), "교환사채": ("교환사채", "EB"),
-            "단일판매": ("공급계약", "판매계약", "주요 계약", "위탁생산"), "사업보고서": ("사업보고서",),
+            "단일판매": ("공급계약", "판매계약", "주요 계약", "위탁생산", "파운드리 계약"), "사업보고서": ("사업보고서",),
             "반기보고서": ("반기보고서",), "분기보고서": ("분기보고서",),
         }
-        compact = question.upper()
-        return [report_token for report_token, aliases in groups.items() if any(alias.upper() in compact for alias in aliases)]
+        compact = re.sub(r"\s+", "", question).upper()
+        return [report_token for report_token, aliases in groups.items()
+                if any(re.sub(r"\s+", "", alias).upper() in compact for alias in aliases)]
 
     def _effective_table_unit(self, table: Dict[str, Any]) -> Dict[str, Any]:
         unit = self._json_dict(table.get("unit_json"))

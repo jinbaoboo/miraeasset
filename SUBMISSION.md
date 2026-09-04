@@ -32,6 +32,7 @@ make eval-operational DB=outputs/disclosures.db
 make eval-development DB=outputs/disclosures.db
 make eval-adversarial-http PYTHON=.venv/bin/python BASE_URL=http://127.0.0.1:8000
 make eval-metamorphic-http PYTHON=.venv/bin/python BASE_URL=http://127.0.0.1:8000
+make eval-roadmap-http PYTHON=.venv/bin/python BASE_URL=http://127.0.0.1:8000
 ```
 
 `submission-check`는 필수 제출 파일, Git에 추적된 DB·코퍼스·secret 파일,
@@ -46,6 +47,7 @@ make eval-metamorphic-http PYTHON=.venv/bin/python BASE_URL=http://127.0.0.1:800
 - 자체 개발 QA 100문항 검증: [docs/development_qa_100_validation.md](docs/development_qa_100_validation.md)
 - 강화형 QA 100문항 실제 API 검증: [docs/adversarial_qa_100_validation.md](docs/adversarial_qa_100_validation.md)
 - 메타모픽 QA 100문항 실제 API 검증: [docs/metamorphic_qa_100_validation.md](docs/metamorphic_qa_100_validation.md)
+- 발전 로드맵 1~4단계 QA 400문항 실제 API 검증: [docs/roadmap_qa_400_validation.md](docs/roadmap_qa_400_validation.md)
 - 후속 개발 로드맵: [docs/development_roadmap.md](docs/development_roadmap.md)
 - 배포 전 체크리스트: [docs/release_checklist.md](docs/release_checklist.md)
 - 환경변수 키 예시: [.env.example](.env.example)

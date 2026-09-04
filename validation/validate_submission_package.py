@@ -15,7 +15,14 @@ REQUIRED_PATHS = (
     "requirements.txt", "pyproject.toml", ".env.example", ".gitignore", ".dockerignore",
     "src", "tests", "eval", "validation", "schemas", "docs",
     "docs/technical_proposal.md", "docs/api_spec.md", "docs/implementation_report.md",
-    "docs/release_checklist.md", "schemas/answer_response.schema.json",
+    "docs/release_checklist.md", "docs/roadmap_qa_400_validation.md",
+    "schemas/answer_response.schema.json",
+    "eval/build_lifecycle_qa_100.py", "eval/lifecycle_qa_100_questions.jsonl",
+    "eval/lifecycle_qa_100_results.json", "eval/build_composite_calculation_qa_100.py",
+    "eval/composite_calculation_qa_100_questions.jsonl", "eval/composite_calculation_qa_100_results.json",
+    "eval/build_unanswerable_security_qa_100.py", "eval/unanswerable_security_qa_100_questions.jsonl",
+    "eval/unanswerable_security_qa_100_results.json", "eval/build_noisy_language_qa_100.py",
+    "eval/noisy_language_qa_100_questions.jsonl", "eval/noisy_language_qa_100_results.json",
 )
 FORBIDDEN_TRACKED_NAMES = {".env"}
 FORBIDDEN_TRACKED_PREFIXES = ("outputs/", "corpus/", "tmp/", ".venv/")

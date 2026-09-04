@@ -3,7 +3,7 @@ DB ?= outputs/disclosures.db
 DATA_ROOT ?= /path/to/corpus
 BASE_URL ?= http://127.0.0.1:8000
 
-.PHONY: test validate build quality eval eval-operational eval-development eval-adversarial-http eval-metamorphic-http submission-check audit-source validate-api ask serve
+.PHONY: test validate build quality eval eval-operational eval-development eval-adversarial-http eval-metamorphic-http eval-lifecycle-http eval-composite-http eval-safety-http eval-noisy-http eval-roadmap-http submission-check audit-source validate-api ask serve
 test:
 	$(PYTHON) -m unittest discover -s tests -v
 
@@ -42,6 +42,32 @@ eval-metamorphic-http:
 	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 \
 		--questions eval/metamorphic_qa_100_questions.jsonl \
 		--output eval/metamorphic_qa_100_results.json
+
+eval-lifecycle-http:
+	$(PYTHON) eval/build_lifecycle_qa_100.py
+	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 \
+		--questions eval/lifecycle_qa_100_questions.jsonl \
+		--output eval/lifecycle_qa_100_results.json
+
+eval-composite-http:
+	$(PYTHON) eval/build_composite_calculation_qa_100.py
+	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 \
+		--questions eval/composite_calculation_qa_100_questions.jsonl \
+		--output eval/composite_calculation_qa_100_results.json
+
+eval-safety-http:
+	$(PYTHON) eval/build_unanswerable_security_qa_100.py
+	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 \
+		--questions eval/unanswerable_security_qa_100_questions.jsonl \
+		--output eval/unanswerable_security_qa_100_results.json
+
+eval-noisy-http:
+	$(PYTHON) eval/build_noisy_language_qa_100.py
+	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 \
+		--questions eval/noisy_language_qa_100_questions.jsonl \
+		--output eval/noisy_language_qa_100_results.json
+
+eval-roadmap-http: eval-lifecycle-http eval-composite-http eval-safety-http eval-noisy-http
 
 submission-check:
 	$(PYTHON) -m validation.validate_submission_package

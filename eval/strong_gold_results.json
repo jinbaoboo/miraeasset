@@ -14,8 +14,8 @@
     }
   },
   "latency_ms": {
-    "median": 22.9,
-    "max": 10256.49
+    "median": 20.45,
+    "max": 8752.9
   },
   "transport": "direct",
   "metamorphic": {
@@ -57,7 +57,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 10256.49,
+      "latency_ms": 8752.9,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -118,7 +118,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2350.3,
+      "latency_ms": 2392.04,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -179,7 +179,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1970.13,
+      "latency_ms": 2111.25,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -240,7 +240,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2133.56,
+      "latency_ms": 2329.24,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -301,7 +301,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2197.3,
+      "latency_ms": 3429.09,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -324,9 +324,9 @@
       "plan_quarter": 1,
       "plan_metric": "operating_margin",
       "plan_scope": "consolidated",
-      "answer_chars": 190,
+      "answer_chars": 179,
       "answer_lines": 1,
-      "answer": "SK하이닉스의 2025년 1분기 연결 기준 영업이익률은 42.18%입니다. 입력값은 영업이익 7,440,504 ((단위 : 백만원)), 매출액 (주4,21,28) 17,639,141 ((단위 : 백만원))입니다. 계산식: 7440504 / 17639141 * 100. 근거 접수번호: 20250515002103, 20250515002103.",
+      "answer": "SK하이닉스의 2025년 1분기 연결 기준 영업이익률은 42.18%입니다. 입력값은 영업이익 7,440,504 ((단위 : 백만원)), 매출액 17,639,141 ((단위 : 백만원))입니다. 계산식: 7440504 / 17639141 * 100. 근거 접수번호: 20250515002103, 20250515002103.",
       "notes": null,
       "gold_note": null
     },
@@ -362,7 +362,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2143.87,
+      "latency_ms": 4193.37,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -430,7 +430,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2226.79,
+      "latency_ms": 3122.68,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -505,7 +505,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1585.88,
+      "latency_ms": 1920.51,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -566,7 +566,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 22.91,
+      "latency_ms": 21.6,
       "validation_action": "allow",
       "query_type": "investment_plan",
       "numeric_details": [
@@ -639,7 +639,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 5.91,
+      "latency_ms": 5.31,
       "validation_action": "allow",
       "query_type": "correction_history",
       "numeric_details": [],
@@ -694,7 +694,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 33.28,
+      "latency_ms": 31.99,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -748,7 +748,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.19,
+      "latency_ms": 11.93,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -802,7 +802,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 18.73,
+      "latency_ms": 18.49,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -856,7 +856,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 15.65,
+      "latency_ms": 14.56,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -910,7 +910,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 11.36,
+      "latency_ms": 11.29,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -964,7 +964,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 17.64,
+      "latency_ms": 16.93,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1018,7 +1018,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 12.74,
+      "latency_ms": 11.63,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1072,7 +1072,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 16.4,
+      "latency_ms": 15.62,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -1126,7 +1126,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 114.15,
+      "latency_ms": 110.02,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [
@@ -1201,7 +1201,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 29.73,
+      "latency_ms": 28.92,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [],
@@ -1256,7 +1256,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.51,
+      "latency_ms": 3.53,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1308,7 +1308,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.05,
+      "latency_ms": 3.01,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1358,7 +1358,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3198.7,
+      "latency_ms": 2262.21,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1414,7 +1414,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.59,
+      "latency_ms": 2.47,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1462,7 +1462,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1.96,
+      "latency_ms": 1.81,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1510,7 +1510,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 0.04,
+      "latency_ms": 0.05,
       "validation_action": "blocked",
       "query_type": null,
       "numeric_details": [],
@@ -1606,7 +1606,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.43,
+      "latency_ms": 3.14,
       "validation_action": "clarify",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1656,7 +1656,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3.63,
+      "latency_ms": 3.08,
       "validation_action": "limit",
       "query_type": "financial_metric",
       "numeric_details": [],
@@ -1708,7 +1708,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2.02,
+      "latency_ms": 2.22,
       "validation_action": "limit",
       "query_type": null,
       "numeric_details": [],
@@ -1756,7 +1756,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1298.61,
+      "latency_ms": 1466.2,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1817,7 +1817,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4903.63,
+      "latency_ms": 7820.37,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1878,7 +1878,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2886.91,
+      "latency_ms": 5915.52,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -1939,7 +1939,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1565.19,
+      "latency_ms": 2584.37,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2000,7 +2000,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 4394.56,
+      "latency_ms": 6767.9,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2023,9 +2023,9 @@
       "plan_quarter": 1,
       "plan_metric": "operating_margin",
       "plan_scope": "consolidated",
-      "answer_chars": 190,
+      "answer_chars": 179,
       "answer_lines": 1,
-      "answer": "SK하이닉스의 2025년 1분기 연결 기준 영업이익률은 42.18%입니다. 입력값은 영업이익 7,440,504 ((단위 : 백만원)), 매출액 (주4,21,28) 17,639,141 ((단위 : 백만원))입니다. 계산식: 7440504 / 17639141 * 100. 근거 접수번호: 20250515002103, 20250515002103.",
+      "answer": "SK하이닉스의 2025년 1분기 연결 기준 영업이익률은 42.18%입니다. 입력값은 영업이익 7,440,504 ((단위 : 백만원)), 매출액 17,639,141 ((단위 : 백만원))입니다. 계산식: 7440504 / 17639141 * 100. 근거 접수번호: 20250515002103, 20250515002103.",
       "notes": null,
       "gold_note": null
     },
@@ -2061,7 +2061,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 1727.92,
+      "latency_ms": 1825.17,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2129,7 +2129,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 2470.92,
+      "latency_ms": 2534.25,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2192,7 +2192,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 3225.38,
+      "latency_ms": 4799.82,
       "validation_action": "allow",
       "query_type": "financial_metric",
       "numeric_details": [
@@ -2253,7 +2253,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 22.89,
+      "latency_ms": 19.3,
       "validation_action": "allow",
       "query_type": "investment_plan",
       "numeric_details": [
@@ -2326,7 +2326,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 6.23,
+      "latency_ms": 5.55,
       "validation_action": "allow",
       "query_type": "correction_history",
       "numeric_details": [],
@@ -2381,7 +2381,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 40.85,
+      "latency_ms": 32.24,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2435,7 +2435,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 18.62,
+      "latency_ms": 11.74,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2489,7 +2489,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 30.3,
+      "latency_ms": 21.79,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2544,7 +2544,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 20.36,
+      "latency_ms": 14.46,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2598,7 +2598,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 15.35,
+      "latency_ms": 13.0,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2652,7 +2652,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 20.78,
+      "latency_ms": 18.27,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2706,7 +2706,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 13.95,
+      "latency_ms": 11.49,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2760,7 +2760,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 14.95,
+      "latency_ms": 13.46,
       "validation_action": "allow",
       "query_type": "business_overview",
       "numeric_details": [],
@@ -2814,7 +2814,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 848.82,
+      "latency_ms": 1033.63,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [
@@ -2883,7 +2883,7 @@
         "composite_subtasks": true,
         "citation_fields": true
       },
-      "latency_ms": 32.46,
+      "latency_ms": 31.41,
       "validation_action": "allow",
       "query_type": "business_change",
       "numeric_details": [],

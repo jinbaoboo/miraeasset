@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import statistics
 import time
@@ -11,11 +12,19 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
 from src.agent.disclosure_agent import DisclosureAgent
+
+
+def _nearest_rank_percentile(values: List[float], percentile: float) -> Optional[float]:
+    if not values:
+        return None
+    ordered = sorted(values)
+    index = min(len(ordered) - 1, max(0, math.ceil(len(ordered) * percentile) - 1))
+    return ordered[index]
 
 
 def _normalized(value: str) -> str:
@@ -266,6 +275,8 @@ def evaluate(db: Path | None, questions: Path, output: Path, base_url: str | Non
         "failed": sum(not row["passed"] for row in results),
         "by_category": {key: dict(value) for key, value in by_category.items()},
         "latency_ms": {"median": round(statistics.median(latencies), 2) if latencies else None,
+                       "p95": _nearest_rank_percentile(latencies, 0.95),
+                       "p99": _nearest_rank_percentile(latencies, 0.99),
                        "max": max(latencies) if latencies else None},
         "transport": "http" if base_url else "direct",
         "metamorphic": metamorphic,

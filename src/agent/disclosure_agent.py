@@ -53,7 +53,8 @@ class DisclosureAgent:
                 return self._answer_composite(question_id, question, composite, use_llm)
         return self._answer_single(question_id, question, use_llm)
 
-    def _answer_single(self, question_id: str, question: str, use_llm: bool = True) -> Dict[str, Any]:
+    def _answer_single(self, question_id: str, question: str, use_llm: bool = True,
+                       precomputed_plan: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         if not question.strip():
             return self._response(question_id, question, [], ["empty_question"], "질문이 비어 있어 답변할 수 없습니다.")
         if self._contains_security_request(question):
@@ -62,7 +63,7 @@ class DisclosureAgent:
         if any(term in question for term in OUT_OF_SCOPE):
             return self._response(question_id, question, [], ["out_of_corpus_scope"],
                                   "제공된 공시 코퍼스만으로는 주가·뉴스·투자 추천을 확인할 수 없습니다.")
-        plan = self.analyzer.analyze(question)
+        plan = precomputed_plan or self.analyzer.analyze(question)
         trace: List[str] = ["query_analyzed", "metadata_filters_applied"]
         clarification = self._clarification_answer(plan)
         if clarification:
@@ -188,17 +189,32 @@ class DisclosureAgent:
                 trace.append("correction_history_retrieved")
                 contexts.extend(self._correction_context(item) for item in history)
         specialized_answer = self._specialized_answer(plan, specialized_data)
-        retrieved = ([] if specialized_answer else
+        calculation_answer = self._calculation_answer(plan, cells, event_fields)
+        can_template_cells = self._can_template_with_cells(plan, financial_metrics)
+        structured_template_ready = (
+            query_type == "financial_metric"
+            and bool((can_template_cells and cells) or event_fields)
+        )
+        structured_answer_ready = bool(
+            specialized_answer
+            or dimension_limit_answer
+            or calculation_answer
+            or structured_template_ready
+        )
+        retrieved = ([] if structured_answer_ready else
                      self.retriever.search(question, search_plan, limit=max(4, 8-len(contexts))))
         contexts.extend({"kind": item["kind"], "record_id": item["record_id"],
                          "content": item.get("content", "")[:6000], "citation": item.get("citation", {}),
                          "retrieval_score": item.get("score"), "score_breakdown": item.get("score_breakdown", {})}
                         for item in retrieved)
-        if retrieved: trace.append("fts_evidence_retrieved")
+        if retrieved:
+            trace.append("fts_evidence_retrieved")
+        elif structured_answer_ready:
+            trace.append("fts_skipped_structured_answer_ready")
         context_limit = (1000 if plan.get("intent") == "calculation" and event_fields else 50 if "정정" in question
                          else 20 if query_type == "business_change" else 10)
         contexts = self._deduplicate(contexts)[:context_limit]
-        if not contexts and not specialized_answer:
+        if not contexts and not structured_answer_ready:
             trace.append("insufficient_evidence")
             answer = "제공된 공시 코퍼스에서 질문을 뒷받침할 근거를 찾지 못했습니다. 회사명·기간·공시 유형을 더 구체적으로 입력해 주세요."
             return self._response(question_id, question, contexts, trace, answer, plan)
@@ -206,11 +222,9 @@ class DisclosureAgent:
         if answer:
             trace.append("dimension_evidence_limit" if dimension_limit_answer and not specialized_answer
                          else "deterministic_specialized_answer")
-        calculation_answer = self._calculation_answer(plan, cells, event_fields)
         if not answer and calculation_answer:
             answer = calculation_answer
             trace.append("deterministic_calculation_executed")
-        can_template_cells = self._can_template_with_cells(plan, financial_metrics)
         deterministic_numeric = plan.get("intent") in {"comparison", "calculation"} and bool((can_template_cells and cells) or event_fields)
         if deterministic_numeric:
             trace.append("deterministic_numeric_tool_preferred")
@@ -248,7 +262,8 @@ class DisclosureAgent:
 
     def _answer_composite(self, question_id: str, question: str, composite: Dict[str, Any],
                           use_llm: bool) -> Dict[str, Any]:
-        subresults = [self._answer_single(f"{question_id}:{task['task_id']}", task["question"], use_llm)
+        subresults = [self._answer_single(f"{question_id}:{task['task_id']}", task["question"], use_llm,
+                                          precomputed_plan=task["plan"])
                       for task in composite["subtasks"]]
         contexts = self._deduplicate([context for result in subresults for context in result.get("retrieved_context", [])])
         answer_parts = []

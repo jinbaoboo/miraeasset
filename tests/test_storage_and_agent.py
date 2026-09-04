@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from src.agent.disclosure_agent import DisclosureAgent
 from src.domain.metric_ontology import FINANCIAL_CELL_METRICS, metric_definition
@@ -68,6 +69,24 @@ class StoreAgentTests(unittest.TestCase):
         self.assertTrue(result["retrieved_context"])
         self.assertIn("candidate_documents_filtered", result["think_trace"]["steps"])
         self.assertIn("citations_attached", result["think_trace"]["steps"])
+
+    def test_structured_metric_answer_skips_full_text_search(self):
+        agent = DisclosureAgent(self.db)
+        with patch.object(agent.retriever, "search", side_effect=AssertionError("unexpected FTS")) as search:
+            result = agent.answer("q-fast", "테스트 2023년 1분기 연결 영업이익은?", use_llm=False)
+        agent.close()
+        search.assert_not_called()
+        self.assertEqual(result["validation"]["action"], "allow")
+        self.assertIn("1,000", result["answer"])
+        self.assertIn("fts_skipped_structured_answer_ready", result["think_trace"]["steps"])
+
+    def test_unstructured_question_keeps_full_text_search_fallback(self):
+        agent = DisclosureAgent(self.db)
+        with patch.object(agent.retriever, "search", wraps=agent.retriever.search) as search:
+            result = agent.answer("q-fts", "테스트 2023년 공시 내용을 찾아줘", use_llm=False)
+        agent.close()
+        search.assert_called_once()
+        self.assertIn("fts_evidence_retrieved", result["think_trace"]["steps"])
 
     def test_metric_label_particle_ignores_parentheses(self):
         self.assertEqual(DisclosureAgent._topic("영업수익(매출액)"), "영업수익(매출액)은")

@@ -5,11 +5,18 @@ from pathlib import Path
 
 from eval.evaluate_agent import expand_cases, load_cases
 from eval.evaluate_manual_qa import (
-    _answerability_check, _apply_metamorphic_consistency, _effective_plan, _numeric_expectations,
+    _answerability_check, _apply_metamorphic_consistency, _effective_plan, _nearest_rank_percentile,
+    _numeric_expectations,
 )
 
 
 class GoldenEvaluationTests(unittest.TestCase):
+    def test_latency_percentiles_use_nearest_rank(self):
+        values = list(range(1, 101))
+        self.assertEqual(_nearest_rank_percentile(values, 0.95), 95)
+        self.assertEqual(_nearest_rank_percentile(values, 0.99), 99)
+        self.assertIsNone(_nearest_rank_percentile([], 0.95))
+
     def test_curated_cases_expand_to_150_robustness_queries(self):
         base = load_cases(Path("eval/golden_questions.jsonl"))
         expanded = expand_cases(base)

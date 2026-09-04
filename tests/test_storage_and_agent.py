@@ -992,18 +992,84 @@ class StoreAgentTests(unittest.TestCase):
             def __init__(self, output): self.output = output
             def generate(self, question, contexts): return self.output
 
-        grounded_output = "테스트의 2023년 1분기 영업이익은 1,000백만원입니다. [근거 1]"
+        question = "테스트 2023년 공시 내용을 요약해줘"
+        grounded_output = "테스트의 공시에는 영업이익 1,000백만원이 포함됩니다. [근거 1]"
         accepted = DisclosureAgent(self.db, hcx_client=FakeHcx(grounded_output))
-        accepted_result = accepted.answer("q-hcx-1", "테스트 2023년 1분기 영업이익", use_llm=True)
+        accepted_result = accepted.answer("q-hcx-1", question, use_llm=True)
         accepted.close()
         self.assertEqual(accepted_result["answer"], grounded_output)
         self.assertIn("hyperclova_x_grounded_generation", accepted_result["think_trace"]["steps"])
 
         rejected = DisclosureAgent(self.db, hcx_client=FakeHcx("출처 없는 답변"))
-        rejected_result = rejected.answer("q-hcx-2", "테스트 2023년 1분기 영업이익", use_llm=True)
+        rejected_result = rejected.answer("q-hcx-2", question, use_llm=True)
         rejected.close()
         self.assertNotEqual(rejected_result["answer"], "출처 없는 답변")
         self.assertIn("hyperclova_x_citation_validation_failed", rejected_result["think_trace"]["steps"])
+
+    def test_business_change_keeps_specialized_fallback_when_hyperclova_citation_is_invalid(self):
+        class FakeHcx:
+            configured = True
+
+            def generate(self, question, contexts):
+                return "인용 형식이 없는 생성 답변"
+
+        def evidence(year, signal, receipt):
+            return {
+                "chunk_id": f"chunk-{year}", "doc_id": f"doc-{year}", "corp_name": "테스트",
+                "base_year": year, "report_nm": f"사업보고서 ({year}.12)", "section_path": "II. 사업의 내용",
+                "evidence_categories": ["strategy_technology"], "signals": [signal], "topics": ["주요 사업"],
+                "text": f"{signal} 전략을 추진합니다.",
+                "citation": {"doc_id": f"doc-{year}", "corp_name": "테스트",
+                             "report_nm": f"사업보고서 ({year}.12)", "rcept_no": receipt},
+            }
+
+        data = {
+            "evidence": [evidence(2023, "AAM", "r-2023"), evidence(2025, "SDV", "r-2025")],
+            "profiles": {
+                2023: {"categories": ["strategy_technology"], "topics": ["주요 사업"],
+                       "signals": ["AAM"], "section_count": 1},
+                2025: {"categories": ["strategy_technology"], "topics": ["주요 사업"],
+                       "signals": ["SDV"], "section_count": 1},
+            },
+        }
+        agent = DisclosureAgent(self.db, hcx_client=FakeHcx())
+        with patch.object(agent.retriever, "candidate_documents", return_value=[{"doc_id": "doc-2023"}]), \
+                patch.object(agent.retriever, "find_business_change_evidence", return_value=data):
+            result = agent.answer(
+                "q-hcx-fallback", "테스트의 2023년과 2025년 사업보고서 핵심 사업은 어떻게 변화했나?",
+                use_llm=True,
+            )
+        agent.close()
+        self.assertIn("2025년에 추가로 강조", result["answer"])
+        self.assertIn("hyperclova_x_citation_validation_failed", result["think_trace"]["steps"])
+        self.assertEqual(result["validation"]["action"], "allow")
+
+    def test_business_change_rejects_unhelpful_hyperclova_limit_answer(self):
+        class FakeHcx:
+            configured = True
+
+            def generate(self, question, contexts):
+                return "확인할 수 없습니다. [근거 1]"
+
+        agent = DisclosureAgent(self.db, hcx_client=FakeHcx())
+        plan = {
+            "question": "테스트 사업 변화", "query_type": "business_change", "companies": [{"corp_name": "테스트"}],
+            "years": [2023, 2025], "intent": "comparison", "required_metrics": [], "missing_slots": [],
+        }
+        context = {"kind": "business_evidence", "record_id": "e1", "content": "2023년과 2025년 사업 변화 근거",
+                   "citation": {"doc_id": "d1", "corp_name": "테스트", "report_nm": "사업보고서",
+                                "rcept_no": "r1"}}
+        with patch.object(agent.retriever, "candidate_documents", return_value=[{"doc_id": "d1"}]), \
+                patch.object(agent.retriever, "find_business_change_evidence", return_value={"evidence": [{}], "profiles": {}}), \
+                patch.object(agent, "_specialized_answer", return_value="확인된 사업 변화입니다. 근거 접수번호: r1."), \
+                patch.object(agent, "_business_context", return_value=context), \
+                patch.object(agent, "_response", side_effect=lambda question_id, question, contexts, trace, answer, plan=None: {
+                    "answer": answer, "think_trace": {"steps": trace},
+                }):
+            result = agent._answer_single("q-hcx-limit", plan["question"], use_llm=True, precomputed_plan=plan)
+        agent.close()
+        self.assertIn("확인된 사업 변화", result["answer"])
+        self.assertIn("hyperclova_x_unhelpful_generation_fallback", result["think_trace"]["steps"])
 
     def test_guardrail_blocks_cited_but_unsupported_number(self):
         class FakeHcx:
@@ -1012,7 +1078,7 @@ class StoreAgentTests(unittest.TestCase):
                 return "테스트의 2023년 1분기 영업이익은 9,999백만원입니다. [근거 1]"
 
         agent = DisclosureAgent(self.db, hcx_client=FakeHcx())
-        result = agent.answer("q-unsupported", "테스트 2023년 1분기 영업이익", use_llm=True)
+        result = agent.answer("q-unsupported", "테스트 2023년 공시 내용을 요약해줘", use_llm=True)
         agent.close()
         self.assertNotIn("9,999백만원입니다", result["answer"])
         self.assertEqual(result["validation"]["action"], "blocked")

@@ -3,7 +3,7 @@ DB ?= outputs/disclosures.db
 DATA_ROOT ?= /path/to/corpus
 BASE_URL ?= http://127.0.0.1:8000
 
-.PHONY: test validate build quality eval eval-operational eval-development eval-adversarial-http eval-metamorphic-http eval-lifecycle-http eval-composite-http eval-safety-http eval-noisy-http eval-roadmap-http submission-check audit-source validate-api ask serve
+.PHONY: test validate build quality eval eval-operational eval-development eval-adversarial-http eval-metamorphic-http eval-lifecycle-http eval-composite-http eval-hyperclova-http eval-safety-http eval-noisy-http eval-roadmap-http submission-check audit-source validate-api ask serve
 test:
 	$(PYTHON) -m unittest discover -s tests -v
 
@@ -54,6 +54,11 @@ eval-composite-http:
 	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 \
 		--questions eval/composite_calculation_qa_100_questions.jsonl \
 		--output eval/composite_calculation_qa_100_results.json
+
+eval-hyperclova-http:
+	PYTHONPATH=. $(PYTHON) eval/evaluate_manual_qa.py --base-url "$(BASE_URL)" --workers 4 --use-llm \
+		--questions eval/composite_calculation_qa_100_questions.jsonl \
+		--output eval/hyperclova_composite_qa_100_results.json
 
 eval-safety-http:
 	$(PYTHON) eval/build_unanswerable_security_qa_100.py

@@ -225,23 +225,39 @@ class DisclosureAgent:
         if not answer and calculation_answer:
             answer = calculation_answer
             trace.append("deterministic_calculation_executed")
-        deterministic_numeric = plan.get("intent") in {"comparison", "calculation"} and bool((can_template_cells and cells) or event_fields)
+        deterministic_numeric = structured_template_ready or (
+            plan.get("intent") in {"comparison", "calculation"}
+            and bool((can_template_cells and cells) or event_fields)
+        )
         if deterministic_numeric:
             trace.append("deterministic_numeric_tool_preferred")
         # Qualitative multi-year business comparison benefits from grounded
         # generation; all numeric/sum/lifecycle routes remain deterministic.
+        grounded_fallback_answer = answer
         if query_type == "business_change" and use_llm and self.hcx.configured:
             answer = None
         if not answer and use_llm and self.hcx.configured and not deterministic_numeric:
             try:
-                generation_contexts = contexts[:20]
+                generation_contexts = contexts[:10]
                 generated = self.hcx.generate(question, generation_contexts)
-                if generated and self._valid_generated_citations(generated, len(generation_contexts)):
+                generated_is_unhelpful_limit = bool(
+                    generated
+                    and grounded_fallback_answer
+                    and self.guardrail.is_limit_answer(generated)
+                    and not self.guardrail.is_limit_answer(grounded_fallback_answer)
+                )
+                if (generated and self._valid_generated_citations(generated, len(generation_contexts))
+                        and not generated_is_unhelpful_limit):
                     answer = generated
                     trace.append("hyperclova_x_grounded_generation")
+                elif generated_is_unhelpful_limit:
+                    answer = grounded_fallback_answer
+                    trace.append("hyperclova_x_unhelpful_generation_fallback")
                 else:
+                    answer = grounded_fallback_answer
                     trace.append("hyperclova_x_citation_validation_failed")
             except RuntimeError:
+                answer = grounded_fallback_answer
                 trace.append("hyperclova_x_request_failed_fallback")
         if not answer:
             answer = self._template_answer(question, plan, cells if can_template_cells else [], event_fields, contexts)

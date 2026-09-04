@@ -1,16 +1,33 @@
+import json
 import unittest
 from collections import Counter
 from decimal import Decimal
 from pathlib import Path
+from unittest.mock import patch
+from urllib.parse import parse_qs, urlparse
 
 from eval.evaluate_agent import expand_cases, load_cases
 from eval.evaluate_manual_qa import (
-    _answerability_check, _apply_metamorphic_consistency, _effective_plan, _nearest_rank_percentile,
+    _answerability_check, _apply_metamorphic_consistency, _effective_plan, _http_answer, _nearest_rank_percentile,
     _numeric_expectations,
 )
 
 
 class GoldenEvaluationTests(unittest.TestCase):
+    def test_http_evaluator_can_enable_hyperclova(self):
+        class Response:
+            status = 200
+
+            def __enter__(self): return self
+            def __exit__(self, exc_type, exc, traceback): return False
+            def read(self): return json.dumps({"answer": "ok"}).encode("utf-8")
+
+        with patch("eval.evaluate_manual_qa.urlopen", return_value=Response()) as urlopen:
+            result = _http_answer("http://127.0.0.1:8001", "q1", "질문", use_llm=True)
+        query = parse_qs(urlparse(urlopen.call_args.args[0]).query)
+        self.assertEqual(result["answer"], "ok")
+        self.assertEqual(query["use_llm"], ["true"])
+
     def test_latency_percentiles_use_nearest_rank(self):
         values = list(range(1, 101))
         self.assertEqual(_nearest_rank_percentile(values, 0.95), 95)
